@@ -1,0 +1,3 @@
+all the pages for the application
+- also include components that are used ONLY for that page here 
+- components folder is for components used across multiple pages
