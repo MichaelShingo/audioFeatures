@@ -6,7 +6,7 @@ const KeyPressHandler: React.FC = () => {
 
 	const handleKeyPress = (event: KeyboardEvent): void => {
 		if (event.key === 'd') {
-			dispatch({ type: actions.DRONE_ON });
+		dispatch({ type: actions.DRONE_ON })
 		} else if (event.key >= '1' && event.key <= '9') {
 			dispatch({ type: actions.BEAT_MAP, payload: parseInt(event.key) - 1 });
 		} else if (event.shiftKey && event.key === 'ArrowUp') {

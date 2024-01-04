@@ -1,61 +1,88 @@
-import { useEffect, useRef, useState } from 'react';
+import React, { ChangeEvent } from 'react';
 import Meyda from 'meyda';
-import { Button } from '@mui/material';
-import { actions, useAppState } from '../context/AppStateContext';
 
-const AudioComponent = () => {
-	const { state, dispatch } = useAppState();
-	const [audioContext, setAudioContext] = useState<AudioContext | null>(null);
-	const audioElement = useRef<HTMLMediaElement | null>(null);
-	
-	useEffect(() => {
-		setAudioContext(new AudioContext());
-	}, []);
+const AudioComponent: React.FC = () => {
+	const audioContext = new window.AudioContext();
+	const PITCHES = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
 
-	useEffect(() => {
-		if (audioContext !== null && audioElement.current !== null) {
-			const source =
-				audioElement && audioContext.createMediaElementSource(audioElement.current);
-			source && source.connect(audioContext.destination);
-			
-			const SLOWEST: number =  16384;
-			const FRAME_RATE: number = 8192;
-			const analyzer = Meyda.createMeydaAnalyzer({
-				audioContext: audioContext,
-				source: source,
-				bufferSize: FRAME_RATE, // 28 times per sec
-				featureExtractors: ['rms'],
-				callback: (features: Meyda.MeydaFeaturesObject) => {
-					console.log(features);
-					dispatch({type: actions.SET_RMS, payload: features.rms })
-				},
-			});
-			analyzer.start();
+	const handleFileChange = async (event: ChangeEvent<HTMLInputElement>) => {
+		const file = event.target.files?.[0];
+		if (file) {
+			analyzePitch(file, 'name');
 		}
-	}, [audioContext]);
-
-	const startAudio = () => {
-		audioContext && audioContext.state === 'suspended' ? audioContext.resume() : null;
 	};
+
+	const getChroma = async (file: File) => {
+		const arrayBuffer: ArrayBuffer = await file.arrayBuffer();
+		const BUFFER_SIZE = 512;
+		const audioBuffer: AudioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+		Meyda.bufferSize = BUFFER_SIZE;
+		Meyda.sampleRate = audioBuffer.sampleRate;
+		const channelData: Float32Array = audioBuffer.getChannelData(0);
+		const numFrames: number = Math.floor(channelData.length / BUFFER_SIZE);
+		const results: any[] = [];
+		for (let i = 0; i < numFrames; i++) {
+			const start: number = i * BUFFER_SIZE;
+			const end: number = start + BUFFER_SIZE;
+			const frame: Float32Array = channelData.subarray(start, end);
+			const chroma: number[] = Meyda.extract('chroma', frame) as number[];
+			results.push(chroma);
+		}
+		console.log(results);
+		return results;
+
+		// console.log(audioBuffer);
+		// processAudio(audioBuffer);
+	};
+
+	const getNoteIndex = (chroma: number[]) => {
+		return chroma.indexOf(Math.max(...chroma));
+	};
+
+	const getNoteName = (chroma: number[]) => {
+		return PITCHES[getNoteIndex(chroma)];
+	};
+
+	const analyzePitch = async (fileBuffer: File, type = 'values') => {
+		const results: any[] = [];
+		const chromaResults: any[] = await getChroma(fileBuffer);
+		chromaResults.forEach((chroma: number[]) => {
+			if (type === 'index') results.push(getNoteIndex(chroma));
+			else if (type === 'name') results.push(getNoteName(chroma));
+			else results.push(chroma);
+		});
+		console.log(results);
+		return results;
+	};
+
+	const processAudio = (buffer: AudioBuffer) => {
+		console.log(buffer.length, buffer.sampleRate, buffer.duration);
+		Meyda.bufferSize = 512;
+		const features = Meyda.extract(['rms', 'chroma'], buffer.getChannelData(0)); // Assuming mono audio
+		// console.log(features);
+	};
+
+	const chunkAudioBuffer = (array: [], size: number) => {
+		const chunkedArray = [];
+		for (let i = 0; i < array.length; i++) {
+			const last = chunkedArray[chunkedArray.length - 1];
+			if (!last || last.length === size) {
+				chunkedArray.push([array[i]]);
+			} else {
+				last.push(array[i]);
+			}
+		}
+		return chunkedArray;
+	};
+
 	return (
-		<>
-			<audio
-				ref={audioElement}
-				controls
-				loop
-				crossOrigin="anonymous"
-				id="audio"
-				src="/cowboyBebopSample.wav"
-			></audio>
-			<Button variant="outlined" onClick={startAudio}>
-				Start
-			</Button>
-		</>
+		<div>
+			<input type="file" accept="audio/*" onChange={handleFileChange} />
+		</div>
 	);
 };
 
 export default AudioComponent;
-
 
 /*
 https://www.reddit.com/r/webdev/comments/elyeej/how_to_pass_music_from_a_streaming_service_into/

@@ -23,7 +23,7 @@
       "react-hooks/exhaustive-deps": "warn",
       "react/prop-types": "off",
       "@typescript-eslint/no-var-requires": 0,
-      "react/no-unknown-property": ["off", { "ignore": ["JSX"] }],
+      "react/no-unknown-property": ["off", { "ignore": ["JSX"] }]
 
 
     },
