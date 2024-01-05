@@ -1,19 +1,17 @@
-import React, { ChangeEvent, ReactNode, useState } from 'react';
+import React, { useEffect } from 'react';
 import Meyda from 'meyda';
-import { Box, Stack } from '@mui/system';
+import { BUFFER_SIZE, PITCH_LETTERS } from '../data/constants';
+import { actions, useAppState } from '../context/AppStateContext';
 
 const AudioComponent: React.FC = () => {
+	const { state, dispatch } = useAppState();
 	const audioContext = new window.AudioContext();
-	const [waveform, setWaveForm] = useState<Float32Array>([]);
-	const PITCHES = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
-	//The minimum representable positive value (closest to zero) is approximately 1.4013e-45.
-	// The maximum finite representable value is approximately 3.4028e38.
-	const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
-		const file = event.target.files?.[0];
-		if (file) {
-			analyzePitch(file, 'name'); // length 1802
+
+	useEffect(() => {
+		if (state.audioFile) {
+			analyzePitch(state.audioFile);
 		}
-	};
+	}, [state.audioFile]);
 
 	const analyzePitch = async (fileBuffer: File, type = 'values') => {
 		const results: (number | string | number[])[] = [];
@@ -28,7 +26,7 @@ const AudioComponent: React.FC = () => {
 				results.push(chroma);
 			}
 		}
-		console.log(results);
+		// console.log(results);
 		return results;
 	};
 
@@ -37,12 +35,10 @@ const AudioComponent: React.FC = () => {
 	};
 
 	const getNoteName = (chroma: number[]) => {
-		return PITCHES[getNoteIndex(chroma)];
+		return PITCH_LETTERS[getNoteIndex(chroma)];
 	};
 
 	const getChroma = async (fileBuffer: File) => {
-		// why does chroma contain a lot of every pitch???
-		const BUFFER_SIZE = 512;
 		const audioBinaryFile: ArrayBuffer = await fileBuffer.arrayBuffer();
 		const audioBufferFile: AudioBuffer =
 			await audioContext.decodeAudioData(audioBinaryFile);
@@ -51,31 +47,10 @@ const AudioComponent: React.FC = () => {
 		Meyda.sampleRate = audioBufferFile.sampleRate;
 
 		const waveformData: Float32Array = audioBufferFile.getChannelData(0);
-		console.log(waveformData);
+		// console.log(waveformData);
 
-		let waveformMax = -Infinity;
-		let waveformMin = Infinity;
-		for (const num of waveformData) {
-			if (num > waveformMax) {
-				waveformMax = num;
-			}
-			if (num < waveformMin) {
-				waveformMin = num;
-			}
-		}
-		console.log(waveformMin, waveformMax);
+		dispatch({ type: actions.SET_WAVEFORM, payload: waveformData });
 
-		const scaleToRange = (value, min, max, newMin, newMax) => {
-			return ((value - min) / (max - min)) * (newMax - newMin) + newMin;
-		};
-
-		const scaledWaveformData: Float32Array = waveformData.map((value) =>
-			scaleToRange(value, waveformMin, waveformMax, 0, 100)
-		);
-
-		console.log(scaledWaveformData);
-		// console.log(Math.min(...waveformData), Math.max(...waveformData));
-		setWaveForm(scaledWaveformData);
 		const numFrames: number = Math.floor(waveformData.length / BUFFER_SIZE);
 		const results: number[][] = [];
 
@@ -86,33 +61,11 @@ const AudioComponent: React.FC = () => {
 			const chroma: number[] = Meyda.extract('chroma', frame) as number[];
 			results.push(chroma);
 		}
-		console.log(results);
+		// console.log(results);
 		return results;
 	};
 
-	const generateWaveform = (): ReactNode[] => {
-		const res: ReactNode[] = [];
-		for (let i = 0; i < waveform.length; i++) {
-			if (i % 1000 === 0) {
-				console.log(i, waveform[i]);
-				res.push(
-					<Box
-						sx={{ width: '0.5px', height: `${waveform[i]}px`, backgroundColor: 'blue' }}
-					></Box>
-				);
-			}
-		}
-		return res;
-	};
-
-	return (
-		<div>
-			<Stack direction={'row'} alignItems="center">
-				{waveform && generateWaveform()}
-			</Stack>
-			<input type="file" accept="audio/*" onChange={handleFileChange} />
-		</div>
-	);
+	return <></>;
 };
 
 export default AudioComponent;

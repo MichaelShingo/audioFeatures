@@ -4,6 +4,8 @@ import { ThemeProvider } from '@mui/material/styles';
 import theme from '@/utils/theme';
 import AppContainer from './components/AppContainer';
 import AudioComponent from './components/AudioComponent';
+import AudioUpload from './components/AudioUpload';
+import Waveform from './components/Waveform';
 
 export default function Home() {
 	return (
@@ -11,6 +13,8 @@ export default function Home() {
 			<AppStateProvider>
 				<AppContainer>
 					<AudioComponent />
+					<Waveform />
+					<AudioUpload />
 				</AppContainer>
 			</AppStateProvider>
 		</ThemeProvider>
