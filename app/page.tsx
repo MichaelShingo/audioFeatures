@@ -6,6 +6,9 @@ import AppContainer from './components/AppContainer';
 import AudioComponent from './components/AudioComponent';
 import AudioUpload from './components/AudioUpload';
 import Waveform from './components/Waveform';
+import DataDisplay from './components/DataDisplay';
+import DataContainer from './components/DataContainer';
+import ResizeInterface from './components/ResizeInterface';
 
 export default function Home() {
 	return (
@@ -14,7 +17,11 @@ export default function Home() {
 				<AppContainer>
 					<AudioComponent />
 					<Waveform />
-					<AudioUpload />
+					<ResizeInterface />
+					<DataContainer>
+						<AudioUpload />
+						<DataDisplay />
+					</DataContainer>
 				</AppContainer>
 			</AppStateProvider>
 		</ThemeProvider>

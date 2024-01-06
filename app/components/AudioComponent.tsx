@@ -3,10 +3,14 @@ import Meyda from 'meyda';
 import { BUFFER_SIZE, PITCH_LETTERS } from '../data/constants';
 import { actions, useAppState } from '../context/AppStateContext';
 
+let audioContext: AudioContext;
+
 const AudioComponent: React.FC = () => {
 	const { state, dispatch } = useAppState();
-	const audioContext = new window.AudioContext();
 
+	useEffect(() => {
+		audioContext = new window.AudioContext();
+	}, []);
 	useEffect(() => {
 		if (state.audioFile) {
 			analyzePitch(state.audioFile);

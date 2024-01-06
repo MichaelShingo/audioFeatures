@@ -1,2 +1,9 @@
 import { actions, useAppState } from '../context/AppStateContext';
 const { state, dispatch } = useAppState();
+
+
+brightred f52c40
+darkred 800924
+maroon 512330
+navy 232e45
+darkgrey 161616

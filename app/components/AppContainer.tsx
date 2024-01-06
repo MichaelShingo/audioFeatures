@@ -1,20 +1,36 @@
 import { Box } from '@mui/system';
-import { ReactNode } from 'react';
-import { useMediaQuery, Theme } from '@mui/material';
+import { ReactNode, useEffect } from 'react';
+import { useMediaQuery, Theme, useTheme } from '@mui/material';
+import { actions, useAppState } from '../context/AppStateContext';
 
 interface AppContainerProps {
 	children: ReactNode;
 }
 
 const AppContainer: React.FC<AppContainerProps> = ({ children }) => {
+	const { state, dispatch } = useAppState();
 	const isSmallScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
+	const theme = useTheme();
+	console.log(state.windowHeight);
+	useEffect(() => {
+		dispatch({ type: actions.SET_WINDOW_HEIGHT, payload: window.innerHeight });
+		const handleResize = () => {
+			dispatch({ type: actions.SET_WINDOW_HEIGHT, payload: window.innerHeight });
+		};
+
+		window.addEventListener('resize', handleResize);
+
+		return () => {
+			window.removeEventListener('resize', handleResize);
+		};
+	}, []);
 
 	return (
 		<Box
 			data-label="app-container"
 			component="div"
 			sx={{
-				backgroundColor: 'white',
+				backgroundColor: theme.palette.common.darkGrey,
 				color: 'white',
 				overflowX: 'hidden',
 				overflowY: 'hidden',

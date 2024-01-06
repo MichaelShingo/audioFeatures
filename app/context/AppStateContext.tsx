@@ -9,6 +9,9 @@ interface GlobalState {
 	rms: number;
 	audioFile: File | null;
 	waveform: Float32Array | null;
+	currentPCM: number;
+	resizePosition: number;
+	windowHeight: number;
 }
 const initialState: GlobalState = {
 	dark_mode: true,
@@ -16,6 +19,9 @@ const initialState: GlobalState = {
 	rms: 20,
 	audioFile: null,
 	waveform: null,
+	currentPCM: 0,
+	resizePosition: 500,
+	windowHeight: 1000,
 };
 
 export type AppAction = { type: string; payload?: string | number | File | Float32Array };
@@ -31,6 +37,9 @@ export const actions: Record<string, string> = {
 	SET_RMS: 'SET_RMS',
 	SET_AUDIO_FILE: 'SET_AUDIO_FILE',
 	SET_WAVEFORM: 'SET_WAVEFORM',
+	SET_CURRENT_PCM: 'SET_CURRENT_PCM',
+	SET_RESIZE_POSITION: 'SET_RESIZE_POSITION',
+	SET_WINDOW_HEIGHT: 'SET_WINDOW_HEIGHT',
 };
 
 const appReducer = (state: GlobalState, action: AppAction): GlobalState => {
@@ -43,6 +52,12 @@ const appReducer = (state: GlobalState, action: AppAction): GlobalState => {
 			return { ...state, audioFile: action.payload as File };
 		case actions.SET_WAVEFORM:
 			return { ...state, waveform: action.payload as Float32Array };
+		case actions.SET_CURRENT_PCM:
+			return { ...state, currentPCM: action.payload as number };
+		case actions.SET_RESIZE_POSITION:
+			return { ...state, resizePosition: action.payload as number };
+		case actions.SET_WINDOW_HEIGHT:
+			return { ...state, windowHeight: action.payload as number };
 		default:
 			return state;
 	}
