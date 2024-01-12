@@ -6,23 +6,23 @@ import { useEffect, useRef, useState } from 'react';
 const ResizeInterface = () => {
 	const { state, dispatch } = useAppState();
 	const theme = useTheme();
-	const [mouseY, setMouseY] = useState<number>(0);
 	const [isDragging, setIsDragging] = useState<boolean>(false);
 	const dragStartRef = useRef<number>(-1);
 
-	const handleMouseUp = () => {
+	const handleMouseUp = (e: MouseEvent) => {
+		e.stopPropagation();
 		setIsDragging(false);
 		dragStartRef.current = -1;
 	};
 
 	const handleMouseMove = (e: MouseEvent) => {
+		e.stopPropagation();
 		if (isDragging) {
 			dispatch({ type: actions.SET_RESIZE_POSITION, payload: e.clientY });
-			setMouseY(e.clientY);
 		}
 	};
 
-	const handleOnMouseDown = (e: MouseEvent) => {
+	const handleOnMouseDown = (e: React.MouseEvent<Element, MouseEvent>) => {
 		e.stopPropagation();
 		setIsDragging(true);
 	};
@@ -45,16 +45,18 @@ const ResizeInterface = () => {
 
 	return (
 		<Box
-			onMouseDown={handleOnMouseDown}
+			onMouseDown={(e) => handleOnMouseDown(e)}
 			sx={{
-				backgroundColor: theme.palette.grey[50],
-				height: '2%',
+				backgroundColor: theme.palette.grey[700],
+				height: isDragging ? '2%' : '1%',
 				width: '100%',
 				position: 'absolute',
 				top: `${state.resizePosition}px`,
+				transition: 'height 0.5s ease-in',
 				zIndex: 5,
 				':hover': {
 					cursor: isDragging ? 'grabbing' : 'grab',
+					height: '2%',
 				},
 			}}
 		></Box>

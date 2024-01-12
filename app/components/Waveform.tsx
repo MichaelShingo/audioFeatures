@@ -41,7 +41,6 @@ const Waveform: React.FC = () => {
 
 	const handleOnMouseEnter = (value: number) => {
 		dispatch({ type: actions.SET_CURRENT_PCM, payload: value });
-		console.log(theme.palette.common.brightRed);
 	};
 
 	const generateWaveform = (): ReactNode[] => {
@@ -49,28 +48,30 @@ const Waveform: React.FC = () => {
 		if (!scaledWaveform || !state.waveform) {
 			return res;
 		}
-		for (let i = 0; i < scaledWaveform.length; i++) {
-			if (i % 1000 === 0) {
-				res.push(
-					<Box
-						key={i}
-						onMouseEnter={() => handleOnMouseEnter(state.waveform[i])}
-						sx={{
-							width: '1px',
-							height: `${scaledWaveform[i]}%`,
-							backgroundColor: theme.palette.common.darkRed,
-							':hover': {
-								cursor: 'text',
-								backgroundColor: theme.palette.common.brightRed,
-							},
-						}}
-					></Box>
-				);
+		// console.log(scaledWaveform.length, state.pitchData);
+
+		// pitch data is an array of arrays.length(12)
+		console.log(state.loudnessData.length);
+		for (let i = 0; i < state.loudnessData.length; i++) {
+			const loudnessTotal: number | undefined = state.loudnessData[i]?.total;
+			let loudness: number = 0;
+			if (loudnessTotal) {
+				loudness = loudnessTotal;
 			}
+			res.push(
+				<div
+					key={i}
+					onMouseEnter={() => handleOnMouseEnter(loudness)}
+					style={{
+						width: '1px',
+						height: `${loudness * 5}%`,
+						backgroundColor: theme.palette.common.lightGrey,
+					}}
+				></div>
+			);
 		}
 		return res;
 	};
-	console.log('waveform percent', positionPercentage);
 
 	return (
 		<Stack
@@ -79,8 +80,8 @@ const Waveform: React.FC = () => {
 			alignSelf="center"
 			sx={{
 				width: '100%',
-				backgroundColor: 'blue',
-				height: `${positionPercentage}%`,
+				backgroundColor: '',
+				height: '90%',
 				overflowX: 'auto',
 				overflowY: 'auto',
 			}}

@@ -12,16 +12,15 @@ const DataContainer: React.FC<DataContainerProps> = ({ children }) => {
 
 	const positionPercentage: number =
 		100 - (state.resizePosition / state.windowHeight) * 100;
-	console.log('resizePosition', state.resizePosition);
-	console.log('data percent', positionPercentage);
 	return (
 		<Box
 			sx={{
-				backgroundColor: 'green',
+				backgroundColor: '',
 				height: `${positionPercentage}%`,
 				width: '100%',
 				overflowX: 'auto',
 				overflowY: 'auto',
+				padding: '1%',
 			}}
 		>
 			{children}

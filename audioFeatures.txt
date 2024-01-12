@@ -2,6 +2,27 @@ import { actions, useAppState } from '../context/AppStateContext';
 const { state, dispatch } = useAppState();
 
 
+Features
+- Audio playback that follows with the waveform.
+- Zoom in and out of waveform.
+- Select a portion of the waveform to see an average of values
+- Playback auto-updates values.
+- Data to display:
+	- Volume
+	- Pitch percentage
+- Cool visualization.
+	- Shows volume and pitch content using different params.
+- Listen to microphone input and react.
+
+Advanced Features
+- Can you generate chord progression?
+- Can you generate sheet music based on this? 
+
+Issues
+- Optimizing visualization of waveform?
+- 
+
+
 brightred f52c40
 darkred 800924
 maroon 512330

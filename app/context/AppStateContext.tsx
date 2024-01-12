@@ -1,4 +1,5 @@
 import React, { createContext, useReducer, useContext, Dispatch } from 'react';
+import { Loudness, PitchData, SpectralFlatness } from '../data/constants';
 
 export const H_BREAKPOINT = 440;
 export const SETTINGS_ROW_SPACING: string = '10px';
@@ -12,7 +13,14 @@ interface GlobalState {
 	currentPCM: number;
 	resizePosition: number;
 	windowHeight: number;
+	pitchData: PitchData;
+	loudnessData: Loudness[];
+	spectralFlatnessData: SpectralFlatness[];
+	minutes: number;
+	seconds: number;
+	milliseconds: number;
 }
+
 const initialState: GlobalState = {
 	dark_mode: true,
 	settings_open: false,
@@ -22,9 +30,25 @@ const initialState: GlobalState = {
 	currentPCM: 0,
 	resizePosition: 500,
 	windowHeight: 1000,
+	pitchData: [],
+	loudnessData: [],
+	spectralFlatnessData: [],
+	minutes: 0,
+	seconds: 0,
+	milliseconds: 0,
 };
 
-export type AppAction = { type: string; payload?: string | number | File | Float32Array };
+export type AppAction = {
+	type: string;
+	payload?:
+		| string
+		| number
+		| File
+		| Float32Array
+		| PitchData
+		| Loudness[]
+		| SpectralFlatness[];
+};
 
 interface AppStateContextType {
 	state: GlobalState;
@@ -40,6 +64,12 @@ export const actions: Record<string, string> = {
 	SET_CURRENT_PCM: 'SET_CURRENT_PCM',
 	SET_RESIZE_POSITION: 'SET_RESIZE_POSITION',
 	SET_WINDOW_HEIGHT: 'SET_WINDOW_HEIGHT',
+	SET_PITCH_DATA: 'SET_PITCH_DATA',
+	SET_LOUDNESS_DATA: 'SET_LOUDNESS_DATA',
+	SET_SPECTRAL_FLATNESS_DATA: 'SET_SPECTRAL_FLATNESS_DATA',
+	SET_MINUTES: 'SET_MINUTES',
+	SET_SECONDS: 'SET_SECONDS',
+	SET_MILLISECONDS: 'SET_MILLISECONDS',
 };
 
 const appReducer = (state: GlobalState, action: AppAction): GlobalState => {
@@ -58,6 +88,18 @@ const appReducer = (state: GlobalState, action: AppAction): GlobalState => {
 			return { ...state, resizePosition: action.payload as number };
 		case actions.SET_WINDOW_HEIGHT:
 			return { ...state, windowHeight: action.payload as number };
+		case actions.SET_PITCH_DATA:
+			return { ...state, pitchData: action.payload as PitchData };
+		case actions.SET_LOUDNESS_DATA:
+			return { ...state, loudnessData: action.payload as Loudness[] };
+		case actions.SET_SPECTRAL_FLATNESS_DATA:
+			return { ...state, spectralFlatnessData: action.payload as SpectralFlatness[] };
+		case actions.SET_MINUTES:
+			return { ...state, minutes: action.payload as number };
+		case actions.SET_SECONDS:
+			return { ...state, seconds: action.payload as number };
+		case actions.SET_MILLISECONDS:
+			return { ...state, milliseconds: action.payload as number };
 		default:
 			return state;
 	}

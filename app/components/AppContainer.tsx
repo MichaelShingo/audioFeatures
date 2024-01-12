@@ -11,7 +11,6 @@ const AppContainer: React.FC<AppContainerProps> = ({ children }) => {
 	const { state, dispatch } = useAppState();
 	const isSmallScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
 	const theme = useTheme();
-	console.log(state.windowHeight);
 	useEffect(() => {
 		dispatch({ type: actions.SET_WINDOW_HEIGHT, payload: window.innerHeight });
 		const handleResize = () => {
@@ -30,7 +29,7 @@ const AppContainer: React.FC<AppContainerProps> = ({ children }) => {
 			data-label="app-container"
 			component="div"
 			sx={{
-				backgroundColor: theme.palette.common.darkGrey,
+				backgroundColor: theme.palette.background.paper,
 				color: 'white',
 				overflowX: 'hidden',
 				overflowY: 'hidden',

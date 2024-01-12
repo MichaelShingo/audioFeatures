@@ -1,6 +1,12 @@
 import React, { useEffect } from 'react';
-import Meyda from 'meyda';
-import { BUFFER_SIZE, PITCH_LETTERS } from '../data/constants';
+import Meyda, { MeydaFeaturesObject } from 'meyda';
+import {
+	BUFFER_SIZE,
+	Loudness,
+	PITCH_LETTERS,
+	PitchData,
+	SpectralFlatness,
+} from '../data/constants';
 import { actions, useAppState } from '../context/AppStateContext';
 
 let audioContext: AudioContext;
@@ -11,15 +17,23 @@ const AudioComponent: React.FC = () => {
 	useEffect(() => {
 		audioContext = new window.AudioContext();
 	}, []);
+
 	useEffect(() => {
-		if (state.audioFile) {
-			analyzePitch(state.audioFile);
-		}
+		const setPitchData = async () => {
+			if (state.audioFile) {
+				const pitchResults: PitchData = await analyzePitch(state.audioFile);
+				dispatch({
+					type: actions.SET_PITCH_DATA,
+					payload: pitchResults as PitchData,
+				});
+			}
+		};
+		setPitchData();
 	}, [state.audioFile]);
 
 	const analyzePitch = async (fileBuffer: File, type = 'values') => {
 		const results: (number | string | number[])[] = [];
-		const chromaResults: number[][] = await getChroma(fileBuffer);
+		const chromaResults: number[][] = await getFeatures(fileBuffer);
 
 		for (const chroma of chromaResults) {
 			if (type === 'index') {
@@ -30,7 +44,6 @@ const AudioComponent: React.FC = () => {
 				results.push(chroma);
 			}
 		}
-		// console.log(results);
 		return results;
 	};
 
@@ -42,7 +55,7 @@ const AudioComponent: React.FC = () => {
 		return PITCH_LETTERS[getNoteIndex(chroma)];
 	};
 
-	const getChroma = async (fileBuffer: File) => {
+	const getFeatures = async (fileBuffer: File) => {
 		const audioBinaryFile: ArrayBuffer = await fileBuffer.arrayBuffer();
 		const audioBufferFile: AudioBuffer =
 			await audioContext.decodeAudioData(audioBinaryFile);
@@ -51,22 +64,43 @@ const AudioComponent: React.FC = () => {
 		Meyda.sampleRate = audioBufferFile.sampleRate;
 
 		const waveformData: Float32Array = audioBufferFile.getChannelData(0);
-		// console.log(waveformData);
 
 		dispatch({ type: actions.SET_WAVEFORM, payload: waveformData });
 
 		const numFrames: number = Math.floor(waveformData.length / BUFFER_SIZE);
-		const results: number[][] = [];
+		const chromaResults: number[][] = [];
+		const loudnessResults: Loudness[] = [];
+		const spectralFlatnessResults: SpectralFlatness[] = [];
 
 		for (let i = 0; i < numFrames; i++) {
 			const start: number = i * BUFFER_SIZE;
 			const end: number = start + BUFFER_SIZE;
 			const frame: Float32Array = waveformData.subarray(start, end);
-			const chroma: number[] = Meyda.extract('chroma', frame) as number[];
-			results.push(chroma);
+			const features: Partial<MeydaFeaturesObject> | null = Meyda.extract(
+				['chroma', 'loudness', 'spectralFlatness'],
+				frame
+			);
+
+			chromaResults.push(features?.chroma as number[]);
+			loudnessResults.push(features?.loudness);
+			spectralFlatnessResults.push(features?.spectralFlatness);
 		}
-		// console.log(results);
-		return results;
+		dispatch({
+			type: actions.SET_LOUDNESS_DATA,
+			payload: loudnessResults,
+		});
+
+		dispatch({
+			type: actions.SET_SPECTRAL_FLATNESS_DATA,
+			payload: spectralFlatnessResults as SpectralFlatness[],
+		});
+
+		console.log(
+			loudnessResults.length,
+			spectralFlatnessResults.length,
+			chromaResults.length
+		);
+		return chromaResults;
 	};
 
 	return <></>;

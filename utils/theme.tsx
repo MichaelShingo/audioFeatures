@@ -10,16 +10,19 @@ export const theme = createTheme({
 	palette: {
 		mode: 'dark',
 		common: {
-			brightRed: '#f52c40',
+			brightRed: '#df4440',
 			darkRed: '#800924',
 			maroon: '#512330',
 			navy: '#232e45',
-			darkGrey: '#161616',
+			darkGrey: '#2d2e2e',
+			lightGrey: '#423c3b',
+			mediumGrey: '#2e2e2e',
+			lightBlue: '#02b0fe',
 		},
 		primary: {
-			main: '#800924',
-			light: '#f52c40',
-			dark: '#512330',
+			main: '#df4440',
+			light: '#df4440',
+			dark: '#df4440',
 		},
 		secondary: {
 			main: '#232e45',

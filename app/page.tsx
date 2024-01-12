@@ -5,10 +5,10 @@ import theme from '@/utils/theme';
 import AppContainer from './components/AppContainer';
 import AudioComponent from './components/AudioComponent';
 import AudioUpload from './components/AudioUpload';
-import Waveform from './components/Waveform';
 import DataDisplay from './components/DataDisplay';
 import DataContainer from './components/DataContainer';
 import ResizeInterface from './components/ResizeInterface';
+import UpperContainer from './components/UpperContainer';
 
 export default function Home() {
 	return (
@@ -16,7 +16,7 @@ export default function Home() {
 			<AppStateProvider>
 				<AppContainer>
 					<AudioComponent />
-					<Waveform />
+					<UpperContainer />
 					<ResizeInterface />
 					<DataContainer>
 						<AudioUpload />

@@ -13,3 +13,7 @@ export const PITCH_LETTERS = [
 	'A#',
 	'B',
 ];
+
+export type PitchData = (number | string | number[])[];
+export type Loudness = { specific: Float32Array; total: number } | undefined;
+export type SpectralFlatness = number | undefined;
