@@ -1,7 +1,7 @@
 import React, { ChangeEvent } from 'react';
 import { actions, useAppState } from '../context/AppStateContext';
-import { Button, styled } from '@mui/material';
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import { IconButton, styled } from '@mui/material';
+import FileUpload from '@mui/icons-material/FileUpload';
 
 const VisuallyHiddenInput = styled('input')({
 	clip: 'rect(0 0 0 0)',
@@ -26,10 +26,10 @@ const AudioUpload: React.FC = () => {
 	};
 
 	return (
-		<Button component="label" variant="contained" startIcon={<CloudUploadIcon />}>
-			Upload Audio
+		<IconButton component="label">
+			<FileUpload />
 			<VisuallyHiddenInput type="file" accept="audio/*" onChange={handleFileChange} />
-		</Button>
+		</IconButton>
 	);
 };
 

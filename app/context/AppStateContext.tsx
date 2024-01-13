@@ -1,5 +1,6 @@
 import React, { createContext, useReducer, useContext, Dispatch } from 'react';
 import { Loudness, PitchData, SpectralFlatness } from '../data/constants';
+import { calculateMilliseconds, calculateSeconds } from '../utils/timecodeCalculations';
 
 export const H_BREAKPOINT = 440;
 export const SETTINGS_ROW_SPACING: string = '10px';
@@ -96,10 +97,23 @@ const appReducer = (state: GlobalState, action: AppAction): GlobalState => {
 			return { ...state, spectralFlatnessData: action.payload as SpectralFlatness[] };
 		case actions.SET_MINUTES:
 			return { ...state, minutes: action.payload as number };
-		case actions.SET_SECONDS:
-			return { ...state, seconds: action.payload as number };
-		case actions.SET_MILLISECONDS:
-			return { ...state, milliseconds: action.payload as number };
+		case actions.SET_SECONDS: {
+			const timecode = calculateSeconds(action.payload as number);
+			return {
+				...state,
+				minutes: state.minutes + timecode.minutes,
+				seconds: timecode.seconds,
+			};
+		}
+		case actions.SET_MILLISECONDS: {
+			const timecode = calculateMilliseconds(action.payload as number);
+			return {
+				...state,
+				minutes: state.minutes + timecode.minutes,
+				seconds: state.seconds + timecode.seconds,
+				milliseconds: timecode.milliseconds,
+			};
+		}
 		default:
 			return state;
 	}

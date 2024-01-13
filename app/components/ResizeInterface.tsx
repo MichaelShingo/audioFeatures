@@ -1,11 +1,10 @@
-import { Box } from '@mui/system';
-import { useTheme } from '@mui/material';
+import { IconButton } from '@mui/material';
 import { actions, useAppState } from '../context/AppStateContext';
 import { useEffect, useRef, useState } from 'react';
+import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 
 const ResizeInterface = () => {
-	const { state, dispatch } = useAppState();
-	const theme = useTheme();
+	const { dispatch } = useAppState();
 	const [isDragging, setIsDragging] = useState<boolean>(false);
 	const dragStartRef = useRef<number>(-1);
 
@@ -44,22 +43,18 @@ const ResizeInterface = () => {
 	}, []);
 
 	return (
-		<Box
-			onMouseDown={(e) => handleOnMouseDown(e)}
+		<IconButton
 			sx={{
-				backgroundColor: theme.palette.grey[700],
-				height: isDragging ? '2%' : '1%',
-				width: '100%',
-				position: 'absolute',
-				top: `${state.resizePosition}px`,
-				transition: 'height 0.5s ease-in',
-				zIndex: 5,
+				rotate: '90deg',
 				':hover': {
 					cursor: isDragging ? 'grabbing' : 'grab',
 					height: '2%',
 				},
 			}}
-		></Box>
+			onMouseDown={(e) => handleOnMouseDown(e)}
+		>
+			<DragIndicatorIcon />
+		</IconButton>
 	);
 };
 
