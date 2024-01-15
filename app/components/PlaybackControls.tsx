@@ -7,67 +7,58 @@ import KeyboardVoiceIcon from '@mui/icons-material/KeyboardVoice';
 import Timecode from './Timecode';
 import FilledIconButton from './FilledIconButton';
 import ResizeInterface from './ResizeInterface';
-import React, { ChangeEvent, useRef } from 'react';
-import { styled } from '@mui/material';
+import React, { useEffect, useRef } from 'react';
 import AudioUpload from './AudioUpload';
+import * as Tone from 'tone';
 
 const PlaybackControls: React.FC = () => {
 	const { state, dispatch } = useAppState();
 	const theme = useTheme();
+	const player = useRef<Tone.Player | null>(null);
 
-	const sourceNode = useRef<AudioBufferSourceNode | null>(null);
-	console.log('currentTime', state.currentTime);
+	useEffect(() => {
+		if (state.audioBuffer) {
+			player.current = new Tone.Player(state.audioBuffer).toDestination();
+		}
+	}, [state.audioBuffer]);
 
 	const playAudio = () => {
-		if (state.audioContext) {
-			state.audioContext.resume();
-		}
+		// player.current?.seek(5, 0);
+		Tone.start();
+		const startTime: number = state.seconds;
+		Tone.Transport.seconds = startTime;
+		Tone.Transport.start();
+		player.current?.start(0, startTime);
+		Tone.Transport.scheduleRepeat(() => {
+			const transportState: Tone.PlaybackState = Tone.Transport.state;
+			const currentTime: number = Tone.Transport.seconds;
+			if (transportState === 'started') {
+				dispatch({ type: actions.SET_SECONDS, payload: currentTime });
+			}
+		}, 0.1);
 		dispatch({ type: actions.SET_IS_PLAYING, payload: true });
-
-		if (state.audioContext && state.audioBuffer) {
-			state.audioContext.resume();
-			sourceNode.current = state.audioContext.createBufferSource();
-			sourceNode.current.buffer = state.audioBuffer;
-			sourceNode.current.connect(state.audioContext.destination);
-			sourceNode.current.start(0, state.currentTime);
-
-			const updateCurrentTime = () => {
-				if (state.audioContext) {
-					dispatch({
-						type: actions.SET_CURRENT_TIME,
-						payload: state.audioContext.currentTime,
-					});
-				}
-				if (state.isPlaying) {
-					requestAnimationFrame(updateCurrentTime);
-				}
-			};
-
-			updateCurrentTime();
-		}
 	};
 
 	const stopAudio = () => {
+		player.current?.stop();
+		Tone.Transport.stop();
 		dispatch({ type: actions.SET_IS_PLAYING, payload: false });
 		dispatch({
-			type: actions.SET_CURRENT_TIME,
+			type: actions.SET_SECONDS,
 			payload: 0,
 		});
-		if (sourceNode.current && state.audioContext) {
-			sourceNode.current.stop();
-			state.audioContext.suspend();
-		}
 	};
 
 	const pauseAudio = () => {
+		player.current?.stop();
+		Tone.Transport.stop();
 		dispatch({ type: actions.SET_IS_PLAYING, payload: false });
 
-		if (sourceNode.current && state.audioContext) {
+		if (state.audioContext) {
 			dispatch({
 				type: actions.SET_CURRENT_TIME,
 				payload: state.audioContext.currentTime,
 			});
-			sourceNode.current.stop();
 			state.audioContext.suspend();
 		}
 	};
