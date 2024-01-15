@@ -31,8 +31,6 @@ const AppContainer: React.FC<AppContainerProps> = ({ children }) => {
 			sx={{
 				backgroundColor: theme.palette.background.paper,
 				color: 'white',
-				overflowX: 'hidden',
-				overflowY: 'hidden',
 				height: isSmallScreen ? '95vh' : '100vh',
 				width: '100vw',
 				mt: '0px',

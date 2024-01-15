@@ -1,6 +1,10 @@
 import React, { createContext, useReducer, useContext, Dispatch } from 'react';
 import { Loudness, PitchData, SpectralFlatness } from '../data/constants';
-import { calculateMilliseconds, calculateSeconds } from '../utils/timecodeCalculations';
+import {
+	Timecode,
+	calculateMilliseconds,
+	calculateSeconds,
+} from '../utils/timecodeCalculations';
 
 export const H_BREAKPOINT = 440;
 export const SETTINGS_ROW_SPACING: string = '10px';
@@ -20,6 +24,14 @@ interface GlobalState {
 	minutes: number;
 	seconds: number;
 	milliseconds: number;
+	isHoveredWaveform: boolean;
+	markerPosition: number;
+	timecode: Timecode;
+	audioBuffer: AudioBuffer | null;
+	audioContext: AudioContext | null;
+	isPlaying: boolean;
+	currentTime: number;
+	isUploaded: boolean;
 }
 
 const initialState: GlobalState = {
@@ -37,6 +49,14 @@ const initialState: GlobalState = {
 	minutes: 0,
 	seconds: 0,
 	milliseconds: 0,
+	isHoveredWaveform: false,
+	markerPosition: 0,
+	timecode: { minutes: 0, seconds: 0, milliseconds: 0 },
+	audioBuffer: null,
+	audioContext: null,
+	isPlaying: false,
+	currentTime: 0,
+	isUploaded: false,
 };
 
 export type AppAction = {
@@ -48,6 +68,10 @@ export type AppAction = {
 		| Float32Array
 		| PitchData
 		| Loudness[]
+		| boolean
+		| Timecode
+		| AudioBuffer
+		| AudioContext
 		| SpectralFlatness[];
 };
 
@@ -71,6 +95,14 @@ export const actions: Record<string, string> = {
 	SET_MINUTES: 'SET_MINUTES',
 	SET_SECONDS: 'SET_SECONDS',
 	SET_MILLISECONDS: 'SET_MILLISECONDS',
+	SET_IS_HOVERED_WAVEFORM: 'SET_IS_HOVERED_WAVEFORM',
+	SET_MARKER_POSITION: 'SET_MARKER_POSITION',
+	SET_TIMECODE: 'SET_TIMECODE',
+	SET_AUDIO_BUFFER: 'SET_AUDIO_BUFFER',
+	SET_AUDIO_CONTEXT: 'SET_AUDIO_CONTEXT',
+	SET_IS_PLAYING: 'SET_IS_PLAYING',
+	SET_CURRENT_TIME: 'SET_CURRENT_TIME',
+	SET_IS_UPLOADED: 'SET_IS_UPLOADED',
 };
 
 const appReducer = (state: GlobalState, action: AppAction): GlobalState => {
@@ -101,7 +133,10 @@ const appReducer = (state: GlobalState, action: AppAction): GlobalState => {
 			const timecode = calculateSeconds(action.payload as number);
 			return {
 				...state,
-				minutes: state.minutes + timecode.minutes,
+				minutes:
+					timecode.minutes > 0
+						? (state.minutes as number) + (timecode.minutes as number)
+						: state.minutes,
 				seconds: timecode.seconds,
 			};
 		}
@@ -109,11 +144,27 @@ const appReducer = (state: GlobalState, action: AppAction): GlobalState => {
 			const timecode = calculateMilliseconds(action.payload as number);
 			return {
 				...state,
-				minutes: state.minutes + timecode.minutes,
-				seconds: state.seconds + timecode.seconds,
+				minutes: timecode.minutes > 0 ? state.minutes + timecode.minutes : state.minutes,
+				seconds: timecode.seconds > 0 ? state.seconds + timecode.seconds : state.seconds,
 				milliseconds: timecode.milliseconds,
 			};
 		}
+		case actions.SET_IS_HOVERED_WAVEFORM:
+			return { ...state, isHoveredWaveform: !state.isHoveredWaveform };
+		case actions.SET_MARKER_POSITION:
+			return { ...state, markerPosition: action.payload as number };
+		case actions.SET_TIMECODE:
+			return { ...state, timecode: { minutes: 0, seconds: 0, milliseconds: 0 } };
+		case actions.SET_AUDIO_BUFFER:
+			return { ...state, audioBuffer: action.payload as AudioBuffer };
+		case actions.SET_AUDIO_CONTEXT:
+			return { ...state, audioContext: action.payload as AudioContext };
+		case actions.SET_IS_PLAYING:
+			return { ...state, isPlaying: action.payload as boolean };
+		case actions.SET_CURRENT_TIME:
+			return { ...state, currentTime: action.payload as number };
+		case actions.SET_IS_UPLOADED:
+			return { ...state, isUploaded: action.payload as boolean };
 		default:
 			return state;
 	}

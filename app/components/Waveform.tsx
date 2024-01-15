@@ -1,7 +1,8 @@
 import React, { ReactNode } from 'react';
-import { Box, Stack } from '@mui/system';
+import { Stack } from '@mui/system';
 import { actions, useAppState } from '../context/AppStateContext';
 import { useTheme } from '@mui/material';
+import HoverMarker from './HoverMarker';
 
 const calcMinAndMax = (waveform: Float32Array): [number, number] => {
 	let max = -Infinity;
@@ -30,7 +31,6 @@ const scaleToRange = (
 const Waveform: React.FC = () => {
 	const { state, dispatch } = useAppState();
 	const theme = useTheme();
-	const positionPercentage: number = (state.resizePosition / state.windowHeight) * 100;
 
 	let scaledWaveform: Float32Array | null = null;
 
@@ -41,6 +41,7 @@ const Waveform: React.FC = () => {
 
 	const handleOnMouseEnter = (value: number) => {
 		dispatch({ type: actions.SET_CURRENT_PCM, payload: value });
+		dispatch({ type: actions.SET_IS_HOVERED_WAVEFORM, payload: true });
 	};
 
 	const generateWaveform = (): ReactNode[] => {
@@ -51,7 +52,6 @@ const Waveform: React.FC = () => {
 		// console.log(scaledWaveform.length, state.pitchData);
 
 		// pitch data is an array of arrays.length(12)
-		console.log(state.loudnessData.length);
 		for (let i = 0; i < state.loudnessData.length; i++) {
 			const loudnessTotal: number | undefined = state.loudnessData[i]?.total;
 			let loudness: number = 0;
@@ -61,11 +61,13 @@ const Waveform: React.FC = () => {
 			res.push(
 				<div
 					key={i}
-					onMouseEnter={() => handleOnMouseEnter(loudness)}
+					// onMouseEnter={() => handleOnMouseEnter(loudness)}
 					style={{
-						width: '1px',
-						height: `${loudness * 5}%`,
+						width: '0.5px',
+						height: `${loudness}%`,
 						backgroundColor: theme.palette.common.lightGrey,
+						zIndex: '-5',
+						flexShrink: '0',
 					}}
 				></div>
 			);
@@ -73,21 +75,44 @@ const Waveform: React.FC = () => {
 		return res;
 	};
 
+	const handleOnMouseEnterStack = () => {
+		dispatch({ type: actions.SET_IS_HOVERED_WAVEFORM, payload: true });
+	};
+
+	const handleOnMouseLeave = () => {
+		dispatch({ type: actions.SET_IS_HOVERED_WAVEFORM, payload: false });
+	};
+
+	const handleClick = () => {
+		dispatch({ type: actions.SET_MARKER_POSITION, payload: 5 });
+	};
+
 	return (
-		<Stack
-			direction={'row'}
-			alignItems="center"
-			alignSelf="center"
-			sx={{
-				width: '100%',
+		<div
+			onMouseEnter={handleOnMouseEnterStack}
+			onMouseLeave={handleOnMouseLeave}
+			onClick={handleClick}
+			style={{
+				width: '100vw',
 				backgroundColor: '',
 				height: '90%',
 				overflowX: 'auto',
-				overflowY: 'auto',
+				overflowY: 'hidden',
+
+				paddingInline: '25px',
+				display: 'flex',
+				alignItems: 'center',
+				justifyContent: 'flex-start',
+				flexDirection: 'row',
+				flexWrap: 'nowrap',
+				gap: '0px',
 			}}
 		>
+			<HoverMarker />
+			{/* <div style={{ width: '20000px', height: '50px', backgroundColor: 'blue' }}></div>
+			<div style={{ width: '20000px', height: '50px', backgroundColor: 'blue' }}></div> */}
 			{scaledWaveform && generateWaveform()}
-		</Stack>
+		</div>
 	);
 };
 

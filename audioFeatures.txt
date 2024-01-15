@@ -1,6 +1,12 @@
 import { actions, useAppState } from '../context/AppStateContext';
 const { state, dispatch } = useAppState();
 
+waveform grey 423c3b
+background grey 161616
+play red df4440
+timecode grey 2e2e2e
+playhead blue 02b0fe
+
 
 Features
 - Audio playback that follows with the waveform.

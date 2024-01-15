@@ -1,8 +1,10 @@
-type Timecode = {
+export type Timecode = {
 	minutes: number;
 	seconds: number;
 	milliseconds: number;
 };
+
+export type Time = { [key in 'minutes' | 'seconds' | 'milliseconds']: number };
 
 const MILLISECONDS_PER_MINUTE = 60000;
 const MILLISECONDS_PER_SECOND = 1000;
@@ -14,13 +16,13 @@ export const calculateMilliseconds = (milliseconds: number): Timecode => {
 	} else if (milliseconds < MILLISECONDS_PER_MINUTE) {
 		return {
 			minutes: 0,
-			seconds: Math.round(milliseconds / MILLISECONDS_PER_SECOND),
+			seconds: Math.floor(milliseconds / MILLISECONDS_PER_SECOND),
 			milliseconds: milliseconds % MILLISECONDS_PER_SECOND,
 		};
 	}
 	return {
-		minutes: Math.round(milliseconds / MILLISECONDS_PER_MINUTE),
-		seconds: Math.round(milliseconds / MILLISECONDS_PER_SECOND),
+		minutes: Math.floor(milliseconds / MILLISECONDS_PER_MINUTE),
+		seconds: Math.floor(milliseconds / MILLISECONDS_PER_SECOND),
 		milliseconds: milliseconds % MILLISECONDS_PER_SECOND,
 	};
 };
@@ -32,7 +34,7 @@ export const calculateSeconds = (
 		return { minutes: 0, seconds: seconds };
 	}
 	return {
-		minutes: Math.round(seconds / SECONDS_PER_MINUTE),
+		minutes: Math.floor(seconds / SECONDS_PER_MINUTE),
 		seconds: seconds % SECONDS_PER_MINUTE,
 	};
 };

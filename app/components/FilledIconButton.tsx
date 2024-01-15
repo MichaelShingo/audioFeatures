@@ -5,23 +5,35 @@ import { useTheme } from '@mui/material';
 
 interface FilledIconButtonProps {
 	icon: ReactElement;
+	onClickHandler: (e: React.MouseEvent<HTMLElement>) => void;
+	isActive: boolean;
 }
 const iconButtonStyles = {
 	zIndex: '1',
+	backgroundColor: 'red',
 };
 
-const FilledIconButton: React.FC<FilledIconButtonProps> = ({ icon }) => {
+const FilledIconButton: React.FC<FilledIconButtonProps> = ({
+	onClickHandler,
+	icon,
+	isActive,
+}) => {
 	const theme = useTheme();
 
 	return (
 		<Box
+			onClick={onClickHandler}
 			sx={{
-				backgroundColor: theme.palette.common.brightRed,
+				backgroundColor: isActive
+					? theme.palette.common.brightRed
+					: theme.palette.common.mediumGrey,
 				borderRadius: '50%',
 				marginInline: '5px',
 			}}
 		>
-			<IconButton sx={{ iconButtonStyles }}>{icon}</IconButton>
+			<IconButton disabled={!isActive} sx={{ iconButtonStyles }}>
+				{icon}
+			</IconButton>
 		</Box>
 	);
 };

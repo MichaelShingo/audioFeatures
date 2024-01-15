@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import Meyda, { MeydaFeaturesObject } from 'meyda';
 import {
 	BUFFER_SIZE,
@@ -16,6 +16,7 @@ const AudioComponent: React.FC = () => {
 
 	useEffect(() => {
 		audioContext = new window.AudioContext();
+		dispatch({ type: actions.SET_AUDIO_CONTEXT, payload: audioContext });
 	}, []);
 
 	useEffect(() => {
@@ -59,6 +60,8 @@ const AudioComponent: React.FC = () => {
 		const audioBinaryFile: ArrayBuffer = await fileBuffer.arrayBuffer();
 		const audioBufferFile: AudioBuffer =
 			await audioContext.decodeAudioData(audioBinaryFile);
+
+		dispatch({ type: actions.SET_AUDIO_BUFFER, payload: audioBufferFile });
 
 		Meyda.bufferSize = BUFFER_SIZE;
 		Meyda.sampleRate = audioBufferFile.sampleRate;

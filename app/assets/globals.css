@@ -4,7 +4,6 @@ body {
 
 html {
 	height: 100%;
-	overflow: hidden;
 }
 
 input::-webkit-outer-spin-button,
@@ -16,4 +15,31 @@ input::-webkit-inner-spin-button {
 /* Firefox */
 input[type='number'] {
 	-moz-appearance: textfield;
+}
+
+/* Style the scrollbar track */
+::-webkit-scrollbar {
+	width: 6px; /* Set the width of the scrollbar */
+}
+
+/* Style the scrollbar handle (thumb) */
+::-webkit-scrollbar-thumb {
+	background-color: #2e2e2e; /* Set the color of the thumb */
+
+	border-radius: 6px; /* Add rounded edges to the thumb */
+	transition: 0.5s;
+}
+::-webkit-scrollbar-thumb:hover {
+	background-color: #423c3b; /* Set the color of the thumb */
+	transition: 0.5s;
+}
+
+/* Style the scrollbar track when the handle is being dragged */
+::-webkit-scrollbar-track {
+	background-color: transparent; /* Set the background color of the track */
+}
+
+/* Style the scrollbar corner */
+::-webkit-scrollbar-corner {
+	background-color: transparent; /* Set the background color of the corner */
 }

@@ -18,8 +18,7 @@ const DataContainer: React.FC<DataContainerProps> = ({ children }) => {
 				backgroundColor: '',
 				height: `${positionPercentage}%`,
 				width: '100%',
-				overflowX: 'auto',
-				overflowY: 'auto',
+
 				padding: '1%',
 			}}
 		>
