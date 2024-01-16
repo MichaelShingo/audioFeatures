@@ -1,8 +1,17 @@
 import { Stack } from '@mui/system';
 import { actions, useAppState } from '../context/AppStateContext';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Typography, useTheme } from '@mui/material';
-import { Time } from '../utils/timecodeCalculations';
+
+const calcMinutes = (currentTimeInSeconds: number): number => {
+	return Math.floor(currentTimeInSeconds / 60);
+};
+const calcSeconds = (currentTimeInSeconds: number): number => {
+	return Math.floor(currentTimeInSeconds % 60);
+};
+const calcMilliseconds = (currentTimeInSeconds: number): number => {
+	return Math.round((currentTimeInSeconds * 1000) % 1000);
+};
 
 const Timecode = () => {
 	const { state, dispatch } = useAppState();
@@ -21,47 +30,26 @@ const Timecode = () => {
 		textAlign: 'center' as const,
 	};
 
-	const setMinutes = (e: React.ChangeEvent<HTMLInputElement>) => {
-		dispatch({ type: actions.SET_MINUTES, payload: parseInt(e.target.value) });
-	};
-	const setSeconds = (e: React.ChangeEvent<HTMLInputElement>) => {
-		dispatch({ type: actions.SET_SECONDS, payload: parseInt(e.target.value) });
-	};
-	const setMilliseconds = (e: React.ChangeEvent<HTMLInputElement>) => {
-		dispatch({ type: actions.SET_MILLISECONDS, payload: parseInt(e.target.value) });
-		// dispatch({
-		// 	type: actions.SET_TIMECODE,
-		// 	payload: { minutes: 0, seconds: 0, milliseconds: parseInt(e.target.value) },
-		// });
-	};
-
-	// const setTimecode = (e: React.ChangeEvent<HTMLInputElement>, time: Time) => {
-	// 	dispatch({
-	// 		type: actions.SET_TIMECODE,
-	// 		payload: { minutes: 0, seconds: 0, milliseconds: 0 },
-	// 	});
-	// };
-
 	return (
 		<Stack direction="row" sx={{ marginRight: '5px' }}>
 			<input
 				type="number"
 				onChange={(e: React.ChangeEvent<HTMLInputElement>) => setMinutes(e)}
-				value={state.minutes}
+				value={calcMinutes(state.seconds)}
 				style={inputStyle}
 			/>
 			<Typography sx={colonStyle}>:</Typography>
 			<input
 				type="number"
 				onChange={(e) => setSeconds(e)}
-				value={state.seconds}
+				value={calcSeconds(state.seconds)}
 				style={inputStyle}
 			/>
 			<Typography sx={colonStyle}>:</Typography>
 			<input
 				type="number"
 				onChange={(e) => setMilliseconds(e)}
-				value={state.milliseconds}
+				value={calcMilliseconds(state.seconds)}
 				style={inputStyle}
 			/>
 		</Stack>

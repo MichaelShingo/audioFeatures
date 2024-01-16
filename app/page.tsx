@@ -7,12 +7,14 @@ import AudioComponent from './components/AudioComponent';
 import DataDisplay from './components/DataDisplay';
 import DataContainer from './components/DataContainer';
 import UpperContainer from './components/UpperContainer';
+import MousePosition from './components/MousePosition';
 
 export default function Home() {
 	return (
 		<ThemeProvider theme={theme}>
 			<AppStateProvider>
 				<AppContainer>
+					<MousePosition />
 					<AudioComponent />
 					<UpperContainer />
 					<DataContainer>

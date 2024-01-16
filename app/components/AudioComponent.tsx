@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import Meyda, { MeydaFeaturesObject } from 'meyda';
 import {
 	BUFFER_SIZE,
@@ -65,6 +65,7 @@ const AudioComponent: React.FC = () => {
 			const audioBufferFile: AudioBuffer =
 				await state.audioContext.decodeAudioData(audioBinaryFile);
 
+			dispatch({ type: actions.SET_AUDIO_DURATION, payload: audioBufferFile.duration });
 			dispatch({ type: actions.SET_AUDIO_BUFFER, payload: audioBufferFile });
 
 			Meyda.bufferSize = BUFFER_SIZE;
@@ -75,7 +76,7 @@ const AudioComponent: React.FC = () => {
 			dispatch({ type: actions.SET_WAVEFORM, payload: waveformData });
 
 			const numFrames: number = Math.floor(waveformData.length / BUFFER_SIZE);
-			const chromaResults: number[][] = [];
+			let chromaResults: number[][] = [];
 			const loudnessResults: Loudness[] = [];
 			const spectralFlatnessResults: SpectralFlatness[] = [];
 
@@ -107,6 +108,9 @@ const AudioComponent: React.FC = () => {
 				spectralFlatnessResults.length,
 				chromaResults.length
 			);
+			if (chromaResults === undefined) {
+				chromaResults = [[0]];
+			}
 			return chromaResults;
 		}
 	};

@@ -9,6 +9,11 @@ import {
 export const H_BREAKPOINT = 440;
 export const SETTINGS_ROW_SPACING: string = '10px';
 
+type MousePosition = {
+	x: number;
+	y: number;
+};
+
 interface GlobalState {
 	dark_mode: boolean;
 	settings_open: boolean;
@@ -33,6 +38,11 @@ interface GlobalState {
 	currentTime: number;
 	isUploaded: boolean;
 	isUploading: boolean;
+	mousePosition: MousePosition;
+	isSeekHandleHovered: boolean;
+	waveformWidth: number;
+	wavelengthLength: number;
+	audioDuration: number;
 }
 
 const initialState: GlobalState = {
@@ -59,6 +69,11 @@ const initialState: GlobalState = {
 	currentTime: 0,
 	isUploaded: false,
 	isUploading: false,
+	mousePosition: { x: 0, y: 0 },
+	isSeekHandleHovered: false,
+	waveformWidth: 0,
+	wavelengthLength: 0,
+	audioDuration: 0,
 };
 
 export type AppAction = {
@@ -66,6 +81,7 @@ export type AppAction = {
 	payload?:
 		| string
 		| number
+		| MousePosition
 		| File
 		| Float32Array
 		| PitchData
@@ -106,6 +122,11 @@ export const actions: Record<string, string> = {
 	SET_CURRENT_TIME: 'SET_CURRENT_TIME',
 	SET_IS_UPLOADED: 'SET_IS_UPLOADED',
 	SET_IS_UPLOADING: 'SET_IS_UPLOADING',
+	SET_MOUSE_POSITION: 'SET_MOUSE_POSITION',
+	SET_IS_SEEK_HANDLE_HOVERED: 'SET_IS_SEEK_HANDLE_HOVERED',
+	SET_WAVEFORM_WIDTH: 'SET_WAVEFORM_WIDTH',
+	SET_WAVELENGTH_LENGTH: 'SET_WAVELENGTH_LENGTH',
+	SET_AUDIO_DURATION: 'SET_AUDIO_DURATION',
 };
 
 const appReducer = (state: GlobalState, action: AppAction): GlobalState => {
@@ -170,6 +191,16 @@ const appReducer = (state: GlobalState, action: AppAction): GlobalState => {
 			return { ...state, isUploaded: action.payload as boolean };
 		case actions.SET_IS_UPLOADING:
 			return { ...state, isUploading: action.payload as boolean };
+		case actions.SET_MOUSE_POSITION:
+			return { ...state, mousePosition: action.payload as MousePosition };
+		case actions.SET_IS_SEEK_HANDLE_HOVERED:
+			return { ...state, isSeekHandleHovered: action.payload as boolean };
+		case actions.SET_WAVEFORM_WIDTH:
+			return { ...state, waveformWidth: action.payload as number };
+		case actions.SET_WAVELENGTH_LENGTH:
+			return { ...state, wavelengthLength: action.payload as number };
+		case actions.SET_AUDIO_DURATION:
+			return { ...state, audioDuration: action.payload as number };
 		default:
 			return state;
 	}

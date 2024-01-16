@@ -3,6 +3,7 @@ import { actions, useAppState } from '../context/AppStateContext';
 import { LinearProgress, Typography, useTheme } from '@mui/material';
 import HoverMarker from './HoverMarker';
 import { Box, Stack } from '@mui/system';
+import SeekHandle from './SeekHandle';
 
 const calcMinAndMax = (waveform: Float32Array): [number, number] => {
 	let max = -Infinity;
@@ -31,7 +32,6 @@ const scaleToRange = (
 const Waveform: React.FC = () => {
 	const { state, dispatch } = useAppState();
 	const theme = useTheme();
-
 	let scaledWaveform: Float32Array | null = null;
 
 	if (state.waveform) {
@@ -49,9 +49,10 @@ const Waveform: React.FC = () => {
 		if (!scaledWaveform || !state.waveform) {
 			return res;
 		}
-
+		const loudnessDataLength: number = state.loudnessData.length;
+		// dispatch({ type: actions.SET_WAVELENGTH_LENGTH, payload: loudnessDataLength });
 		// pitch data is an array of arrays.length(12)
-		for (let i = 0; i < state.loudnessData.length; i++) {
+		for (let i = 0; i < loudnessDataLength; i++) {
 			const loudnessTotal: number | undefined = state.loudnessData[i]?.total;
 			let loudness: number = 0;
 			if (loudnessTotal) {
@@ -96,8 +97,8 @@ const Waveform: React.FC = () => {
 				backgroundColor: '',
 				height: '90%',
 				overflowX: 'auto',
-				overflowY: 'hidden',
-				paddingInline: '25px',
+				overflowY: 'auto',
+				paddingInline: '0px',
 				display: 'flex',
 				alignItems: 'center',
 				justifyContent: 'flex-start',
@@ -133,6 +134,7 @@ const Waveform: React.FC = () => {
 				</Box>
 			</Stack>
 			<HoverMarker />
+			<SeekHandle />
 			{scaledWaveform && generateWaveform()}
 		</div>
 	);

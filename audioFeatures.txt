@@ -1,6 +1,12 @@
 import { actions, useAppState } from '../context/AppStateContext';
 const { state, dispatch } = useAppState();
 
+- Timecode display with playback
+- waveform height should scale to max volume 
+- timecode seeking handle 
+
+
+
 Typescript cheat sheet:
 	onClickHandler: (e: React.MouseEvent<HTMLButtonElement>) => void;
 	

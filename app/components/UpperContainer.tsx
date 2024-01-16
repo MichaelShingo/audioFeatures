@@ -1,12 +1,12 @@
 import { Box } from '@mui/system';
-import { actions, useAppState } from '../context/AppStateContext';
+import { useAppState } from '../context/AppStateContext';
 import Waveform from './Waveform';
 import PlaybackControls from './PlaybackControls';
-import { Typography, useTheme } from '@mui/material';
+import { useTheme } from '@mui/material';
 interface UpperContainerProps {}
 
 const UpperContainer: React.FC<UpperContainerProps> = () => {
-	const { state, dispatch } = useAppState();
+	const { state } = useAppState();
 	const theme = useTheme();
 	const positionPercentage: number = (state.resizePosition / state.windowHeight) * 100;
 
@@ -17,7 +17,6 @@ const UpperContainer: React.FC<UpperContainerProps> = () => {
 				backgroundColor: '',
 			}}
 		>
-			{/* <HoverMarker /> */}
 			<Waveform />
 
 			<Box

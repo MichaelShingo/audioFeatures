@@ -22,6 +22,8 @@ const PlaybackControls: React.FC = () => {
 		}
 	}, [state.audioBuffer]);
 
+	const fps: number = 1 / 20;
+
 	const playAudio = () => {
 		Tone.start();
 		const startTime: number = state.seconds;
@@ -34,7 +36,7 @@ const PlaybackControls: React.FC = () => {
 			if (transportState === 'started') {
 				dispatch({ type: actions.SET_SECONDS, payload: currentTime });
 			}
-		}, 0.1);
+		}, fps);
 		dispatch({ type: actions.SET_IS_PLAYING, payload: true });
 	};
 

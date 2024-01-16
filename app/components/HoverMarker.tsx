@@ -1,34 +1,22 @@
 import { useTheme } from '@mui/material';
-import { actions, useAppState } from '../context/AppStateContext';
-import React, { useState, useEffect } from 'react';
+import { useAppState } from '../context/AppStateContext';
+import React from 'react';
 
-const HoverMarker = () => {
-	const { state, dispatch } = useAppState();
-	const [mousePosition, setMousePosition] = useState<number>(0);
+const HoverMarker: React.FC = () => {
+	const { state } = useAppState();
 	const theme = useTheme();
-
-	const handleMouseMove = (event: MouseEvent) => {
-		setMousePosition(event.clientX);
-	};
-
-	useEffect(() => {
-		window.addEventListener('mousemove', handleMouseMove);
-
-		return () => {
-			window.removeEventListener('mousemove', handleMouseMove);
-		};
-	}, []);
 
 	return (
 		<div
 			style={{
 				backgroundColor: theme.palette.common.brightRed,
-				height: `${state.resizePosition - 7}px`,
+				height: `${state.resizePosition - 50}px`,
 				width: '1px',
 				position: 'absolute',
-				left: `${mousePosition}px`,
+				left: `${state.mousePosition.x}px`,
 				opacity: '50%',
-				visibility: state.isHoveredWaveform ? 'visible' : 'hidden',
+				visibility:
+					state.isHoveredWaveform && !state.isSeekHandleHovered ? 'visible' : 'hidden',
 				pointerEvents: 'none',
 				zIndex: '-1',
 			}}
