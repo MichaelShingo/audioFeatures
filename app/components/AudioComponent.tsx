@@ -23,6 +23,8 @@ const AudioComponent: React.FC = () => {
 		const setPitchData = async () => {
 			if (state.audioFile) {
 				const pitchResults: PitchData = await analyzePitch(state.audioFile);
+				dispatch({ type: actions.SET_IS_UPLOADING, payload: false });
+				dispatch({ type: actions.SET_IS_UPLOADED, payload: true });
 				dispatch({
 					type: actions.SET_PITCH_DATA,
 					payload: pitchResults as PitchData,
@@ -58,52 +60,55 @@ const AudioComponent: React.FC = () => {
 
 	const getFeatures = async (fileBuffer: File) => {
 		const audioBinaryFile: ArrayBuffer = await fileBuffer.arrayBuffer();
-		const audioBufferFile: AudioBuffer =
-			await audioContext.decodeAudioData(audioBinaryFile);
 
-		dispatch({ type: actions.SET_AUDIO_BUFFER, payload: audioBufferFile });
+		if (state.audioContext) {
+			const audioBufferFile: AudioBuffer =
+				await state.audioContext.decodeAudioData(audioBinaryFile);
 
-		Meyda.bufferSize = BUFFER_SIZE;
-		Meyda.sampleRate = audioBufferFile.sampleRate;
+			dispatch({ type: actions.SET_AUDIO_BUFFER, payload: audioBufferFile });
 
-		const waveformData: Float32Array = audioBufferFile.getChannelData(0);
+			Meyda.bufferSize = BUFFER_SIZE;
+			Meyda.sampleRate = audioBufferFile.sampleRate;
 
-		dispatch({ type: actions.SET_WAVEFORM, payload: waveformData });
+			const waveformData: Float32Array = audioBufferFile.getChannelData(0);
 
-		const numFrames: number = Math.floor(waveformData.length / BUFFER_SIZE);
-		const chromaResults: number[][] = [];
-		const loudnessResults: Loudness[] = [];
-		const spectralFlatnessResults: SpectralFlatness[] = [];
+			dispatch({ type: actions.SET_WAVEFORM, payload: waveformData });
 
-		for (let i = 0; i < numFrames; i++) {
-			const start: number = i * BUFFER_SIZE;
-			const end: number = start + BUFFER_SIZE;
-			const frame: Float32Array = waveformData.subarray(start, end);
-			const features: Partial<MeydaFeaturesObject> | null = Meyda.extract(
-				['chroma', 'loudness', 'spectralFlatness'],
-				frame
+			const numFrames: number = Math.floor(waveformData.length / BUFFER_SIZE);
+			const chromaResults: number[][] = [];
+			const loudnessResults: Loudness[] = [];
+			const spectralFlatnessResults: SpectralFlatness[] = [];
+
+			for (let i = 0; i < numFrames; i++) {
+				const start: number = i * BUFFER_SIZE;
+				const end: number = start + BUFFER_SIZE;
+				const frame: Float32Array = waveformData.subarray(start, end);
+				const features: Partial<MeydaFeaturesObject> | null = Meyda.extract(
+					['chroma', 'loudness', 'spectralFlatness'],
+					frame
+				);
+
+				chromaResults.push(features?.chroma as number[]);
+				loudnessResults.push(features?.loudness);
+				spectralFlatnessResults.push(features?.spectralFlatness);
+			}
+			dispatch({
+				type: actions.SET_LOUDNESS_DATA,
+				payload: loudnessResults,
+			});
+
+			dispatch({
+				type: actions.SET_SPECTRAL_FLATNESS_DATA,
+				payload: spectralFlatnessResults as SpectralFlatness[],
+			});
+
+			console.log(
+				loudnessResults.length,
+				spectralFlatnessResults.length,
+				chromaResults.length
 			);
-
-			chromaResults.push(features?.chroma as number[]);
-			loudnessResults.push(features?.loudness);
-			spectralFlatnessResults.push(features?.spectralFlatness);
+			return chromaResults;
 		}
-		dispatch({
-			type: actions.SET_LOUDNESS_DATA,
-			payload: loudnessResults,
-		});
-
-		dispatch({
-			type: actions.SET_SPECTRAL_FLATNESS_DATA,
-			payload: spectralFlatnessResults as SpectralFlatness[],
-		});
-
-		console.log(
-			loudnessResults.length,
-			spectralFlatnessResults.length,
-			chromaResults.length
-		);
-		return chromaResults;
 	};
 
 	return <></>;

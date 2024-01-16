@@ -1,8 +1,8 @@
 import React, { ReactNode } from 'react';
-import { Stack } from '@mui/system';
 import { actions, useAppState } from '../context/AppStateContext';
-import { useTheme } from '@mui/material';
+import { LinearProgress, Typography, useTheme } from '@mui/material';
 import HoverMarker from './HoverMarker';
+import { Box, Stack } from '@mui/system';
 
 const calcMinAndMax = (waveform: Float32Array): [number, number] => {
 	let max = -Infinity;
@@ -39,17 +39,16 @@ const Waveform: React.FC = () => {
 		scaledWaveform = state.waveform.map((value) => scaleToRange(value, min, max, 0, 100));
 	}
 
-	const handleOnMouseEnter = (value: number) => {
-		dispatch({ type: actions.SET_CURRENT_PCM, payload: value });
-		dispatch({ type: actions.SET_IS_HOVERED_WAVEFORM, payload: true });
-	};
+	// const handleOnMouseEnter = (value: number) => {
+	// 	dispatch({ type: actions.SET_CURRENT_PCM, payload: value });
+	// 	dispatch({ type: actions.SET_IS_HOVERED_WAVEFORM, payload: true });
+	// };
 
 	const generateWaveform = (): ReactNode[] => {
 		const res: ReactNode[] = [];
 		if (!scaledWaveform || !state.waveform) {
 			return res;
 		}
-		// console.log(scaledWaveform.length, state.pitchData);
 
 		// pitch data is an array of arrays.length(12)
 		for (let i = 0; i < state.loudnessData.length; i++) {
@@ -98,7 +97,6 @@ const Waveform: React.FC = () => {
 				height: '90%',
 				overflowX: 'auto',
 				overflowY: 'hidden',
-
 				paddingInline: '25px',
 				display: 'flex',
 				alignItems: 'center',
@@ -106,11 +104,35 @@ const Waveform: React.FC = () => {
 				flexDirection: 'row',
 				flexWrap: 'nowrap',
 				gap: '0px',
+				marginBottom: '7px',
 			}}
 		>
+			<Stack
+				alignItems="center"
+				justifyContent="center"
+				sx={{ width: '100%', display: state.isUploaded ? 'none' : 'block' }}
+			>
+				<Typography
+					sx={{
+						textAlign: 'center',
+						marginBottom: '25px',
+						width: '100%',
+					}}
+					variant="h4"
+				>
+					Upload audio or activate microphone.
+				</Typography>
+				<Box
+					sx={{
+						width: '50%',
+						marginInline: 'auto',
+						visibility: state.isUploading ? 'visible' : 'hidden',
+					}}
+				>
+					<LinearProgress />
+				</Box>
+			</Stack>
 			<HoverMarker />
-			{/* <div style={{ width: '20000px', height: '50px', backgroundColor: 'blue' }}></div>
-			<div style={{ width: '20000px', height: '50px', backgroundColor: 'blue' }}></div> */}
 			{scaledWaveform && generateWaveform()}
 		</div>
 	);

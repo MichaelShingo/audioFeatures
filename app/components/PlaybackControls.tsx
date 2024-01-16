@@ -23,7 +23,6 @@ const PlaybackControls: React.FC = () => {
 	}, [state.audioBuffer]);
 
 	const playAudio = () => {
-		// player.current?.seek(5, 0);
 		Tone.start();
 		const startTime: number = state.seconds;
 		Tone.Transport.seconds = startTime;
@@ -81,7 +80,7 @@ const PlaybackControls: React.FC = () => {
 				icon={<StopIcon />}
 			/>
 			<FilledIconButton
-				isActive={!state.isPlaying}
+				isActive={!state.isPlaying && state.isUploaded}
 				onClickHandler={playAudio}
 				icon={<PlayArrowIcon style={{}} />}
 			/>

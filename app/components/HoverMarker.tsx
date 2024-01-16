@@ -23,11 +23,11 @@ const HoverMarker = () => {
 		<div
 			style={{
 				backgroundColor: theme.palette.common.brightRed,
-				height: `${state.resizePosition}px`,
+				height: `${state.resizePosition - 7}px`,
 				width: '1px',
 				position: 'absolute',
 				left: `${mousePosition}px`,
-				opacity: '40%',
+				opacity: '50%',
 				visibility: state.isHoveredWaveform ? 'visible' : 'hidden',
 				pointerEvents: 'none',
 				zIndex: '-1',

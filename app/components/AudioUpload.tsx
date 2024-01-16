@@ -19,6 +19,7 @@ const AudioUpload: React.FC = () => {
 	const { dispatch } = useAppState();
 
 	const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+		dispatch({ type: actions.SET_IS_UPLOADING, payload: true });
 		const file = event.target.files?.[0];
 		if (file) {
 			dispatch({ type: actions.SET_AUDIO_FILE, payload: file });

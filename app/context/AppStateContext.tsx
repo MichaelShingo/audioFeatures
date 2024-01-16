@@ -32,6 +32,7 @@ interface GlobalState {
 	isPlaying: boolean;
 	currentTime: number;
 	isUploaded: boolean;
+	isUploading: boolean;
 }
 
 const initialState: GlobalState = {
@@ -57,6 +58,7 @@ const initialState: GlobalState = {
 	isPlaying: false,
 	currentTime: 0,
 	isUploaded: false,
+	isUploading: false,
 };
 
 export type AppAction = {
@@ -103,6 +105,7 @@ export const actions: Record<string, string> = {
 	SET_IS_PLAYING: 'SET_IS_PLAYING',
 	SET_CURRENT_TIME: 'SET_CURRENT_TIME',
 	SET_IS_UPLOADED: 'SET_IS_UPLOADED',
+	SET_IS_UPLOADING: 'SET_IS_UPLOADING',
 };
 
 const appReducer = (state: GlobalState, action: AppAction): GlobalState => {
@@ -165,6 +168,8 @@ const appReducer = (state: GlobalState, action: AppAction): GlobalState => {
 			return { ...state, currentTime: action.payload as number };
 		case actions.SET_IS_UPLOADED:
 			return { ...state, isUploaded: action.payload as boolean };
+		case actions.SET_IS_UPLOADING:
+			return { ...state, isUploading: action.payload as boolean };
 		default:
 			return state;
 	}

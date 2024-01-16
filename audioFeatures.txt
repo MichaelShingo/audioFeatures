@@ -1,6 +1,10 @@
 import { actions, useAppState } from '../context/AppStateContext';
 const { state, dispatch } = useAppState();
 
+Typescript cheat sheet:
+	onClickHandler: (e: React.MouseEvent<HTMLButtonElement>) => void;
+	
+
 waveform grey 423c3b
 background grey 161616
 play red df4440

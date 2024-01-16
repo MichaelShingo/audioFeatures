@@ -20,9 +20,11 @@ const FilledIconButton: React.FC<FilledIconButtonProps> = ({
 }) => {
 	const theme = useTheme();
 
+	const disabledClick = () => {};
+
 	return (
 		<Box
-			onClick={onClickHandler}
+			onClick={isActive ? onClickHandler : disabledClick}
 			sx={{
 				backgroundColor: isActive
 					? theme.palette.common.brightRed

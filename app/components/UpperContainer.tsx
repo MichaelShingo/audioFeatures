@@ -2,7 +2,7 @@ import { Box } from '@mui/system';
 import { actions, useAppState } from '../context/AppStateContext';
 import Waveform from './Waveform';
 import PlaybackControls from './PlaybackControls';
-import { useTheme } from '@mui/material';
+import { Typography, useTheme } from '@mui/material';
 interface UpperContainerProps {}
 
 const UpperContainer: React.FC<UpperContainerProps> = () => {
@@ -19,6 +19,7 @@ const UpperContainer: React.FC<UpperContainerProps> = () => {
 		>
 			{/* <HoverMarker /> */}
 			<Waveform />
+
 			<Box
 				sx={{
 					width: '100%',
