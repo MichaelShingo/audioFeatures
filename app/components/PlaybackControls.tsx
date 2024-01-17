@@ -42,13 +42,14 @@ const PlaybackControls: React.FC = () => {
 	};
 
 	const pauseAudio = () => {
-		dispatch({
-			type: actions.SET_SECONDS,
-			payload: Tone.Transport.seconds,
-		});
+		dispatch({ type: actions.SET_IS_PLAYING, payload: false });
+		const currentTime: number = Tone.Transport.seconds;
 		player.current?.stop();
 		Tone.Transport.stop();
-		dispatch({ type: actions.SET_IS_PLAYING, payload: false });
+		dispatch({
+			type: actions.SET_SECONDS,
+			payload: currentTime,
+		});
 	};
 
 	const listenAudio = () => {

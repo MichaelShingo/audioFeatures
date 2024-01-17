@@ -46,36 +46,41 @@ const Timecode = () => {
 	};
 
 	useEffect(() => {
+		refMilliseconds.current.value = 0;
+		refSeconds.current.value = 0;
+		refMinutes.current.value = 0;
+	}, []);
+	useEffect(() => {
 		const fps: number = 1 / 20;
 
-		if (state.isPlaying) {
+		Tone.Transport.pause;
+
+		if (Tone.Transport.state === 'started') {
 			const transportState: Tone.PlaybackState = Tone.Transport.state;
 			Tone.Transport.scheduleRepeat(() => {
 				const currentTime: number = Tone.Transport.seconds;
-				if (transportState === 'started') {
-					refMilliseconds.current.value = calcMilliseconds(currentTime);
-					refSeconds.current.value = calcSeconds(currentTime);
-					refMinutes.current.value = calcMinutes(currentTime);
-				}
+				refMilliseconds.current.value = calcMilliseconds(currentTime);
+				refSeconds.current.value = calcSeconds(currentTime);
+				refMinutes.current.value = calcMinutes(currentTime);
 			}, fps);
 		} else {
 			console.log('stopping or pausing');
-			// setTimeout(() => {
-			// 	const currentTime: number = state.seconds;
-			// 	refMilliseconds.current.value = calcMilliseconds(currentTime);
-			// 	refSeconds.current.value = calcSeconds(currentTime);
-			// 	refMinutes.current.value = calcMinutes(currentTime);
-			// }, 50);
+			setTimeout(() => {
+				const currentTime: number = state.seconds;
+				refMilliseconds.current.value = calcMilliseconds(currentTime);
+				refSeconds.current.value = calcSeconds(currentTime);
+				refMinutes.current.value = calcMinutes(currentTime);
+			}, 50);
 		}
 	}, [state.isPlaying]);
 
-	useEffect(() => {
-		const currentTime: number = state.seconds;
-		console.log(currentTime);
-		refMilliseconds.current.value = calcMilliseconds(currentTime);
-		refSeconds.current.value = calcSeconds(currentTime);
-		refMinutes.current.value = calcMinutes(currentTime);
-	}, [state.seconds]);
+	// useEffect(() => {
+	// 	const currentTime: number = state.seconds;
+	// 	console.log(currentTime);
+	// 	refMilliseconds.current.value = calcMilliseconds(currentTime);
+	// 	refSeconds.current.value = calcSeconds(currentTime);
+	// 	refMinutes.current.value = calcMinutes(currentTime);
+	// }, [state.seconds]);
 
 	return (
 		<Stack direction="row" sx={{ marginRight: '5px' }}>
