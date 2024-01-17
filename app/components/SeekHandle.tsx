@@ -17,17 +17,10 @@ const SeekHandle: React.FC = () => {
 		dispatch({ type: actions.SET_IS_SEEK_HANDLE_HOVERED, payload: false });
 	};
 
-	// Need size of the div
-	// total duration of audio
-	// calculate position based on percentage
-
 	const calcPosition = (): number => {
-		console.log(state.seconds, state.audioDuration, wavelengthLength);
 		const playbackPercentage: number = state.seconds / state.audioDuration;
 		return playbackPercentage * wavelengthLength;
 	};
-
-	console.log('calc position', calcPosition());
 
 	return (
 		<Box

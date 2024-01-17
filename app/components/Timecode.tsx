@@ -1,7 +1,8 @@
 import { Stack } from '@mui/system';
-import { actions, useAppState } from '../context/AppStateContext';
-import React, { useEffect } from 'react';
+import { useAppState } from '../context/AppStateContext';
+import React, { ChangeEvent, useEffect, useRef } from 'react';
 import { Typography, useTheme } from '@mui/material';
+import * as Tone from 'tone';
 
 const calcMinutes = (currentTimeInSeconds: number): number => {
 	return Math.floor(currentTimeInSeconds / 60);
@@ -14,8 +15,11 @@ const calcMilliseconds = (currentTimeInSeconds: number): number => {
 };
 
 const Timecode = () => {
-	const { state, dispatch } = useAppState();
+	const { state } = useAppState();
 	const theme = useTheme();
+	const refMilliseconds = useRef<HTMLInputElement>(null);
+	const refSeconds = useRef<HTMLInputElement>(null);
+	const refMinutes = useRef<HTMLInputElement>(null);
 
 	const inputStyle = {
 		backgroundColor: theme.palette.common.mediumGrey,
@@ -30,28 +34,56 @@ const Timecode = () => {
 		textAlign: 'center' as const,
 	};
 
+	const setSeconds = (e: ChangeEvent<HTMLInputElement>) => {
+		console.log('set minutes', e.target.value);
+	};
+	const setMinutes = (e: ChangeEvent<HTMLInputElement>) => {
+		console.log('set minutes', e.target.value);
+	};
+
+	const setMilliseconds = (e: ChangeEvent<HTMLInputElement>) => {
+		console.log('set minutes', e.target.value);
+	};
+
+	useEffect(() => {
+		const fps: number = 1 / 20;
+
+		if (state.isPlaying) {
+			const transportState: Tone.PlaybackState = Tone.Transport.state;
+			Tone.Transport.scheduleRepeat(() => {
+				const currentTime: number = Tone.Transport.seconds;
+				if (transportState === 'started') {
+					refMilliseconds.current.value = calcMilliseconds(currentTime);
+					refSeconds.current.value = calcSeconds(currentTime);
+					refMinutes.current.value = calcMinutes(currentTime);
+				}
+			}, fps);
+		} else {
+			console.log('stopping or pausing');
+			// setTimeout(() => {
+			// 	const currentTime: number = state.seconds;
+			// 	refMilliseconds.current.value = calcMilliseconds(currentTime);
+			// 	refSeconds.current.value = calcSeconds(currentTime);
+			// 	refMinutes.current.value = calcMinutes(currentTime);
+			// }, 50);
+		}
+	}, [state.isPlaying]);
+
+	useEffect(() => {
+		const currentTime: number = state.seconds;
+		console.log(currentTime);
+		refMilliseconds.current.value = calcMilliseconds(currentTime);
+		refSeconds.current.value = calcSeconds(currentTime);
+		refMinutes.current.value = calcMinutes(currentTime);
+	}, [state.seconds]);
+
 	return (
 		<Stack direction="row" sx={{ marginRight: '5px' }}>
-			<input
-				type="number"
-				onChange={(e: React.ChangeEvent<HTMLInputElement>) => setMinutes(e)}
-				value={calcMinutes(state.seconds)}
-				style={inputStyle}
-			/>
+			<input ref={refMinutes} type="number" style={inputStyle} />
 			<Typography sx={colonStyle}>:</Typography>
-			<input
-				type="number"
-				onChange={(e) => setSeconds(e)}
-				value={calcSeconds(state.seconds)}
-				style={inputStyle}
-			/>
+			<input type="number" ref={refSeconds} style={inputStyle} />
 			<Typography sx={colonStyle}>:</Typography>
-			<input
-				type="number"
-				onChange={(e) => setMilliseconds(e)}
-				value={calcMilliseconds(state.seconds)}
-				style={inputStyle}
-			/>
+			<input ref={refMilliseconds} type="number" style={inputStyle} />
 		</Stack>
 	);
 };

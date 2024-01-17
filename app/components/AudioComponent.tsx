@@ -8,16 +8,10 @@ import {
 	SpectralFlatness,
 } from '../data/constants';
 import { actions, useAppState } from '../context/AppStateContext';
-
-let audioContext: AudioContext;
+import * as Tone from 'tone';
 
 const AudioComponent: React.FC = () => {
 	const { state, dispatch } = useAppState();
-
-	useEffect(() => {
-		audioContext = new window.AudioContext();
-		dispatch({ type: actions.SET_AUDIO_CONTEXT, payload: audioContext });
-	}, []);
 
 	useEffect(() => {
 		const setPitchData = async () => {
@@ -61,9 +55,9 @@ const AudioComponent: React.FC = () => {
 	const getFeatures = async (fileBuffer: File) => {
 		const audioBinaryFile: ArrayBuffer = await fileBuffer.arrayBuffer();
 
-		if (state.audioContext) {
+		if (Tone.context) {
 			const audioBufferFile: AudioBuffer =
-				await state.audioContext.decodeAudioData(audioBinaryFile);
+				await Tone.context.decodeAudioData(audioBinaryFile);
 
 			dispatch({ type: actions.SET_AUDIO_DURATION, payload: audioBufferFile.duration });
 			dispatch({ type: actions.SET_AUDIO_BUFFER, payload: audioBufferFile });

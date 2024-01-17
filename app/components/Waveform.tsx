@@ -133,7 +133,7 @@ const Waveform: React.FC = () => {
 					<LinearProgress />
 				</Box>
 			</Stack>
-			<HoverMarker />
+			{/* <HoverMarker /> */}
 			<SeekHandle />
 			{scaledWaveform && generateWaveform()}
 		</div>

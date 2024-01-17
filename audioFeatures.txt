@@ -1,6 +1,7 @@
 import { actions, useAppState } from '../context/AppStateContext';
 const { state, dispatch } = useAppState();
 
+- is there any issue with multiple audio contexts between tone and web audio? 
 - Timecode display with playback
 - waveform height should scale to max volume 
 - timecode seeking handle 

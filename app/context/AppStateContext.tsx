@@ -33,7 +33,6 @@ interface GlobalState {
 	markerPosition: number;
 	timecode: Timecode;
 	audioBuffer: AudioBuffer | null;
-	audioContext: AudioContext | null;
 	isPlaying: boolean;
 	currentTime: number;
 	isUploaded: boolean;
@@ -64,7 +63,6 @@ const initialState: GlobalState = {
 	markerPosition: 0,
 	timecode: { minutes: 0, seconds: 0, milliseconds: 0 },
 	audioBuffer: null,
-	audioContext: null,
 	isPlaying: false,
 	currentTime: 0,
 	isUploaded: false,
@@ -89,7 +87,6 @@ export type AppAction = {
 		| boolean
 		| Timecode
 		| AudioBuffer
-		| AudioContext
 		| SpectralFlatness[];
 };
 
@@ -117,7 +114,6 @@ export const actions: Record<string, string> = {
 	SET_MARKER_POSITION: 'SET_MARKER_POSITION',
 	SET_TIMECODE: 'SET_TIMECODE',
 	SET_AUDIO_BUFFER: 'SET_AUDIO_BUFFER',
-	SET_AUDIO_CONTEXT: 'SET_AUDIO_CONTEXT',
 	SET_IS_PLAYING: 'SET_IS_PLAYING',
 	SET_CURRENT_TIME: 'SET_CURRENT_TIME',
 	SET_IS_UPLOADED: 'SET_IS_UPLOADED',
@@ -181,8 +177,7 @@ const appReducer = (state: GlobalState, action: AppAction): GlobalState => {
 			return { ...state, timecode: { minutes: 0, seconds: 0, milliseconds: 0 } };
 		case actions.SET_AUDIO_BUFFER:
 			return { ...state, audioBuffer: action.payload as AudioBuffer };
-		case actions.SET_AUDIO_CONTEXT:
-			return { ...state, audioContext: action.payload as AudioContext };
+
 		case actions.SET_IS_PLAYING:
 			return { ...state, isPlaying: action.payload as boolean };
 		case actions.SET_CURRENT_TIME:
