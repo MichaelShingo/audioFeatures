@@ -45,42 +45,32 @@ const Timecode = () => {
 		console.log('set minutes', e.target.value);
 	};
 
+	const setTimecode = (currentTime: number): void => {
+		refMilliseconds.current.value = calcMilliseconds(currentTime);
+		refSeconds.current.value = calcSeconds(currentTime);
+		refMinutes.current.value = calcMinutes(currentTime);
+	};
+
 	useEffect(() => {
-		refMilliseconds.current.value = 0;
-		refSeconds.current.value = 0;
-		refMinutes.current.value = 0;
+		setTimecode(0);
 	}, []);
+
 	useEffect(() => {
-		const fps: number = 1 / 20;
-
-		Tone.Transport.pause;
-
+		const fps: number = 1 / 10;
+		let scheduleRepeatId: number | undefined = undefined;
 		if (Tone.Transport.state === 'started') {
-			const transportState: Tone.PlaybackState = Tone.Transport.state;
-			Tone.Transport.scheduleRepeat(() => {
+			scheduleRepeatId = Tone.Transport.scheduleRepeat(() => {
 				const currentTime: number = Tone.Transport.seconds;
-				refMilliseconds.current.value = calcMilliseconds(currentTime);
-				refSeconds.current.value = calcSeconds(currentTime);
-				refMinutes.current.value = calcMinutes(currentTime);
+				setTimecode(currentTime);
 			}, fps);
 		} else {
-			console.log('stopping or pausing');
-			setTimeout(() => {
-				const currentTime: number = state.seconds;
-				refMilliseconds.current.value = calcMilliseconds(currentTime);
-				refSeconds.current.value = calcSeconds(currentTime);
-				refMinutes.current.value = calcMinutes(currentTime);
-			}, 50);
+			if (scheduleRepeatId) {
+				Tone.Transport.clear(scheduleRepeatId);
+			}
+			const currentTime: number = state.seconds;
+			setTimecode(currentTime);
 		}
 	}, [state.isPlaying]);
-
-	// useEffect(() => {
-	// 	const currentTime: number = state.seconds;
-	// 	console.log(currentTime);
-	// 	refMilliseconds.current.value = calcMilliseconds(currentTime);
-	// 	refSeconds.current.value = calcSeconds(currentTime);
-	// 	refMinutes.current.value = calcMinutes(currentTime);
-	// }, [state.seconds]);
 
 	return (
 		<Stack direction="row" sx={{ marginRight: '5px' }}>

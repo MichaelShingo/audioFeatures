@@ -4,6 +4,7 @@ import { LinearProgress, Typography, useTheme } from '@mui/material';
 import HoverMarker from './HoverMarker';
 import { Box, Stack } from '@mui/system';
 import SeekHandle from './SeekHandle';
+import { WAVEFORM_PIXEL_WIDTH } from '../data/constants';
 
 const calcMinAndMax = (waveform: Float32Array): [number, number] => {
 	let max = -Infinity;
@@ -63,7 +64,7 @@ const Waveform: React.FC = () => {
 					key={i}
 					// onMouseEnter={() => handleOnMouseEnter(loudness)}
 					style={{
-						width: '0.5px',
+						width: `${WAVEFORM_PIXEL_WIDTH}px`,
 						height: `${loudness}%`,
 						backgroundColor: theme.palette.common.lightGrey,
 						zIndex: '-5',

@@ -14,6 +14,8 @@ export const PITCH_LETTERS = [
 	'B',
 ];
 
+export const WAVEFORM_PIXEL_WIDTH: number = 2;
+
 export type PitchData = (number | string | number[])[];
 export type Loudness = { specific: Float32Array; total: number } | undefined;
 export type SpectralFlatness = number | undefined;

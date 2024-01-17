@@ -19,6 +19,7 @@ const PlaybackControls: React.FC = () => {
 	useEffect(() => {
 		if (state.audioBuffer) {
 			player.current = new Tone.Player(state.audioBuffer).toDestination();
+			player.current.sync().start(0);
 		}
 	}, [state.audioBuffer]);
 
@@ -27,12 +28,10 @@ const PlaybackControls: React.FC = () => {
 		const startTime: number = state.seconds;
 		Tone.Transport.seconds = startTime;
 		Tone.Transport.start();
-		player.current?.start(0, startTime);
 		dispatch({ type: actions.SET_IS_PLAYING, payload: true });
 	};
 
 	const stopAudio = () => {
-		player.current?.stop();
 		Tone.Transport.stop();
 		dispatch({ type: actions.SET_IS_PLAYING, payload: false });
 		dispatch({
@@ -44,8 +43,7 @@ const PlaybackControls: React.FC = () => {
 	const pauseAudio = () => {
 		dispatch({ type: actions.SET_IS_PLAYING, payload: false });
 		const currentTime: number = Tone.Transport.seconds;
-		player.current?.stop();
-		Tone.Transport.stop();
+		Tone.Transport.pause();
 		dispatch({
 			type: actions.SET_SECONDS,
 			payload: currentTime,
