@@ -115,7 +115,6 @@ export const actions: Record<string, string> = {
 	SET_TIMECODE: 'SET_TIMECODE',
 	SET_AUDIO_BUFFER: 'SET_AUDIO_BUFFER',
 	SET_IS_PLAYING: 'SET_IS_PLAYING',
-	SET_CURRENT_TIME: 'SET_CURRENT_TIME',
 	SET_IS_UPLOADED: 'SET_IS_UPLOADED',
 	SET_IS_UPLOADING: 'SET_IS_UPLOADING',
 	SET_MOUSE_POSITION: 'SET_MOUSE_POSITION',
@@ -180,8 +179,7 @@ const appReducer = (state: GlobalState, action: AppAction): GlobalState => {
 
 		case actions.SET_IS_PLAYING:
 			return { ...state, isPlaying: action.payload as boolean };
-		case actions.SET_CURRENT_TIME:
-			return { ...state, currentTime: action.payload as number };
+
 		case actions.SET_IS_UPLOADED:
 			return { ...state, isUploaded: action.payload as boolean };
 		case actions.SET_IS_UPLOADING:

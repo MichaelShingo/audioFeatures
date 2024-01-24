@@ -5,6 +5,7 @@ const { state, dispatch } = useAppState();
 - Timecode display with playback
 - waveform height should scale to max volume 
 - timecode seeking handle 
+- stop transport at end of song
 
 
 

@@ -1,8 +1,7 @@
 import { useTheme } from '@mui/material';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { actions, useAppState } from '../context/AppStateContext';
 import { Box } from '@mui/system';
-import * as Tone from 'tone';
 import { WAVEFORM_PIXEL_WIDTH } from '../data/constants';
 
 const SeekHandle: React.FC = () => {
@@ -10,6 +9,15 @@ const SeekHandle: React.FC = () => {
 	const theme = useTheme();
 	const ref = useRef<HTMLElement>(null);
 	const wavelengthLength: number = state.loudnessData.length / (1 / WAVEFORM_PIXEL_WIDTH);
+
+	const calcPosition = (currentTimeInSeconds: number): number => {
+		const playbackPercentage: number = currentTimeInSeconds / state.audioDuration;
+		return playbackPercentage * wavelengthLength;
+	};
+
+	const [staticPosition, setStaticPosition] = useState<string>(
+		`${calcPosition(state.seconds)}px`
+	);
 
 	const handleOnMouseEnter = () => {
 		dispatch({ type: actions.SET_IS_SEEK_HANDLE_HOVERED, payload: true });
@@ -19,29 +27,9 @@ const SeekHandle: React.FC = () => {
 		dispatch({ type: actions.SET_IS_SEEK_HANDLE_HOVERED, payload: false });
 	};
 
-	const calcPosition = (currentTimeInSeconds: number): number => {
-		const playbackPercentage: number = currentTimeInSeconds / state.audioDuration;
-		return playbackPercentage * wavelengthLength;
-	};
-
 	useEffect(() => {
-		const fps: number = 1 / 30;
-		let scheduleRepeatId: number | undefined = undefined;
-		if (Tone.Transport.state === 'started') {
-			scheduleRepeatId = Tone.Transport.scheduleRepeat(() => {
-				const position: number = calcPosition(Tone.Transport.seconds);
-				if (ref.current) {
-					ref.current.style.left = `${position}px`;
-				}
-			}, fps);
-		} else {
-			if (scheduleRepeatId) {
-				Tone.Transport.clear(scheduleRepeatId);
-			}
-			const position: number = calcPosition(Tone.Transport.seconds);
-			if (ref.current) {
-				ref.current.style.left = `${position}px`;
-			}
+		if (!state.isPlaying) {
+			setStaticPosition(`${calcPosition(state.seconds)}px`);
 		}
 	}, [state.isPlaying]);
 
@@ -57,6 +45,18 @@ const SeekHandle: React.FC = () => {
 				position: 'relative',
 				top: '0px',
 				zIndex: '2',
+				left: staticPosition,
+				'@keyframes playAnimation': {
+					from: {
+						left: `${calcPosition(state.seconds)}px`,
+					},
+					to: {
+						left: `${calcPosition(state.audioDuration)}px`,
+					},
+				},
+				animation: state.isPlaying
+					? `playAnimation ${state.audioDuration - state.seconds}s linear`
+					: 'none',
 			}}
 		>
 			<Box
@@ -80,7 +80,7 @@ const SeekHandle: React.FC = () => {
 					borderRight: '5px solid transparent',
 					borderTop: `5px solid ${theme.palette.common.lightBlue}`,
 					position: 'relative',
-					left: '-3px',
+					left: '-4px',
 					top: '0px',
 					'&:hover': {
 						cursor: 'grab',

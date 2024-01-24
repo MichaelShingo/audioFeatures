@@ -46,31 +46,32 @@ const Timecode = () => {
 	};
 
 	const setTimecode = (currentTime: number): void => {
+		return;
 		refMilliseconds.current.value = calcMilliseconds(currentTime);
 		refSeconds.current.value = calcSeconds(currentTime);
 		refMinutes.current.value = calcMinutes(currentTime);
 	};
 
 	useEffect(() => {
-		setTimecode(0);
+		// setTimecode(0);
 	}, []);
 
-	useEffect(() => {
-		const fps: number = 1 / 10;
-		let scheduleRepeatId: number | undefined = undefined;
-		if (Tone.Transport.state === 'started') {
-			scheduleRepeatId = Tone.Transport.scheduleRepeat(() => {
-				const currentTime: number = Tone.Transport.seconds;
-				setTimecode(currentTime);
-			}, fps);
-		} else {
-			if (scheduleRepeatId) {
-				Tone.Transport.clear(scheduleRepeatId);
-			}
-			const currentTime: number = state.seconds;
-			setTimecode(currentTime);
-		}
-	}, [state.isPlaying]);
+	// useEffect(() => {
+	// 	const fps: number = 1 / 10;
+	// 	let scheduleRepeatId: number | undefined = undefined;
+	// 	if (Tone.Transport.state === 'started') {
+	// 		scheduleRepeatId = Tone.Transport.scheduleRepeat(() => {
+	// 			const currentTime: number = Tone.Transport.seconds;
+	// 			setTimecode(currentTime);
+	// 		}, fps);
+	// 	} else {
+	// 		if (scheduleRepeatId) {
+	// 			Tone.Transport.clear(scheduleRepeatId);
+	// 		}
+	// 		const currentTime: number = state.seconds;
+	// 		setTimecode(currentTime);
+	// 	}
+	// }, [state.isPlaying]);
 
 	return (
 		<Stack direction="row" sx={{ marginRight: '5px' }}>
