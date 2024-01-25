@@ -14,6 +14,8 @@ const AudioComponent: React.FC = () => {
 	const { state, dispatch } = useAppState();
 
 	useEffect(() => {
+		dispatch({ type: actions.SET_SECONDS, payload: 0 });
+		Tone.Transport.seconds = 0;
 		const setPitchData = async () => {
 			if (state.audioFile) {
 				const pitchResults: PitchData = await analyzePitch(state.audioFile);

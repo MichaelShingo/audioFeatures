@@ -18,7 +18,7 @@ const HoverMarker: React.FC = () => {
 				visibility:
 					state.isHoveredWaveform && !state.isSeekHandleHovered ? 'visible' : 'hidden',
 				pointerEvents: 'none',
-				zIndex: '-1',
+				zIndex: '2',
 			}}
 		></div>
 	);

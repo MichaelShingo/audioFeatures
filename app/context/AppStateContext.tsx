@@ -152,11 +152,11 @@ const appReducer = (state: GlobalState, action: AppAction): GlobalState => {
 			const timecode = calculateSeconds(action.payload as number);
 			return {
 				...state,
-				minutes:
-					timecode.minutes > 0
-						? (state.minutes as number) + (timecode.minutes as number)
-						: state.minutes,
-				seconds: timecode.seconds,
+				// minutes:
+				// 	timecode.minutes > 0
+				// 		? (state.minutes as number) + (timecode.minutes as number)
+				// 		: state.minutes,
+				seconds: action.payload as number,
 			};
 		}
 		case actions.SET_MILLISECONDS: {

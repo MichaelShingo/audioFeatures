@@ -15,23 +15,44 @@ const PlaybackControls: React.FC = () => {
 	const { state, dispatch } = useAppState();
 	const theme = useTheme();
 	const player = useRef<Tone.Player | null>(null);
+	let scheduleRepeaterId: number = 0;
 
 	useEffect(() => {
+		player.current?.dispose();
 		if (state.audioBuffer) {
 			player.current = new Tone.Player(state.audioBuffer).toDestination();
 			player.current.sync().start(0);
 		}
 	}, [state.audioBuffer]);
 
+	useEffect(() => {
+		// Tone.Transport.clear(scheduleRepeaterId);
+		// Tone.Transport.cancel(scheduleRepeaterId);
+	}, [state.isUploading]);
+
+	const checkIsEndofAudioFile = (transportTime: number, audioDuration: number) => {
+		if (transportTime > audioDuration) {
+			console.log('stop audio', transportTime, audioDuration);
+			stopAudio();
+		}
+	};
 	const playAudio = () => {
 		Tone.start();
 		const startTime: number = state.seconds;
+		console.log(startTime);
 		Tone.Transport.seconds = startTime;
 		Tone.Transport.start();
 		dispatch({ type: actions.SET_IS_PLAYING, payload: true });
+
+		scheduleRepeaterId = Tone.Transport.scheduleRepeat(
+			() => checkIsEndofAudioFile(Tone.Transport.seconds, state.audioDuration),
+			0.1,
+			0
+		);
 	};
 
 	const stopAudio = () => {
+		Tone.Transport.clear(scheduleRepeaterId);
 		Tone.Transport.stop();
 		dispatch({ type: actions.SET_IS_PLAYING, payload: false });
 		dispatch({
@@ -41,9 +62,9 @@ const PlaybackControls: React.FC = () => {
 	};
 
 	const pauseAudio = () => {
-		dispatch({ type: actions.SET_IS_PLAYING, payload: false });
-		const currentTime: number = Tone.Transport.seconds;
 		Tone.Transport.pause();
+		const currentTime: number = Tone.Transport.seconds;
+		dispatch({ type: actions.SET_IS_PLAYING, payload: false });
 		dispatch({
 			type: actions.SET_SECONDS,
 			payload: currentTime,

@@ -1,8 +1,9 @@
 import { useTheme } from '@mui/material';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { actions, useAppState } from '../context/AppStateContext';
 import { Box } from '@mui/system';
 import { WAVEFORM_PIXEL_WIDTH } from '../data/constants';
+import * as Tone from 'tone';
 
 const SeekHandle: React.FC = () => {
 	const { state, dispatch } = useAppState();
@@ -15,10 +16,6 @@ const SeekHandle: React.FC = () => {
 		return playbackPercentage * wavelengthLength;
 	};
 
-	const [staticPosition, setStaticPosition] = useState<string>(
-		`${calcPosition(state.seconds)}px`
-	);
-
 	const handleOnMouseEnter = () => {
 		dispatch({ type: actions.SET_IS_SEEK_HANDLE_HOVERED, payload: true });
 	};
@@ -28,10 +25,32 @@ const SeekHandle: React.FC = () => {
 	};
 
 	useEffect(() => {
-		if (!state.isPlaying) {
-			setStaticPosition(`${calcPosition(state.seconds)}px`);
+		if (ref.current) {
+			ref.current.style.left = `${calcPosition(state.seconds)}px`;
 		}
 	}, [state.isPlaying, state.seconds]);
+
+	function updatePosition() {
+		const position = calcPosition(Tone.Transport.seconds);
+		if (ref.current) {
+			ref.current.style.left = `${position}px`;
+		}
+	}
+
+	useEffect(() => {
+		let scheduledEventId: number = 0;
+		if (Tone.Transport.state === 'started') {
+			scheduledEventId = Tone.Transport.scheduleRepeat(
+				function (time) {
+					Tone.Draw.schedule(updatePosition, time);
+				},
+				1 / 60,
+				0
+			);
+		} else {
+			// Tone.Transport.clear(scheduledEventId);
+		}
+	}, [state.isPlaying]);
 
 	return (
 		<Box
@@ -45,7 +64,6 @@ const SeekHandle: React.FC = () => {
 				position: 'relative',
 				top: '0px',
 				zIndex: '2',
-				left: staticPosition,
 				'@keyframes playAnimation': {
 					from: {
 						left: `${calcPosition(state.seconds)}px`,
@@ -54,9 +72,9 @@ const SeekHandle: React.FC = () => {
 						left: `${calcPosition(state.audioDuration)}px`,
 					},
 				},
-				animation: state.isPlaying
-					? `playAnimation ${state.audioDuration - state.seconds}s linear`
-					: 'none',
+				// animation: state.isPlaying
+				// 	? `playAnimation ${state.audioDuration - state.seconds}s linear`
+				// 	: 'none',
 			}}
 		>
 			<Box
