@@ -1,10 +1,12 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 import { actions, useAppState } from '../context/AppStateContext';
 import { LinearProgress, Typography, useTheme } from '@mui/material';
 import HoverMarker from './HoverMarker';
 import { Box, Stack } from '@mui/system';
 import SeekHandle from './SeekHandle';
-import { WAVEFORM_PIXEL_WIDTH } from '../data/constants';
+import { Loudness, WAVEFORM_PIXEL_WIDTH } from '../data/constants';
+
+// TODO: can you set points based on audio volume, then draw curve, then fill shape within svg?
 
 const calcMinAndMax = (waveform: Float32Array): [number, number] => {
 	let max = -Infinity;
@@ -33,6 +35,12 @@ const scaleToRange = (
 const Waveform: React.FC = () => {
 	const { state, dispatch } = useAppState();
 	const theme = useTheme();
+	const [svgData, setSVGData] =
+		useState<string>(`<svg xmlns="http://www.w3.org/2000/svg" width="500" height="200" viewBox="0 0 500 200">
+		
+	  </svg>
+	  
+  `);
 	let scaledWaveform: Float32Array | null = null;
 
 	if (state.waveform) {
@@ -45,35 +53,46 @@ const Waveform: React.FC = () => {
 	// 	dispatch({ type: actions.SET_IS_HOVERED_WAVEFORM, payload: true });
 	// };
 
-	const generateWaveform = (): ReactNode[] => {
-		const res: ReactNode[] = [];
+	useEffect(() => {
+		generateWaveform();
+	}, [state.isUploaded]);
+
+	const generateWaveform = (): void => {
 		if (!scaledWaveform || !state.waveform) {
-			return res;
+			return;
 		}
+
 		const loudnessDataLength: number = state.loudnessData.length;
-		// dispatch({ type: actions.SET_WAVELENGTH_LENGTH, payload: loudnessDataLength });
-		// pitch data is an array of arrays.length(12)
+		let newSVGData: string = `<svg xmlns="http://www.w3.org/2000/svg" width="${loudnessDataLength}" height="1000" viewBox="0 0 ${loudnessDataLength} 1000">
+		<rect width="100%" height="100%" fill="rgba(255, 0, 0, 0)" />
+		<g fill="#3498db" stroke="#3498db" stroke-width="1">
+		<path d="M0 100, `;
+
+		const createSVGCoordinate = (x: number, y: number | undefined): string => {
+			let yValue: number | undefined = y;
+			const offset: number = 100;
+			yValue = y ? y + offset : offset;
+			return `L${x} ${Math.round(yValue * 5)}, `;
+		};
+
+		const getLoudnessTotal = (index: number): number | undefined => {
+			return state.loudnessData[index]?.total;
+		};
 		for (let i = 0; i < loudnessDataLength; i++) {
-			const loudnessTotal: number | undefined = state.loudnessData[i]?.total;
-			let loudness: number = 0;
-			if (loudnessTotal) {
-				loudness = loudnessTotal;
-			}
-			res.push(
-				<div
-					key={i}
-					// onMouseEnter={() => handleOnMouseEnter(loudness)}
-					style={{
-						width: `${WAVEFORM_PIXEL_WIDTH}px`,
-						height: `${loudness}%`,
-						backgroundColor: theme.palette.common.lightGrey,
-						zIndex: '-5',
-						flexShrink: '0',
-					}}
-				></div>
-			);
+			newSVGData += createSVGCoordinate(i, getLoudnessTotal(i));
 		}
-		return res;
+
+		for (let i = loudnessDataLength - 1; i >= 0; i--) {
+			let loudnessTotal: number | undefined = getLoudnessTotal(i);
+			loudnessTotal = loudnessTotal ? loudnessTotal * -1 : 0;
+			newSVGData += createSVGCoordinate(i, loudnessTotal);
+		}
+
+		newSVGData += `" fill-opacity="0.3" /></g></svg>`;
+
+		console.log(newSVGData);
+
+		setSVGData(newSVGData);
 	};
 
 	const handleOnMouseEnterStack = () => {
@@ -136,7 +155,9 @@ const Waveform: React.FC = () => {
 			</Stack>
 			{/* <HoverMarker /> */}
 			<SeekHandle />
-			{scaledWaveform && generateWaveform()}
+			<div dangerouslySetInnerHTML={{ __html: svgData }} />
+
+			{/* {scaledWaveform && generateWaveform()} */}
 		</div>
 	);
 };

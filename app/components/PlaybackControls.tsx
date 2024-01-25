@@ -63,7 +63,7 @@ const PlaybackControls: React.FC = () => {
 			<Timecode />
 			<AudioUpload />
 			<FilledIconButton
-				isActive={state.isPlaying}
+				isActive={state.isPlaying || state.seconds > 0}
 				onClickHandler={stopAudio}
 				icon={<StopIcon />}
 			/>

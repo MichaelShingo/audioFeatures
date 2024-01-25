@@ -31,7 +31,7 @@ const SeekHandle: React.FC = () => {
 		if (!state.isPlaying) {
 			setStaticPosition(`${calcPosition(state.seconds)}px`);
 		}
-	}, [state.isPlaying]);
+	}, [state.isPlaying, state.seconds]);
 
 	return (
 		<Box
