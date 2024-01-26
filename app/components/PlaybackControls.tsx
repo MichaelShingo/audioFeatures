@@ -7,52 +7,56 @@ import KeyboardVoiceIcon from '@mui/icons-material/KeyboardVoice';
 import Timecode from './Timecode';
 import FilledIconButton from './FilledIconButton';
 import ResizeInterface from './ResizeInterface';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import AudioUpload from './AudioUpload';
 import * as Tone from 'tone';
+
+let player: Tone.Player;
+player = new Tone.Player('/ringtone.mp3');
+let scheduleRepeaterId: number = -1;
 
 const PlaybackControls: React.FC = () => {
 	const { state, dispatch } = useAppState();
 	const theme = useTheme();
-	const player = useRef<Tone.Player | null>(null);
-	const scheduleRepeaterId: number = 0;
 
 	useEffect(() => {
-		player.current?.dispose();
+		player.dispose();
 		if (state.audioBuffer) {
-			player.current = new Tone.Player(state.audioBuffer).toDestination();
-			player.current.sync().start(0);
+			player = new Tone.Player(state.audioBuffer).toDestination();
+			player.sync().start(0);
 		}
 	}, [state.audioBuffer]);
 
 	useEffect(() => {
-		// Tone.Transport.clear(scheduleRepeaterId);
-		// Tone.Transport.cancel(scheduleRepeaterId);
+		if (scheduleRepeaterId !== -1) {
+			Tone.Transport.clear(scheduleRepeaterId);
+		}
+		if (state.isUploading) {
+			stopAudio();
+		}
 	}, [state.isUploading]);
 
 	const checkIsEndofAudioFile = (transportTime: number, audioDuration: number) => {
 		if (transportTime > audioDuration) {
-			console.log('stop audio', transportTime, audioDuration);
 			stopAudio();
 		}
 	};
 	const playAudio = () => {
 		const startTime: number = state.seconds;
-		console.log(startTime, Tone.Transport.seconds);
 		Tone.start();
 		Tone.Transport.seconds = startTime;
 		Tone.Transport.start();
 		dispatch({ type: actions.SET_IS_PLAYING, payload: true });
 
-		// scheduleRepeaterId = Tone.Transport.scheduleRepeat(
-		// 	() => checkIsEndofAudioFile(Tone.Transport.seconds, state.audioDuration),
-		// 	0.1,
-		// 	0
-		// );
+		scheduleRepeaterId = Tone.Transport.scheduleRepeat(
+			() => checkIsEndofAudioFile(Tone.Transport.seconds, state.audioDuration),
+			0.1,
+			0
+		);
 	};
 
 	const stopAudio = () => {
-		// Tone.Transport.clear(scheduleRepeaterId);
+		Tone.Transport.clear(scheduleRepeaterId);
 		Tone.Transport.stop();
 		dispatch({ type: actions.SET_IS_PLAYING, payload: false });
 		dispatch({
@@ -71,9 +75,7 @@ const PlaybackControls: React.FC = () => {
 		});
 	};
 
-	const listenAudio = () => {
-		console.log('listen');
-	};
+	const listenAudio = () => {};
 
 	return (
 		<Stack
