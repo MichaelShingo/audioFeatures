@@ -15,7 +15,7 @@ const PlaybackControls: React.FC = () => {
 	const { state, dispatch } = useAppState();
 	const theme = useTheme();
 	const player = useRef<Tone.Player | null>(null);
-	let scheduleRepeaterId: number = 0;
+	const scheduleRepeaterId: number = 0;
 
 	useEffect(() => {
 		player.current?.dispose();
@@ -37,22 +37,22 @@ const PlaybackControls: React.FC = () => {
 		}
 	};
 	const playAudio = () => {
-		Tone.start();
 		const startTime: number = state.seconds;
-		console.log(startTime);
+		console.log(startTime, Tone.Transport.seconds);
+		Tone.start();
 		Tone.Transport.seconds = startTime;
 		Tone.Transport.start();
 		dispatch({ type: actions.SET_IS_PLAYING, payload: true });
 
-		scheduleRepeaterId = Tone.Transport.scheduleRepeat(
-			() => checkIsEndofAudioFile(Tone.Transport.seconds, state.audioDuration),
-			0.1,
-			0
-		);
+		// scheduleRepeaterId = Tone.Transport.scheduleRepeat(
+		// 	() => checkIsEndofAudioFile(Tone.Transport.seconds, state.audioDuration),
+		// 	0.1,
+		// 	0
+		// );
 	};
 
 	const stopAudio = () => {
-		Tone.Transport.clear(scheduleRepeaterId);
+		// Tone.Transport.clear(scheduleRepeaterId);
 		Tone.Transport.stop();
 		dispatch({ type: actions.SET_IS_PLAYING, payload: false });
 		dispatch({
