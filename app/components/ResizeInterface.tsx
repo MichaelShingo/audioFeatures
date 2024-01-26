@@ -1,29 +1,28 @@
 import { IconButton } from '@mui/material';
 import { actions, useAppState } from '../context/AppStateContext';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 
 const ResizeInterface = () => {
-	const { dispatch } = useAppState();
-	const [isDragging, setIsDragging] = useState<boolean>(false);
+	const { state, dispatch } = useAppState();
 	const dragStartRef = useRef<number>(-1);
 
 	const handleMouseUp = (e: MouseEvent) => {
 		e.stopPropagation();
-		setIsDragging(false);
+		dispatch({ type: actions.SET_IS_DRAGGING, payload: false });
 		dragStartRef.current = -1;
 	};
 
 	const handleMouseMove = (e: MouseEvent) => {
 		e.stopPropagation();
-		if (isDragging) {
+		if (state.isDragging) {
 			dispatch({ type: actions.SET_RESIZE_POSITION, payload: e.clientY });
 		}
 	};
 
 	const handleOnMouseDown = (e: React.MouseEvent<Element, MouseEvent>) => {
 		e.stopPropagation();
-		setIsDragging(true);
+		dispatch({ type: actions.SET_IS_DRAGGING, payload: true });
 	};
 
 	useEffect(() => {
@@ -31,7 +30,7 @@ const ResizeInterface = () => {
 		return () => {
 			window.removeEventListener('mousemove', handleMouseMove);
 		};
-	}, [isDragging]);
+	}, [state.isDragging]);
 
 	useEffect(() => {
 		window.addEventListener('mouseup', handleMouseUp);
@@ -47,7 +46,7 @@ const ResizeInterface = () => {
 			sx={{
 				rotate: '90deg',
 				':hover': {
-					cursor: isDragging ? 'grabbing' : 'grab',
+					cursor: state.isDragging ? 'grabbing' : 'grab',
 					height: '2%',
 				},
 			}}

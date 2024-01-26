@@ -1,8 +1,10 @@
 import { actions, useAppState } from '../context/AppStateContext';
 const { state, dispatch } = useAppState();
 
-- new audio upload needs to set audioDuration properly? 
 
+- waveform should start at "0", is 太胖了
+- auto scroll horizontally with playback
+- timecode
 - waveform height should scale with container
 
 - why is seek handle flashing on animation

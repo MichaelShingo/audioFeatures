@@ -42,6 +42,7 @@ interface GlobalState {
 	waveformWidth: number;
 	wavelengthLength: number;
 	audioDuration: number;
+	isDragging: boolean;
 }
 
 const initialState: GlobalState = {
@@ -72,6 +73,7 @@ const initialState: GlobalState = {
 	waveformWidth: 0,
 	wavelengthLength: 0,
 	audioDuration: 0,
+	isDragging: false,
 };
 
 export type AppAction = {
@@ -122,6 +124,7 @@ export const actions: Record<string, string> = {
 	SET_WAVEFORM_WIDTH: 'SET_WAVEFORM_WIDTH',
 	SET_WAVELENGTH_LENGTH: 'SET_WAVELENGTH_LENGTH',
 	SET_AUDIO_DURATION: 'SET_AUDIO_DURATION',
+	SET_IS_DRAGGING: 'SET_IS_DRAGGING',
 };
 
 const appReducer = (state: GlobalState, action: AppAction): GlobalState => {
@@ -194,6 +197,8 @@ const appReducer = (state: GlobalState, action: AppAction): GlobalState => {
 			return { ...state, wavelengthLength: action.payload as number };
 		case actions.SET_AUDIO_DURATION:
 			return { ...state, audioDuration: action.payload as number };
+		case actions.SET_IS_DRAGGING:
+			return { ...state, isDragging: action.payload as boolean };
 		default:
 			return state;
 	}
