@@ -2,16 +2,12 @@ import { actions, useAppState } from '../context/AppStateContext';
 const { state, dispatch } = useAppState();
 
 
-- waveform should start at "0", is 太胖了
 - auto scroll horizontally with playback
 - timecode
-- waveform height should scale with container
+- draggable seek handle
 
 - why is seek handle flashing on animation
 - seek handle still lags sometimes (should you try a deploy?)
-- Timecode display with playback
-- timecode seeking handle 
-
 
 
 

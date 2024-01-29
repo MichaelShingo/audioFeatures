@@ -11,10 +11,13 @@ const AppContainer: React.FC<AppContainerProps> = ({ children }) => {
 	const { state, dispatch } = useAppState();
 	const isSmallScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
 	const theme = useTheme();
+
 	useEffect(() => {
 		dispatch({ type: actions.SET_WINDOW_HEIGHT, payload: window.innerHeight });
+		dispatch({ type: actions.SET_WINDOW_WIDTH, payload: window.innerWidth });
 		const handleResize = () => {
 			dispatch({ type: actions.SET_WINDOW_HEIGHT, payload: window.innerHeight });
+			dispatch({ type: actions.SET_WINDOW_WIDTH, payload: window.innerWidth });
 		};
 
 		window.addEventListener('resize', handleResize);

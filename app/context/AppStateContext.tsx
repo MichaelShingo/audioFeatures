@@ -22,6 +22,7 @@ interface GlobalState {
 	waveform: Float32Array | null;
 	currentPCM: number;
 	resizePosition: number;
+	windowWidth: number;
 	windowHeight: number;
 	pitchData: PitchData;
 	loudnessData: Loudness[];
@@ -43,6 +44,7 @@ interface GlobalState {
 	wavelengthLength: number;
 	audioDuration: number;
 	isDragging: boolean;
+	waveformScrollPosition: number;
 }
 
 const initialState: GlobalState = {
@@ -53,6 +55,7 @@ const initialState: GlobalState = {
 	waveform: null,
 	currentPCM: 0,
 	resizePosition: 500,
+	windowWidth: 2000,
 	windowHeight: 1000,
 	pitchData: [],
 	loudnessData: [],
@@ -74,6 +77,7 @@ const initialState: GlobalState = {
 	wavelengthLength: 0,
 	audioDuration: 0,
 	isDragging: false,
+	waveformScrollPosition: 0,
 };
 
 export type AppAction = {
@@ -105,6 +109,7 @@ export const actions: Record<string, string> = {
 	SET_WAVEFORM: 'SET_WAVEFORM',
 	SET_CURRENT_PCM: 'SET_CURRENT_PCM',
 	SET_RESIZE_POSITION: 'SET_RESIZE_POSITION',
+	SET_WINDOW_WIDTH: 'SET_WINDOW_WIDTH',
 	SET_WINDOW_HEIGHT: 'SET_WINDOW_HEIGHT',
 	SET_PITCH_DATA: 'SET_PITCH_DATA',
 	SET_LOUDNESS_DATA: 'SET_LOUDNESS_DATA',
@@ -125,6 +130,7 @@ export const actions: Record<string, string> = {
 	SET_WAVELENGTH_LENGTH: 'SET_WAVELENGTH_LENGTH',
 	SET_AUDIO_DURATION: 'SET_AUDIO_DURATION',
 	SET_IS_DRAGGING: 'SET_IS_DRAGGING',
+	SET_WAVEFORM_SCROLL_POSITION: 'SET_WAVEFORM_SCROLL_POSITION',
 };
 
 const appReducer = (state: GlobalState, action: AppAction): GlobalState => {
@@ -143,6 +149,8 @@ const appReducer = (state: GlobalState, action: AppAction): GlobalState => {
 			return { ...state, resizePosition: action.payload as number };
 		case actions.SET_WINDOW_HEIGHT:
 			return { ...state, windowHeight: action.payload as number };
+		case actions.SET_WINDOW_WIDTH:
+			return { ...state, windowWidth: action.payload as number };
 		case actions.SET_PITCH_DATA:
 			return { ...state, pitchData: action.payload as PitchData };
 		case actions.SET_LOUDNESS_DATA:
@@ -179,10 +187,8 @@ const appReducer = (state: GlobalState, action: AppAction): GlobalState => {
 			return { ...state, timecode: { minutes: 0, seconds: 0, milliseconds: 0 } };
 		case actions.SET_AUDIO_BUFFER:
 			return { ...state, audioBuffer: action.payload as AudioBuffer };
-
 		case actions.SET_IS_PLAYING:
 			return { ...state, isPlaying: action.payload as boolean };
-
 		case actions.SET_IS_UPLOADED:
 			return { ...state, isUploaded: action.payload as boolean };
 		case actions.SET_IS_UPLOADING:
@@ -199,6 +205,11 @@ const appReducer = (state: GlobalState, action: AppAction): GlobalState => {
 			return { ...state, audioDuration: action.payload as number };
 		case actions.SET_IS_DRAGGING:
 			return { ...state, isDragging: action.payload as boolean };
+		case actions.SET_WAVEFORM_SCROLL_POSITION: {
+			const newPosition: number = state.waveformScrollPosition + state.windowWidth;
+			return { ...state, waveformScrollPosition: newPosition };
+		}
+
 		default:
 			return state;
 	}

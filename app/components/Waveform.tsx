@@ -1,50 +1,28 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { actions, useAppState } from '../context/AppStateContext';
 import { LinearProgress, Typography } from '@mui/material';
 import HoverMarker from './HoverMarker';
 import { Box, Stack } from '@mui/system';
 import SeekHandle from './SeekHandle';
 
-const calcMinAndMax = (waveform: Float32Array): [number, number] => {
-	let max = -Infinity;
-	let min = Infinity;
-	for (const num of waveform) {
-		if (num > max) {
-			max = num;
-		}
-		if (num < min) {
-			min = num;
-		}
-	}
-	return [min, max];
-};
-
-const scaleToRange = (
-	value: number,
-	min: number,
-	max: number,
-	newMin: number,
-	newMax: number
-) => {
-	return ((value - min) / (max - min)) * (newMax - newMin) + newMin;
-};
-
 const Waveform: React.FC = () => {
 	const { state, dispatch } = useAppState();
 	const [svgData, setSVGData] = useState<string>(
 		`<svg xmlns="http://www.w3.org/2000/svg" width="500" height="200" viewBox="0 0 500 200"></svg>`
 	);
-	let scaledWaveform: Float32Array | null = null;
 
-	if (state.waveform) {
-		const [min, max] = calcMinAndMax(state.waveform);
-		scaledWaveform = state.waveform.map((value) => scaleToRange(value, min, max, 0, 100));
-	}
+	const containerRef = useRef<HTMLDivElement>();
 
 	// const handleOnMouseEnter = (value: number) => {
 	// 	dispatch({ type: actions.SET_CURRENT_PCM, payload: value });
 	// 	dispatch({ type: actions.SET_IS_HOVERED_WAVEFORM, payload: true });
 	// };
+
+	useEffect(() => {
+		if (containerRef.current) {
+			containerRef.current.scrollLeft = state.waveformScrollPosition;
+		}
+	}, [state.waveformScrollPosition]);
 
 	useEffect(() => {
 		if (!state.isUploading) {
@@ -58,9 +36,10 @@ const Waveform: React.FC = () => {
 		}
 
 		const loudnessDataLength: number = state.loudnessData.length;
-		let newSVGData: string = `<svg xmlns="http://www.w3.org/2000/svg" width="${loudnessDataLength}" viewBox="0 0 ${loudnessDataLength} 1000">
-		<g fill="#3498db" stroke="#3498db" stroke-width="1">
-		<path d="M0 0, `;
+		let newSVGData: string = `<svg xmlns="http://www.w3.org/2000/svg" 
+			width="${loudnessDataLength}" viewBox="0 0 ${loudnessDataLength} 1000">
+			<g fill="#3498db" stroke="#3498db" stroke-width="1">
+			<path d="M0 500, `;
 
 		for (let i = 0; i < loudnessDataLength; i++) {
 			newSVGData += createSVGCoordinate(i, getLoudnessTotal(i));
@@ -88,7 +67,7 @@ const Waveform: React.FC = () => {
 		return state.loudnessData[index]?.total;
 	};
 
-	const calcWaveformScalePercentage = (): number => {
+	const calcWaveformScalePercentage = (): number | undefined => {
 		if (state.isDragging) {
 			return state.mousePosition.y / 5;
 		}
@@ -108,6 +87,7 @@ const Waveform: React.FC = () => {
 
 	return (
 		<div
+			ref={containerRef}
 			id="waveform-container"
 			onMouseEnter={handleOnMouseEnterStack}
 			onMouseLeave={handleOnMouseLeave}

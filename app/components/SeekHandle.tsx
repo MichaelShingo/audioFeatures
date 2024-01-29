@@ -1,15 +1,18 @@
 import { useTheme } from '@mui/material';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { actions, useAppState } from '../context/AppStateContext';
 import { Box } from '@mui/system';
 import { WAVEFORM_PIXEL_WIDTH } from '../data/constants';
 import * as Tone from 'tone';
+
+let scheduledEventId: number = 0;
 
 const SeekHandle: React.FC = () => {
 	const { state, dispatch } = useAppState();
 	const theme = useTheme();
 	const ref = useRef<HTMLElement>(null);
 	const wavelengthLength: number = state.loudnessData.length / (1 / WAVEFORM_PIXEL_WIDTH);
+	const [remainder, setRemainder] = useState<number>(10);
 
 	const calcPosition = (currentTimeInSeconds: number): number => {
 		const playbackPercentage: number = currentTimeInSeconds / state.audioDuration;
@@ -30,15 +33,25 @@ const SeekHandle: React.FC = () => {
 		}
 	}, [state.isPlaying, state.seconds]);
 
-	function updatePosition() {
+	const updatePosition = (): void => {
+		// based on the screen size, you know the seconds at which you need to scroll.
+		// pixel to seconds conversion?
 		const position = calcPosition(Tone.Transport.seconds);
+		const currentRemainder: number = position % state.windowWidth;
+
+		console.log(position, state.windowWidth, position % state.windowWidth);
+		if (currentRemainder < remainder) {
+			console.log('set waveform scroll');
+			setRemainder(10);
+			dispatch({ type: actions.SET_WAVEFORM_SCROLL_POSITION });
+		}
 		if (ref.current) {
 			ref.current.style.left = `${position}px`;
 		}
-	}
+		setRemainder(currentRemainder);
+	};
 
 	useEffect(() => {
-		let scheduledEventId: number = 0;
 		if (Tone.Transport.state === 'started') {
 			scheduledEventId = Tone.Transport.scheduleRepeat(
 				function (time) {
@@ -64,17 +77,6 @@ const SeekHandle: React.FC = () => {
 				position: 'relative',
 				top: '0px',
 				zIndex: '2',
-				'@keyframes playAnimation': {
-					from: {
-						left: `${calcPosition(state.seconds)}px`,
-					},
-					to: {
-						left: `${calcPosition(state.audioDuration)}px`,
-					},
-				},
-				// animation: state.isPlaying
-				// 	? `playAnimation ${state.audioDuration - state.seconds}s linear`
-				// 	: 'none',
 			}}
 		>
 			<Box
