@@ -58,6 +58,7 @@ const PlaybackControls: React.FC = () => {
 	const stopAudio = () => {
 		Tone.Transport.clear(scheduleRepeaterId);
 		Tone.Transport.stop();
+		dispatch({ type: actions.SET_WAVEFORM_SCROLL_POSITION, payload: 0 });
 		dispatch({ type: actions.SET_IS_PLAYING, payload: false });
 		dispatch({
 			type: actions.SET_SECONDS,

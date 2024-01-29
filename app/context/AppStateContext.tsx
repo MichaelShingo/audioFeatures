@@ -206,10 +206,8 @@ const appReducer = (state: GlobalState, action: AppAction): GlobalState => {
 		case actions.SET_IS_DRAGGING:
 			return { ...state, isDragging: action.payload as boolean };
 		case actions.SET_WAVEFORM_SCROLL_POSITION: {
-			const newPosition: number = state.waveformScrollPosition + state.windowWidth;
-			return { ...state, waveformScrollPosition: newPosition };
+			return { ...state, waveformScrollPosition: action.payload as number };
 		}
-
 		default:
 			return state;
 	}

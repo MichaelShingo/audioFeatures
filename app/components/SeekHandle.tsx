@@ -12,7 +12,8 @@ const SeekHandle: React.FC = () => {
 	const theme = useTheme();
 	const ref = useRef<HTMLElement>(null);
 	const wavelengthLength: number = state.loudnessData.length / (1 / WAVEFORM_PIXEL_WIDTH);
-	const [remainder, setRemainder] = useState<number>(10);
+	const [prevRemainder, setPrevRemainder] = useState<number>(Infinity);
+	const previousSecond = useRef<number>(-1);
 
 	const calcPosition = (currentTimeInSeconds: number): number => {
 		const playbackPercentage: number = currentTimeInSeconds / state.audioDuration;
@@ -34,27 +35,48 @@ const SeekHandle: React.FC = () => {
 	}, [state.isPlaying, state.seconds]);
 
 	const updatePosition = (): void => {
-		// based on the screen size, you know the seconds at which you need to scroll.
-		// pixel to seconds conversion?
 		const position = calcPosition(Tone.Transport.seconds);
-		const currentRemainder: number = position % state.windowWidth;
-
-		console.log(position, state.windowWidth, position % state.windowWidth);
-		if (currentRemainder < remainder) {
-			console.log('set waveform scroll');
-			setRemainder(10);
-			dispatch({ type: actions.SET_WAVEFORM_SCROLL_POSITION });
-		}
 		if (ref.current) {
 			ref.current.style.left = `${position}px`;
 		}
-		setRemainder(currentRemainder);
+	};
+
+	useEffect(() => {
+		console.log('scroll position state', state.waveformScrollPosition);
+	}, [state.waveformScrollPosition]);
+
+	const handleScroll = (): void => {
+		const remainder: number = Tone.Transport.seconds % (state.windowWidth / 96);
+		const roundedSeconds: number = Math.floor(Tone.Transport.seconds);
+		const isNotFirstView: boolean = Tone.Transport.seconds > 1;
+		const isInitialOnsetOfSecond: boolean = previousSecond.current !== roundedSeconds;
+
+		// console.log(remainder, previousSecond.current);
+
+		if (isNotFirstView && isInitialOnsetOfSecond && remainder < 1) {
+			console.log('scrolled', state.windowWidth, state.waveformScrollPosition);
+
+			const newScrollPosition: number = state.windowWidth + state.waveformScrollPosition;
+			console.log(newScrollPosition);
+			dispatch({
+				type: actions.SET_WAVEFORM_SCROLL_POSITION,
+				payload: newScrollPosition,
+			});
+		}
+		previousSecond.current = Math.floor(Tone.Transport.seconds);
+		setPrevRemainder(remainder);
 	};
 
 	useEffect(() => {
 		if (Tone.Transport.state === 'started') {
+			Tone.Transport.scheduleRepeat(handleScroll, 1 / 4, 0);
+		}
+	}, [state.isPlaying]);
+
+	useEffect(() => {
+		if (Tone.Transport.state === 'started') {
 			scheduledEventId = Tone.Transport.scheduleRepeat(
-				function (time) {
+				(time) => {
 					Tone.Draw.schedule(updatePosition, time);
 				},
 				1 / 60,
