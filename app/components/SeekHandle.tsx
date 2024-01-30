@@ -4,6 +4,7 @@ import { actions, useAppState } from '../context/AppStateContext';
 import { Box } from '@mui/system';
 import { WAVEFORM_PIXEL_WIDTH } from '../data/constants';
 import * as Tone from 'tone';
+import { join } from 'path';
 
 let scheduledEventId: number = 0;
 
@@ -25,7 +26,8 @@ const SeekHandle: React.FC = () => {
 	};
 
 	const handleOnMouseLeave = () => {
-		dispatch({ type: actions.SET_IS_SEEK_HANDLE_HOVERED, payload: false });
+		console.log('mouse left seek');
+		// dispatch({ type: actions.SET_IS_SEEK_HANDLE_HOVERED, payload: false });
 	};
 
 	useEffect(() => {
@@ -41,10 +43,6 @@ const SeekHandle: React.FC = () => {
 		}
 	};
 
-	useEffect(() => {
-		console.log('scroll position state', state.waveformScrollPosition);
-	}, [state.waveformScrollPosition]);
-
 	const handleScroll = (): void => {
 		const remainder: number = Tone.Transport.seconds % (state.windowWidth / 96);
 		const roundedSeconds: number = Math.floor(Tone.Transport.seconds);
@@ -52,7 +50,6 @@ const SeekHandle: React.FC = () => {
 		const isInitialOnsetOfSecond: boolean = previousSecond.current !== roundedSeconds;
 
 		// console.log(remainder, previousSecond.current);
-
 		if (isNotFirstView && isInitialOnsetOfSecond && remainder < 1) {
 			console.log('scrolled', state.windowWidth, state.waveformScrollPosition);
 
@@ -87,11 +84,35 @@ const SeekHandle: React.FC = () => {
 		}
 	}, [state.isPlaying]);
 
+	const handleOnMouseDown = (e: React.MouseEvent): void => {
+		e.stopPropagation();
+		dispatch({ type: actions.SET_SEEK_HANDLE_MOUSE_DOWN, payload: true });
+	};
+	const handleOnMouseUp = (e: React.MouseEvent): void => {
+		e.stopPropagation();
+		dispatch({ type: actions.SET_SEEK_HANDLE_MOUSE_DOWN, payload: false });
+	};
+
+	useEffect(() => {
+		console.log(state.mousePosition);
+	}, [state.mousePosition]);
+
+	useEffect(() => {
+		// is mouse position change not being detected when not-allowed?
+		if (state.seekHandleMouseDown && ref.current) {
+			ref.current.style.left = `${
+				state.mousePosition.x + state.waveformScrollPosition
+			}px`;
+		}
+	}, [state.mousePosition, state.seekHandleMouseDown, state.waveformScrollPosition]);
+
 	return (
 		<Box
 			ref={ref}
 			onMouseEnter={handleOnMouseEnter}
 			onMouseLeave={handleOnMouseLeave}
+			onMouseDown={handleOnMouseDown}
+			onMouseUp={handleOnMouseUp}
 			sx={{
 				backgroundColor: theme.palette.common.brightRed,
 				height: `100%`,
@@ -99,6 +120,7 @@ const SeekHandle: React.FC = () => {
 				position: 'relative',
 				top: '0px',
 				zIndex: '2',
+				pointerEvents: 'visible',
 			}}
 		>
 			<Box

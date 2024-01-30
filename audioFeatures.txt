@@ -2,7 +2,23 @@ import { actions, useAppState } from '../context/AppStateContext';
 const { state, dispatch } = useAppState();
 
 
+
+
+
+
 - auto scroll horizontally with playback
+	- there needs to be logic that detects when the seekHandle reaches the end of the current view, no matter where the scroll position is. 
+	- can you calculate based on current scroll position and current view width, where is the end of the view area?
+	- CALCULATE THE NEXT BREAKPOINT POSITION. IF CUR_POS > NEXT_BREAKPOINT scroll, and update next_breakpoint
+	// what if you scroll while audio is playing?
+	// reset scroll state when stopping
+	// what happens when you pause?
+	// shouldn't scroll position be set absolutely instead of incrementally?
+	// what if you change window width: while it's playing, while it's paused, while it's stopped
+	// are there inconsistentcies with longer audio files?
+	// what about when you drag the handle
+
+	// should it be based on 
 - timecode
 - draggable seek handle
 

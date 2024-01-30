@@ -10,10 +10,11 @@ const MousePosition: React.FC = () => {
 	const { dispatch } = useAppState();
 
 	useEffect(() => {
-		const handleMouseMove = (event: MouseEvent) => {
+		const handleMouseMove = (e: MouseEvent) => {
+			e.stopPropagation();
 			dispatch({
 				type: actions.SET_MOUSE_POSITION,
-				payload: { x: event.clientX, y: event.clientY },
+				payload: { x: e.clientX, y: e.clientY },
 			});
 		};
 		window.addEventListener('mousemove', handleMouseMove);

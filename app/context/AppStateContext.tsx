@@ -45,6 +45,7 @@ interface GlobalState {
 	audioDuration: number;
 	isDragging: boolean;
 	waveformScrollPosition: number;
+	seekHandleMouseDown: boolean;
 }
 
 const initialState: GlobalState = {
@@ -78,6 +79,7 @@ const initialState: GlobalState = {
 	audioDuration: 0,
 	isDragging: false,
 	waveformScrollPosition: 0,
+	seekHandleMouseDown: false,
 };
 
 export type AppAction = {
@@ -131,6 +133,7 @@ export const actions: Record<string, string> = {
 	SET_AUDIO_DURATION: 'SET_AUDIO_DURATION',
 	SET_IS_DRAGGING: 'SET_IS_DRAGGING',
 	SET_WAVEFORM_SCROLL_POSITION: 'SET_WAVEFORM_SCROLL_POSITION',
+	SET_SEEK_HANDLE_MOUSE_DOWN: 'SET_SEEK_HANDLE_MOUSE_DOWN',
 };
 
 const appReducer = (state: GlobalState, action: AppAction): GlobalState => {
@@ -208,6 +211,13 @@ const appReducer = (state: GlobalState, action: AppAction): GlobalState => {
 		case actions.SET_WAVEFORM_SCROLL_POSITION: {
 			return { ...state, waveformScrollPosition: action.payload as number };
 		}
+		case actions.SET_SEEK_HANDLE_MOUSE_DOWN: {
+			return { ...state, seekHandleMouseDown: action.payload as boolean };
+		}
+		case actions.SET_GLOBAL_MOUSE_UP: {
+			return { ...state, seekHandleMouseDown: false };
+		}
+
 		default:
 			return state;
 	}

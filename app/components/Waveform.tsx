@@ -10,19 +10,40 @@ const Waveform: React.FC = () => {
 	const [svgData, setSVGData] = useState<string>(
 		`<svg xmlns="http://www.w3.org/2000/svg" width="500" height="200" viewBox="0 0 500 200"></svg>`
 	);
-
 	const containerRef = useRef<HTMLDivElement>();
+
+	useEffect(() => {
+		const handleScroll = () => {
+			if (containerRef.current) {
+				dispatch({
+					type: actions.SET_WAVEFORM_SCROLL_POSITION,
+					payload: containerRef.current.scrollLeft,
+				});
+			}
+		};
+
+		if (containerRef.current) {
+			containerRef.current.addEventListener('scroll', handleScroll);
+		}
+
+		return () => {
+			if (containerRef.current) {
+				containerRef.current.removeEventListener('scroll', handleScroll);
+			}
+		};
+	}, []);
 
 	// const handleOnMouseEnter = (value: number) => {
 	// 	dispatch({ type: actions.SET_CURRENT_PCM, payload: value });
 	// 	dispatch({ type: actions.SET_IS_HOVERED_WAVEFORM, payload: true });
 	// };
 
-	useEffect(() => {
-		if (containerRef.current) {
-			containerRef.current.scrollLeft = state.waveformScrollPosition;
-		}
-	}, [state.waveformScrollPosition]);
+	// useEffect(() => {
+	// 	// the state is not changing at all after 1st update
+	// 	if (containerRef.current) {
+	// 		containerRef.current.scrollLeft = state.waveformScrollPosition;
+	// 	}
+	// }, [state.waveformScrollPosition]);
 
 	useEffect(() => {
 		if (!state.isUploading) {
@@ -81,9 +102,9 @@ const Waveform: React.FC = () => {
 		dispatch({ type: actions.SET_IS_HOVERED_WAVEFORM, payload: false });
 	};
 
-	const handleClick = () => {
-		dispatch({ type: actions.SET_MARKER_POSITION, payload: 5 });
-	};
+	// const handleClick = () => {
+	// 	dispatch({ type: actions.SET_MARKER_POSITION, payload: 5 });
+	// };
 
 	return (
 		<div
@@ -91,7 +112,6 @@ const Waveform: React.FC = () => {
 			id="waveform-container"
 			onMouseEnter={handleOnMouseEnterStack}
 			onMouseLeave={handleOnMouseLeave}
-			onClick={handleClick}
 			style={{
 				width: '100vw',
 				backgroundColor: '',

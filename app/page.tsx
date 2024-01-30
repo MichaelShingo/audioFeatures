@@ -8,6 +8,7 @@ import DataDisplay from './components/DataDisplay';
 import DataContainer from './components/DataContainer';
 import UpperContainer from './components/UpperContainer';
 import MousePosition from './components/MousePosition';
+import MouseUpHandler from './components/MouseUpHandler';
 
 export default function Home() {
 	return (
@@ -15,6 +16,7 @@ export default function Home() {
 			<AppStateProvider>
 				<AppContainer>
 					<MousePosition />
+					<MouseUpHandler />
 					<AudioComponent />
 					<UpperContainer />
 					<DataContainer>
