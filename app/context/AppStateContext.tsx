@@ -27,9 +27,7 @@ interface GlobalState {
 	pitchData: PitchData;
 	loudnessData: Loudness[];
 	spectralFlatnessData: SpectralFlatness[];
-	minutes: number;
 	seconds: number;
-	milliseconds: number;
 	isHoveredWaveform: boolean;
 	markerPosition: number;
 	timecode: Timecode;
@@ -61,9 +59,7 @@ const initialState: GlobalState = {
 	pitchData: [],
 	loudnessData: [],
 	spectralFlatnessData: [],
-	minutes: 0,
 	seconds: 0,
-	milliseconds: 0,
 	isHoveredWaveform: false,
 	markerPosition: 0,
 	timecode: { minutes: 0, seconds: 0, milliseconds: 0 },
@@ -116,9 +112,7 @@ export const actions: Record<string, string> = {
 	SET_PITCH_DATA: 'SET_PITCH_DATA',
 	SET_LOUDNESS_DATA: 'SET_LOUDNESS_DATA',
 	SET_SPECTRAL_FLATNESS_DATA: 'SET_SPECTRAL_FLATNESS_DATA',
-	SET_MINUTES: 'SET_MINUTES',
 	SET_SECONDS: 'SET_SECONDS',
-	SET_MILLISECONDS: 'SET_MILLISECONDS',
 	SET_IS_HOVERED_WAVEFORM: 'SET_IS_HOVERED_WAVEFORM',
 	SET_MARKER_POSITION: 'SET_MARKER_POSITION',
 	SET_TIMECODE: 'SET_TIMECODE',
@@ -160,27 +154,11 @@ const appReducer = (state: GlobalState, action: AppAction): GlobalState => {
 			return { ...state, loudnessData: action.payload as Loudness[] };
 		case actions.SET_SPECTRAL_FLATNESS_DATA:
 			return { ...state, spectralFlatnessData: action.payload as SpectralFlatness[] };
-		case actions.SET_MINUTES:
-			return { ...state, minutes: action.payload as number };
 		case actions.SET_SECONDS: {
-			const timecode = calculateSeconds(action.payload as number);
-			return {
-				...state,
-				// minutes:
-				// 	timecode.minutes > 0
-				// 		? (state.minutes as number) + (timecode.minutes as number)
-				// 		: state.minutes,
-				seconds: action.payload as number,
-			};
-		}
-		case actions.SET_MILLISECONDS: {
-			const timecode = calculateMilliseconds(action.payload as number);
-			return {
-				...state,
-				minutes: timecode.minutes > 0 ? state.minutes + timecode.minutes : state.minutes,
-				seconds: timecode.seconds > 0 ? state.seconds + timecode.seconds : state.seconds,
-				milliseconds: timecode.milliseconds,
-			};
+			let seconds: number = action.payload as number;
+			seconds = seconds < 0 ? 0 : seconds;
+			seconds = seconds > state.audioDuration ? state.audioDuration : seconds;
+			return { ...state, seconds: seconds };
 		}
 		case actions.SET_IS_HOVERED_WAVEFORM:
 			return { ...state, isHoveredWaveform: !state.isHoveredWaveform };

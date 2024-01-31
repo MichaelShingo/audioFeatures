@@ -22,7 +22,7 @@ const MousePosition: React.FC = () => {
 		return () => {
 			window.removeEventListener('mousemove', handleMouseMove);
 		};
-	}, [dispatch]);
+	}, []);
 
 	return <></>;
 };

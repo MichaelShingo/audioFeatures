@@ -13,12 +13,11 @@ const ResizeInterface = () => {
 		dragStartRef.current = -1;
 	};
 
-	const handleMouseMove = (e: MouseEvent) => {
-		e.stopPropagation();
+	useEffect(() => {
 		if (state.isDragging) {
-			dispatch({ type: actions.SET_RESIZE_POSITION, payload: e.clientY });
+			dispatch({ type: actions.SET_RESIZE_POSITION, payload: state.mousePosition.y });
 		}
-	};
+	}, [state.mousePosition]);
 
 	const handleOnMouseDown = (e: React.MouseEvent<Element, MouseEvent>) => {
 		e.stopPropagation();
@@ -26,18 +25,10 @@ const ResizeInterface = () => {
 	};
 
 	useEffect(() => {
-		window.addEventListener('mousemove', handleMouseMove);
-		return () => {
-			window.removeEventListener('mousemove', handleMouseMove);
-		};
-	}, [state.isDragging]);
-
-	useEffect(() => {
 		window.addEventListener('mouseup', handleMouseUp);
 
 		return () => {
 			window.removeEventListener('mouseup', handleMouseUp);
-			window.removeEventListener('mousemove', handleMouseMove);
 		};
 	}, []);
 

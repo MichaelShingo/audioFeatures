@@ -4,7 +4,6 @@ import { actions, useAppState } from '../context/AppStateContext';
 import { Box } from '@mui/system';
 import { WAVEFORM_PIXEL_WIDTH } from '../data/constants';
 import * as Tone from 'tone';
-import { join } from 'path';
 
 let scheduledEventId: number = 0;
 
@@ -16,9 +15,14 @@ const SeekHandle: React.FC = () => {
 	const [prevRemainder, setPrevRemainder] = useState<number>(Infinity);
 	const previousSecond = useRef<number>(-1);
 
-	const calcPosition = (currentTimeInSeconds: number): number => {
+	const calcPositionFromSeconds = (currentTimeInSeconds: number): number => {
 		const playbackPercentage: number = currentTimeInSeconds / state.audioDuration;
 		return playbackPercentage * wavelengthLength;
+	};
+
+	const calcSecondsFromPosition = (currentPosition: number): number => {
+		const playbackPercentage = currentPosition / wavelengthLength;
+		return playbackPercentage * state.audioDuration;
 	};
 
 	const handleOnMouseEnter = () => {
@@ -32,7 +36,7 @@ const SeekHandle: React.FC = () => {
 
 	useEffect(() => {
 		if (ref.current) {
-			ref.current.style.left = `${calcPosition(state.seconds)}px`;
+			ref.current.style.left = `${calcPositionFromSeconds(state.seconds)}px`;
 		}
 	}, [state.isPlaying, state.seconds]);
 
@@ -64,7 +68,7 @@ const SeekHandle: React.FC = () => {
 	}, [state.isPlaying]);
 
 	const updatePosition = (): void => {
-		const position = calcPosition(Tone.Transport.seconds);
+		const position = calcPositionFromSeconds(Tone.Transport.seconds);
 		if (ref.current) {
 			ref.current.style.left = `${position}px`;
 		}
@@ -79,33 +83,39 @@ const SeekHandle: React.FC = () => {
 				1 / 60,
 				0
 			);
-		} else {
-			// Tone.Transport.clear(scheduledEventId);
 		}
 	}, [state.isPlaying]);
 
 	const handleOnMouseDown = (e: React.MouseEvent): void => {
-		// e.stopPropagation();
+		e.stopPropagation();
 		dispatch({ type: actions.SET_SEEK_HANDLE_MOUSE_DOWN, payload: true });
 	};
 	const handleOnMouseUp = (e: React.MouseEvent): void => {
-		// e.stopPropagation();
+		e.stopPropagation();
 		console.log('mouse up inside seek handle');
 		dispatch({ type: actions.SET_SEEK_HANDLE_MOUSE_DOWN, payload: false });
 	};
 
 	// useEffect(() => {
-	// 	console.log(state.mousePosition);
-	// }, [state.mousePosition]);
+	// 	console.log(state.mousePosition, state.seconds);
+	// }, [state.mousePosition, state.seconds]);
 
 	useEffect(() => {
 		// mouse position change not being detected when not-allowed?
+		const containerWidth: number = calcPositionFromSeconds(state.audioDuration);
+		let position: number = state.mousePosition.x + state.waveformScrollPosition;
+		position = position > containerWidth ? containerWidth : position;
+		position = position < 0 ? 0 : position;
 		if (state.seekHandleMouseDown && ref.current) {
-			ref.current.style.left = `${
-				state.mousePosition.x + state.waveformScrollPosition
-			}px`;
+			ref.current.style.left = `${position}px`;
+			dispatch({ type: actions.SET_SECONDS, payload: calcSecondsFromPosition(position) });
 		}
-	}, [state.mousePosition, state.seekHandleMouseDown, state.waveformScrollPosition]);
+	}, [
+		state.mousePosition,
+		state.seekHandleMouseDown,
+		state.waveformScrollPosition,
+		state.waveformWidth,
+	]);
 
 	return (
 		<Box

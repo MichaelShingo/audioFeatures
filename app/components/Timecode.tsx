@@ -1,18 +1,20 @@
 import { Stack } from '@mui/system';
 import { useAppState } from '../context/AppStateContext';
-import React, { ChangeEvent, useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Typography, useTheme } from '@mui/material';
 import * as Tone from 'tone';
 
-const calcMinutes = (): string => {
-	return Math.floor(Tone.Transport.seconds / 60).toString();
+const calcMinutes = (seconds: number): string => {
+	return Math.floor(seconds / 60).toString();
 };
-const calcSeconds = (): string => {
-	return Math.floor(Tone.Transport.seconds % 60).toString();
+const calcSeconds = (seconds: number): string => {
+	return Math.floor(seconds % 60).toString();
 };
-const calcMilliseconds = (): string => {
-	return Math.round((Tone.Transport.seconds * 1000) % 1000).toString();
+const calcMilliseconds = (seconds: number): string => {
+	return Math.round((seconds * 1000) % 1000).toString();
 };
+
+const colonStyle = { marginInline: '8px', fontSize: '1.6rem' };
 
 const Timecode = () => {
 	const { state } = useAppState();
@@ -34,22 +36,11 @@ const Timecode = () => {
 		textAlign: 'center' as const,
 	};
 
-	const setSeconds = (e: ChangeEvent<HTMLInputElement>) => {
-		console.log('set minutes', e.target.value);
-	};
-	const setMinutes = (e: ChangeEvent<HTMLInputElement>) => {
-		console.log('set minutes', e.target.value);
-	};
-
-	const setMilliseconds = (e: ChangeEvent<HTMLInputElement>) => {
-		console.log('set minutes', e.target.value);
-	};
-
-	const setTimecode = (): void => {
+	const setTimecode = (seconds: number): void => {
 		if (refMilliseconds.current && refSeconds.current && refMinutes.current) {
-			refMilliseconds.current.value = calcMilliseconds();
-			refSeconds.current.value = calcSeconds();
-			refMinutes.current.value = calcMinutes();
+			refMilliseconds.current.value = calcMilliseconds(seconds);
+			refSeconds.current.value = calcSeconds(seconds);
+			refMinutes.current.value = calcMinutes(seconds);
 		}
 	};
 
@@ -57,13 +48,15 @@ const Timecode = () => {
 		if (Tone.Transport.state === 'started') {
 			Tone.Transport.scheduleRepeat(
 				(time) => {
-					Tone.Draw.schedule(setTimecode, time);
+					Tone.Draw.schedule(() => setTimecode(Tone.Transport.seconds), time);
 				},
 				1 / 24,
 				0
 			);
+		} else {
+			setTimecode(state.seconds);
 		}
-	}, [state.isPlaying]);
+	}, [state.isPlaying, state.seconds]);
 
 	return (
 		<Stack direction="row" sx={{ marginRight: '5px' }}>
@@ -75,7 +68,5 @@ const Timecode = () => {
 		</Stack>
 	);
 };
-
-const colonStyle = { marginInline: '8px', fontSize: '1.6rem' };
 
 export default Timecode;

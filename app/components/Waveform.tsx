@@ -94,9 +94,9 @@ const Waveform: React.FC = () => {
 		}
 	};
 
-	const handleOnMouseEnterStack = () => {
-		dispatch({ type: actions.SET_IS_HOVERED_WAVEFORM, payload: true });
-	};
+	// const handleOnMouseEnterStack = () => {
+	// 	dispatch({ type: actions.SET_IS_HOVERED_WAVEFORM, payload: true });
+	// };
 
 	const handleOnMouseLeave = () => {
 		dispatch({ type: actions.SET_IS_HOVERED_WAVEFORM, payload: false });
@@ -110,14 +110,14 @@ const Waveform: React.FC = () => {
 		<div
 			ref={containerRef}
 			id="waveform-container"
-			onMouseEnter={handleOnMouseEnterStack}
+			// onMouseEnter={handleOnMouseEnterStack}
 			onMouseLeave={handleOnMouseLeave}
 			style={{
 				width: '100vw',
 				backgroundColor: '',
 				height: '90%',
 				overflowX: 'auto',
-				overflowY: 'auto',
+				overflowY: 'hidden',
 				paddingInline: '0px',
 				display: 'flex',
 				alignItems: 'center',
