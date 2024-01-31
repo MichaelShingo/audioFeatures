@@ -29,7 +29,6 @@ interface GlobalState {
 	spectralFlatnessData: SpectralFlatness[];
 	seconds: number;
 	isHoveredWaveform: boolean;
-	markerPosition: number;
 	timecode: Timecode;
 	audioBuffer: AudioBuffer | null;
 	isPlaying: boolean;
@@ -61,7 +60,6 @@ const initialState: GlobalState = {
 	spectralFlatnessData: [],
 	seconds: 0,
 	isHoveredWaveform: false,
-	markerPosition: 0,
 	timecode: { minutes: 0, seconds: 0, milliseconds: 0 },
 	audioBuffer: null,
 	isPlaying: false,
@@ -114,7 +112,6 @@ export const actions: Record<string, string> = {
 	SET_SPECTRAL_FLATNESS_DATA: 'SET_SPECTRAL_FLATNESS_DATA',
 	SET_SECONDS: 'SET_SECONDS',
 	SET_IS_HOVERED_WAVEFORM: 'SET_IS_HOVERED_WAVEFORM',
-	SET_MARKER_POSITION: 'SET_MARKER_POSITION',
 	SET_TIMECODE: 'SET_TIMECODE',
 	SET_AUDIO_BUFFER: 'SET_AUDIO_BUFFER',
 	SET_IS_PLAYING: 'SET_IS_PLAYING',
@@ -162,8 +159,6 @@ const appReducer = (state: GlobalState, action: AppAction): GlobalState => {
 		}
 		case actions.SET_IS_HOVERED_WAVEFORM:
 			return { ...state, isHoveredWaveform: !state.isHoveredWaveform };
-		case actions.SET_MARKER_POSITION:
-			return { ...state, markerPosition: action.payload as number };
 		case actions.SET_TIMECODE:
 			return { ...state, timecode: { minutes: 0, seconds: 0, milliseconds: 0 } };
 		case actions.SET_AUDIO_BUFFER:

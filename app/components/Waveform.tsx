@@ -4,6 +4,8 @@ import { LinearProgress, Typography } from '@mui/material';
 import HoverMarker from './HoverMarker';
 import { Box, Stack } from '@mui/system';
 import SeekHandle from './SeekHandle';
+import { WAVEFORM_PIXEL_WIDTH } from '../data/constants';
+import { calcSecondsFromPosition } from '../utils/positionCalculations';
 
 const Waveform: React.FC = () => {
 	const { state, dispatch } = useAppState();
@@ -11,6 +13,12 @@ const Waveform: React.FC = () => {
 		`<svg xmlns="http://www.w3.org/2000/svg" width="500" height="200" viewBox="0 0 500 200"></svg>`
 	);
 	const containerRef = useRef<HTMLDivElement>();
+
+	useEffect(() => {
+		if (containerRef.current) {
+			containerRef.current.scrollLeft = state.waveformScrollPosition;
+		}
+	}, [state.waveformScrollPosition]);
 
 	useEffect(() => {
 		const handleScroll = () => {
@@ -102,9 +110,15 @@ const Waveform: React.FC = () => {
 		dispatch({ type: actions.SET_IS_HOVERED_WAVEFORM, payload: false });
 	};
 
-	// const handleClick = () => {
-	// 	dispatch({ type: actions.SET_MARKER_POSITION, payload: 500 });
-	// };
+	const handleOnClick = () => {
+		const position: number = state.mousePosition.x + state.waveformScrollPosition;
+		const seconds: number = calcSecondsFromPosition(
+			position,
+			state.audioDuration,
+			state.loudnessData
+		);
+		dispatch({ type: actions.SET_SECONDS, payload: seconds });
+	};
 
 	return (
 		<div
@@ -112,6 +126,7 @@ const Waveform: React.FC = () => {
 			id="waveform-container"
 			// onMouseEnter={handleOnMouseEnterStack}
 			onMouseLeave={handleOnMouseLeave}
+			onClick={handleOnClick}
 			style={{
 				width: '100vw',
 				backgroundColor: '',
@@ -162,7 +177,10 @@ const Waveform: React.FC = () => {
 				<>
 					<SeekHandle />
 					<div
-						style={{ transform: `scaleY(${calcWaveformScalePercentage()}%)` }}
+						style={{
+							transform: `scaleY(${calcWaveformScalePercentage()}%)`,
+							pointerEvents: 'none',
+						}}
 						dangerouslySetInnerHTML={{ __html: svgData }}
 					/>
 				</>

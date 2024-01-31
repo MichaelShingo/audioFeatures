@@ -5,7 +5,7 @@ const MouseUpHandler = () => {
 
 	useEffect(() => {
 		const handleMouseUp = (event: MouseEvent) => {
-			console.log('Mouse up at:', event.clientX, event.clientY);
+			// console.log('Mouse up at:', event.clientX, event.clientY);
 			dispatch({ type: actions.SET_GLOBAL_MOUSE_UP });
 		};
 

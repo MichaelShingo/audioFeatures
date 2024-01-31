@@ -30,6 +30,7 @@ const AppContainer: React.FC<AppContainerProps> = ({ children }) => {
 	useEffect(() => {
 		console.log(state.seekHandleMouseDown);
 	}, [state.seekHandleMouseDown]);
+
 	return (
 		<Box
 			data-label="app-container"

@@ -4,6 +4,7 @@ import { actions, useAppState } from '../context/AppStateContext';
 import { Box } from '@mui/system';
 import { WAVEFORM_PIXEL_WIDTH } from '../data/constants';
 import * as Tone from 'tone';
+import { calcSecondsFromPosition } from '../utils/positionCalculations';
 
 let scheduledEventId: number = 0;
 
@@ -18,11 +19,6 @@ const SeekHandle: React.FC = () => {
 	const calcPositionFromSeconds = (currentTimeInSeconds: number): number => {
 		const playbackPercentage: number = currentTimeInSeconds / state.audioDuration;
 		return playbackPercentage * wavelengthLength;
-	};
-
-	const calcSecondsFromPosition = (currentPosition: number): number => {
-		const playbackPercentage = currentPosition / wavelengthLength;
-		return playbackPercentage * state.audioDuration;
 	};
 
 	const handleOnMouseEnter = () => {
@@ -87,11 +83,11 @@ const SeekHandle: React.FC = () => {
 	}, [state.isPlaying]);
 
 	const handleOnMouseDown = (e: React.MouseEvent): void => {
-		e.stopPropagation();
+		// e.stopPropagation();
 		dispatch({ type: actions.SET_SEEK_HANDLE_MOUSE_DOWN, payload: true });
 	};
 	const handleOnMouseUp = (e: React.MouseEvent): void => {
-		e.stopPropagation();
+		// e.stopPropagation();
 		console.log('mouse up inside seek handle');
 		dispatch({ type: actions.SET_SEEK_HANDLE_MOUSE_DOWN, payload: false });
 	};
@@ -108,7 +104,14 @@ const SeekHandle: React.FC = () => {
 		position = position < 0 ? 0 : position;
 		if (state.seekHandleMouseDown && ref.current) {
 			ref.current.style.left = `${position}px`;
-			dispatch({ type: actions.SET_SECONDS, payload: calcSecondsFromPosition(position) });
+			dispatch({
+				type: actions.SET_SECONDS,
+				payload: calcSecondsFromPosition(
+					position,
+					state.audioDuration,
+					state.loudnessData
+				),
+			});
 		}
 	}, [
 		state.mousePosition,
@@ -131,7 +134,6 @@ const SeekHandle: React.FC = () => {
 				position: 'relative',
 				top: '0px',
 				zIndex: '2',
-				pointerEvents: 'visible',
 				'&:hover': {
 					cursor: 'grab',
 				},
@@ -145,7 +147,6 @@ const SeekHandle: React.FC = () => {
 					left: '-4px',
 					top: '0px',
 					backgroundColor: theme.palette.common.lightBlue,
-					pointerEvents: 'visible',
 				}}
 			></Box>
 			<Box
@@ -158,7 +159,6 @@ const SeekHandle: React.FC = () => {
 					position: 'relative',
 					left: '-4px',
 					top: '0px',
-					pointerEvents: 'visible',
 				}}
 			></Box>
 		</Box>
