@@ -4,14 +4,14 @@ import React, { ChangeEvent, useEffect, useRef } from 'react';
 import { Typography, useTheme } from '@mui/material';
 import * as Tone from 'tone';
 
-const calcMinutes = (currentTimeInSeconds: number): number => {
-	return Math.floor(currentTimeInSeconds / 60);
+const calcMinutes = (): string => {
+	return Math.floor(Tone.Transport.seconds / 60).toString();
 };
-const calcSeconds = (currentTimeInSeconds: number): number => {
-	return Math.floor(currentTimeInSeconds % 60);
+const calcSeconds = (): string => {
+	return Math.floor(Tone.Transport.seconds % 60).toString();
 };
-const calcMilliseconds = (currentTimeInSeconds: number): number => {
-	return Math.round((currentTimeInSeconds * 1000) % 1000);
+const calcMilliseconds = (): string => {
+	return Math.round((Tone.Transport.seconds * 1000) % 1000).toString();
 };
 
 const Timecode = () => {
@@ -45,33 +45,25 @@ const Timecode = () => {
 		console.log('set minutes', e.target.value);
 	};
 
-	const setTimecode = (currentTime: number): void => {
-		return;
-		refMilliseconds.current.value = calcMilliseconds(currentTime);
-		refSeconds.current.value = calcSeconds(currentTime);
-		refMinutes.current.value = calcMinutes(currentTime);
+	const setTimecode = (): void => {
+		if (refMilliseconds.current && refSeconds.current && refMinutes.current) {
+			refMilliseconds.current.value = calcMilliseconds();
+			refSeconds.current.value = calcSeconds();
+			refMinutes.current.value = calcMinutes();
+		}
 	};
 
 	useEffect(() => {
-		// setTimecode(0);
-	}, []);
-
-	// useEffect(() => {
-	// 	const fps: number = 1 / 10;
-	// 	let scheduleRepeatId: number | undefined = undefined;
-	// 	if (Tone.Transport.state === 'started') {
-	// 		scheduleRepeatId = Tone.Transport.scheduleRepeat(() => {
-	// 			const currentTime: number = Tone.Transport.seconds;
-	// 			setTimecode(currentTime);
-	// 		}, fps);
-	// 	} else {
-	// 		if (scheduleRepeatId) {
-	// 			Tone.Transport.clear(scheduleRepeatId);
-	// 		}
-	// 		const currentTime: number = state.seconds;
-	// 		setTimecode(currentTime);
-	// 	}
-	// }, [state.isPlaying]);
+		if (Tone.Transport.state === 'started') {
+			Tone.Transport.scheduleRepeat(
+				(time) => {
+					Tone.Draw.schedule(setTimecode, time);
+				},
+				1 / 24,
+				0
+			);
+		}
+	}, [state.isPlaying]);
 
 	return (
 		<Stack direction="row" sx={{ marginRight: '5px' }}>

@@ -103,7 +103,7 @@ const Waveform: React.FC = () => {
 	};
 
 	// const handleClick = () => {
-	// 	dispatch({ type: actions.SET_MARKER_POSITION, payload: 5 });
+	// 	dispatch({ type: actions.SET_MARKER_POSITION, payload: 500 });
 	// };
 
 	return (
