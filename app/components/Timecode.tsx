@@ -1,8 +1,9 @@
 import { Stack } from '@mui/system';
-import { useAppState } from '../context/AppStateContext';
-import React, { useEffect, useRef } from 'react';
+import { useAppState, actions } from '../context/AppStateContext';
+import React, { useEffect, useRef, useState } from 'react';
 import { Typography, useTheme } from '@mui/material';
 import * as Tone from 'tone';
+import TimecodeInput from './TimecodeInput';
 
 const calcMinutes = (seconds: number): string => {
 	return Math.floor(seconds / 60).toString();
@@ -17,24 +18,15 @@ const calcMilliseconds = (seconds: number): string => {
 const colonStyle = { marginInline: '8px', fontSize: '1.6rem' };
 
 const Timecode = () => {
-	const { state } = useAppState();
-	const theme = useTheme();
-	const refMilliseconds = useRef<HTMLInputElement>(null);
-	const refSeconds = useRef<HTMLInputElement>(null);
-	const refMinutes = useRef<HTMLInputElement>(null);
+	const { state, dispatch } = useAppState();
 
-	const inputStyle = {
-		backgroundColor: theme.palette.common.mediumGrey,
-		color: 'white',
-		fontFamily: theme.typography.fontFamily,
-		fontSize: '30px',
-		width: '50px',
-		margin: '0',
-		padding: '0',
-		border: '0',
-		borderRadius: '10px',
-		textAlign: 'center' as const,
-	};
+	const refMinutes = useRef<HTMLInputElement>(null);
+	const refSeconds = useRef<HTMLInputElement>(null);
+	const refMilliseconds = useRef<HTMLInputElement>(null);
+
+	const [prevMinutes, setPrevMinutes] = useState<number>(0);
+	const [prevSeconds, setPrevSeconds] = useState<number>(0);
+	const [prevMilliseconds, setPrevMilliseconds] = useState<number>(0);
 
 	const setTimecode = (seconds: number): void => {
 		if (refMilliseconds.current && refSeconds.current && refMinutes.current) {
@@ -58,13 +50,64 @@ const Timecode = () => {
 		}
 	}, [state.isPlaying, state.seconds]);
 
+	const handleBlurMinutes = (): void => {
+		const difference: number =
+			(parseInt(refMinutes.current?.value as string) - prevMinutes) * 60;
+		dispatch({ type: actions.SET_SECONDS, payload: state.seconds + difference });
+	};
+
+	const handleBlurSeconds = (): void => {
+		const difference: number =
+			parseInt(refSeconds.current?.value as string) - prevSeconds;
+		dispatch({ type: actions.SET_SECONDS, payload: state.seconds + difference });
+	};
+
+	const handleBlurMilliseconds = (): void => {
+		const difference: number =
+			(parseInt(refMilliseconds.current?.value as string) - prevMilliseconds) / 1000;
+		dispatch({ type: actions.SET_SECONDS, payload: state.seconds + difference });
+	};
+
+	const handleFocusMinutes = (): void => {
+		const currentMinutes: number = parseInt(refMinutes.current?.value as string);
+		setPrevMinutes(currentMinutes);
+	};
+
+	const handleFocusSeconds = (): void => {
+		const currentSeconds: number = parseInt(refSeconds.current?.value as string);
+		setPrevSeconds(currentSeconds);
+	};
+
+	const handleFocusMilliseconds = (): void => {
+		const currentMilliseconds: number = parseInt(
+			refMilliseconds.current?.value as string
+		);
+		setPrevMilliseconds(currentMilliseconds);
+	};
+
+	useEffect(() => {
+		console.log(prevMilliseconds, state.seconds);
+	}, [prevMilliseconds, state.seconds]);
+
 	return (
 		<Stack direction="row" sx={{ marginRight: '5px' }}>
-			<input ref={refMinutes} type="number" style={inputStyle} />
+			<TimecodeInput
+				refObj={refMinutes}
+				handleBlur={handleBlurMinutes}
+				handleFocus={handleFocusMinutes}
+			/>
 			<Typography sx={colonStyle}>:</Typography>
-			<input type="number" ref={refSeconds} style={inputStyle} />
+			<TimecodeInput
+				refObj={refSeconds}
+				handleBlur={handleBlurSeconds}
+				handleFocus={handleFocusSeconds}
+			/>
 			<Typography sx={colonStyle}>:</Typography>
-			<input ref={refMilliseconds} type="number" style={inputStyle} />
+			<TimecodeInput
+				refObj={refMilliseconds}
+				handleBlur={handleBlurMilliseconds}
+				handleFocus={handleFocusMilliseconds}
+			/>
 		</Stack>
 	);
 };

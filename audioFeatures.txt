@@ -1,16 +1,21 @@
 import { actions, useAppState } from '../context/AppStateContext';
 const { state, dispatch } = useAppState();
 
-- timecode input change
-- click anywhere on the waveform to seek to that position
+- timecode input change - how to handle decimals? just remove them before processing?
+
 - should not drag handle while playing
+- scroll to location on timecode input change
+
 - seek handle drag issue
 	- not a matter of speed
 	- not a matter of where on the handle you drag
 	- not a matter of click, then wait, then drag
 	- removing waveform/svg doesn't help
 	- making handle bigger doesn't help
-	- 
+- clean up code after playback features are good 
+- test longer audio
+- still issue of stopping at the previous audio spo point
+- when 2 consecutive uploads, they both play? 
 
 
 - auto scroll horizontally with playback

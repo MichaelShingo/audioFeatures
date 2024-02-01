@@ -4,6 +4,7 @@ import {
 	Timecode,
 	calculateMilliseconds,
 	calculateSeconds,
+	roundSeconds,
 } from '../utils/timecodeCalculations';
 
 export const H_BREAKPOINT = 440;
@@ -155,7 +156,7 @@ const appReducer = (state: GlobalState, action: AppAction): GlobalState => {
 			let seconds: number = action.payload as number;
 			seconds = seconds < 0 ? 0 : seconds;
 			seconds = seconds > state.audioDuration ? state.audioDuration : seconds;
-			return { ...state, seconds: seconds };
+			return { ...state, seconds: roundSeconds(seconds) };
 		}
 		case actions.SET_IS_HOVERED_WAVEFORM:
 			return { ...state, isHoveredWaveform: !state.isHoveredWaveform };

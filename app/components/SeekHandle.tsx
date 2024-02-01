@@ -37,31 +37,29 @@ const SeekHandle: React.FC = () => {
 	}, [state.isPlaying, state.seconds]);
 
 	const handleScroll = (): void => {
-		const remainder: number = Tone.Transport.seconds % (state.windowWidth / 96);
-		const roundedSeconds: number = Math.floor(Tone.Transport.seconds);
-		const isNotFirstView: boolean = Tone.Transport.seconds > 1;
-		const isInitialOnsetOfSecond: boolean = previousSecond.current !== roundedSeconds;
-
-		// console.log(remainder, previousSecond.current);
-		if (isNotFirstView && isInitialOnsetOfSecond && remainder < 1) {
-			console.log('scrolled', state.windowWidth, state.waveformScrollPosition);
-
-			const newScrollPosition: number = state.windowWidth + state.waveformScrollPosition;
-			console.log(newScrollPosition);
-			dispatch({
-				type: actions.SET_WAVEFORM_SCROLL_POSITION,
-				payload: newScrollPosition,
-			});
-		}
-		previousSecond.current = Math.floor(Tone.Transport.seconds);
-		setPrevRemainder(remainder);
+		// const remainder: number = Tone.Transport.seconds % (state.windowWidth / 96);
+		// const roundedSeconds: number = Math.floor(Tone.Transport.seconds);
+		// const isNotFirstView: boolean = Tone.Transport.seconds > 1;
+		// const isInitialOnsetOfSecond: boolean = previousSecond.current !== roundedSeconds;
+		// // console.log(remainder, previousSecond.current);
+		// if (isNotFirstView && isInitialOnsetOfSecond && remainder < 1) {
+		// 	console.log('scrolled', state.windowWidth, state.waveformScrollPosition);
+		// 	const newScrollPosition: number = state.windowWidth + state.waveformScrollPosition;
+		// 	console.log(newScrollPosition);
+		// 	dispatch({
+		// 		type: actions.SET_WAVEFORM_SCROLL_POSITION,
+		// 		payload: newScrollPosition,
+		// 	});
+		// }
+		// previousSecond.current = Math.floor(Tone.Transport.seconds);
+		// setPrevRemainder(remainder);
 	};
 
-	useEffect(() => {
-		if (Tone.Transport.state === 'started') {
-			Tone.Transport.scheduleRepeat(handleScroll, 1 / 4, 0);
-		}
-	}, [state.isPlaying]);
+	// useEffect(() => {
+	// 	if (Tone.Transport.state === 'started') {
+	// 		Tone.Transport.scheduleRepeat(handleScroll, 1 / 4, 0);
+	// 	}
+	// }, [state.isPlaying]);
 
 	const updatePosition = (): void => {
 		const position = calcPositionFromSeconds(Tone.Transport.seconds);
@@ -83,11 +81,11 @@ const SeekHandle: React.FC = () => {
 	}, [state.isPlaying]);
 
 	const handleOnMouseDown = (e: React.MouseEvent): void => {
-		// e.stopPropagation();
+		e.stopPropagation();
 		dispatch({ type: actions.SET_SEEK_HANDLE_MOUSE_DOWN, payload: true });
 	};
 	const handleOnMouseUp = (e: React.MouseEvent): void => {
-		// e.stopPropagation();
+		e.stopPropagation();
 		console.log('mouse up inside seek handle');
 		dispatch({ type: actions.SET_SEEK_HANDLE_MOUSE_DOWN, payload: false });
 	};

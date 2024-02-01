@@ -38,3 +38,7 @@ export const calculateSeconds = (
 		seconds: seconds % SECONDS_PER_MINUTE,
 	};
 };
+
+export const roundSeconds = (seconds: number): number => {
+	return Math.ceil(seconds * 1000) / 1000;
+};

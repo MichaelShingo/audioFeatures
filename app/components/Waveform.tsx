@@ -4,7 +4,6 @@ import { LinearProgress, Typography } from '@mui/material';
 import HoverMarker from './HoverMarker';
 import { Box, Stack } from '@mui/system';
 import SeekHandle from './SeekHandle';
-import { WAVEFORM_PIXEL_WIDTH } from '../data/constants';
 import { calcSecondsFromPosition } from '../utils/positionCalculations';
 
 const Waveform: React.FC = () => {
