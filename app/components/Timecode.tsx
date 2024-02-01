@@ -1,7 +1,7 @@
 import { Stack } from '@mui/system';
 import { useAppState, actions } from '../context/AppStateContext';
 import React, { useEffect, useRef, useState } from 'react';
-import { Typography, useTheme } from '@mui/material';
+import { Typography } from '@mui/material';
 import * as Tone from 'tone';
 import TimecodeInput from './TimecodeInput';
 
@@ -37,13 +37,15 @@ const Timecode = () => {
 	};
 
 	useEffect(() => {
+		const fps: number = 1 / 24;
+		const startTime: number = 0;
 		if (Tone.Transport.state === 'started') {
 			Tone.Transport.scheduleRepeat(
 				(time) => {
 					Tone.Draw.schedule(() => setTimecode(Tone.Transport.seconds), time);
 				},
-				1 / 24,
-				0
+				fps,
+				startTime
 			);
 		} else {
 			setTimecode(state.seconds);

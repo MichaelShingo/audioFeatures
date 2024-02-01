@@ -4,7 +4,10 @@ import { actions, useAppState } from '../context/AppStateContext';
 import { Box } from '@mui/system';
 import { WAVEFORM_PIXEL_WIDTH } from '../data/constants';
 import * as Tone from 'tone';
-import { calcSecondsFromPosition } from '../utils/positionCalculations';
+import {
+	calcPositionFromSeconds,
+	calcSecondsFromPosition,
+} from '../utils/positionCalculations';
 
 let scheduledEventId: number = 0;
 
@@ -12,14 +15,8 @@ const SeekHandle: React.FC = () => {
 	const { state, dispatch } = useAppState();
 	const theme = useTheme();
 	const ref = useRef<HTMLElement>(null);
-	const wavelengthLength: number = state.loudnessData.length / (1 / WAVEFORM_PIXEL_WIDTH);
 	const [prevRemainder, setPrevRemainder] = useState<number>(Infinity);
 	const previousSecond = useRef<number>(-1);
-
-	const calcPositionFromSeconds = (currentTimeInSeconds: number): number => {
-		const playbackPercentage: number = currentTimeInSeconds / state.audioDuration;
-		return playbackPercentage * wavelengthLength;
-	};
 
 	const handleOnMouseEnter = () => {
 		dispatch({ type: actions.SET_IS_SEEK_HANDLE_HOVERED, payload: true });
@@ -32,7 +29,11 @@ const SeekHandle: React.FC = () => {
 
 	useEffect(() => {
 		if (ref.current) {
-			ref.current.style.left = `${calcPositionFromSeconds(state.seconds)}px`;
+			ref.current.style.left = `${calcPositionFromSeconds(
+				state.seconds,
+				state.audioDuration,
+				state.loudnessData
+			)}px`;
 		}
 	}, [state.isPlaying, state.seconds]);
 
@@ -62,7 +63,11 @@ const SeekHandle: React.FC = () => {
 	// }, [state.isPlaying]);
 
 	const updatePosition = (): void => {
-		const position = calcPositionFromSeconds(Tone.Transport.seconds);
+		const position = calcPositionFromSeconds(
+			Tone.Transport.seconds,
+			state.audioDuration,
+			state.loudnessData
+		);
 		if (ref.current) {
 			ref.current.style.left = `${position}px`;
 		}
@@ -96,7 +101,11 @@ const SeekHandle: React.FC = () => {
 
 	useEffect(() => {
 		// mouse position change not being detected when not-allowed?
-		const containerWidth: number = calcPositionFromSeconds(state.audioDuration);
+		const containerWidth: number = calcPositionFromSeconds(
+			state.audioDuration,
+			state.audioDuration,
+			state.loudnessData
+		);
 		let position: number = state.mousePosition.x + state.waveformScrollPosition;
 		position = position > containerWidth ? containerWidth : position;
 		position = position < 0 ? 0 : position;
