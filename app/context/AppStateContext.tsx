@@ -1,11 +1,6 @@
 import React, { createContext, useReducer, useContext, Dispatch } from 'react';
 import { Loudness, PitchData, SpectralFlatness } from '../data/constants';
-import {
-	Timecode,
-	calculateMilliseconds,
-	calculateSeconds,
-	roundSeconds,
-} from '../utils/timecodeCalculations';
+import { Timecode, roundSeconds } from '../utils/timecodeCalculations';
 
 export const H_BREAKPOINT = 440;
 export const SETTINGS_ROW_SPACING: string = '10px';
@@ -37,7 +32,6 @@ interface GlobalState {
 	isUploaded: boolean;
 	isUploading: boolean;
 	mousePosition: MousePosition;
-	isSeekHandleHovered: boolean;
 	waveformWidth: number;
 	wavelengthLength: number;
 	audioDuration: number;
@@ -68,7 +62,6 @@ const initialState: GlobalState = {
 	isUploaded: false,
 	isUploading: false,
 	mousePosition: { x: 0, y: 0 },
-	isSeekHandleHovered: false,
 	waveformWidth: 0,
 	wavelengthLength: 0,
 	audioDuration: 0,
@@ -172,8 +165,7 @@ const appReducer = (state: GlobalState, action: AppAction): GlobalState => {
 			return { ...state, isUploading: action.payload as boolean };
 		case actions.SET_MOUSE_POSITION:
 			return { ...state, mousePosition: action.payload as MousePosition };
-		case actions.SET_IS_SEEK_HANDLE_HOVERED:
-			return { ...state, isSeekHandleHovered: action.payload as boolean };
+
 		case actions.SET_WAVEFORM_WIDTH:
 			return { ...state, waveformWidth: action.payload as number };
 		case actions.SET_WAVELENGTH_LENGTH:
@@ -183,6 +175,7 @@ const appReducer = (state: GlobalState, action: AppAction): GlobalState => {
 		case actions.SET_IS_DRAGGING:
 			return { ...state, isDragging: action.payload as boolean };
 		case actions.SET_WAVEFORM_SCROLL_POSITION: {
+			console.log('setting waveform scroll', action.payload);
 			return { ...state, waveformScrollPosition: action.payload as number };
 		}
 		case actions.SET_SEEK_HANDLE_MOUSE_DOWN: {

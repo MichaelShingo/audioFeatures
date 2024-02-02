@@ -1,73 +1,51 @@
 import { useTheme } from '@mui/material';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { actions, useAppState } from '../context/AppStateContext';
 import { Box } from '@mui/system';
-import { WAVEFORM_PIXEL_WIDTH } from '../data/constants';
 import * as Tone from 'tone';
-import {
-	calcPositionFromSeconds,
-	calcSecondsFromPosition,
-} from '../utils/positionCalculations';
-
-let scheduledEventId: number = 0;
+import usePositionCalculations from '../customHooks/usePositionCalculations';
 
 const SeekHandle: React.FC = () => {
 	const { state, dispatch } = useAppState();
+	const { calcPositionFromSeconds, calcSecondsFromPosition } = usePositionCalculations();
 	const theme = useTheme();
 	const ref = useRef<HTMLElement>(null);
-	const [prevRemainder, setPrevRemainder] = useState<number>(Infinity);
-	const previousSecond = useRef<number>(-1);
-
-	const handleOnMouseEnter = () => {
-		dispatch({ type: actions.SET_IS_SEEK_HANDLE_HOVERED, payload: true });
-	};
-
-	const handleOnMouseLeave = () => {
-		console.log('mouse left seek');
-		// dispatch({ type: actions.SET_IS_SEEK_HANDLE_HOVERED, payload: false });
-	};
+	const scrollPositionRef = useRef<number>(state.waveformScrollPosition);
 
 	useEffect(() => {
 		if (ref.current) {
-			ref.current.style.left = `${calcPositionFromSeconds(
-				state.seconds,
-				state.audioDuration,
-				state.loudnessData
-			)}px`;
+			ref.current.style.left = `${calcPositionFromSeconds(state.seconds)}px`;
 		}
 	}, [state.isPlaying, state.seconds]);
 
 	const handleScroll = (): void => {
-		// const remainder: number = Tone.Transport.seconds % (state.windowWidth / 96);
-		// const roundedSeconds: number = Math.floor(Tone.Transport.seconds);
-		// const isNotFirstView: boolean = Tone.Transport.seconds > 1;
-		// const isInitialOnsetOfSecond: boolean = previousSecond.current !== roundedSeconds;
-		// // console.log(remainder, previousSecond.current);
-		// if (isNotFirstView && isInitialOnsetOfSecond && remainder < 1) {
-		// 	console.log('scrolled', state.windowWidth, state.waveformScrollPosition);
-		// 	const newScrollPosition: number = state.windowWidth + state.waveformScrollPosition;
-		// 	console.log(newScrollPosition);
-		// 	dispatch({
-		// 		type: actions.SET_WAVEFORM_SCROLL_POSITION,
-		// 		payload: newScrollPosition,
-		// 	});
-		// }
-		// previousSecond.current = Math.floor(Tone.Transport.seconds);
-		// setPrevRemainder(remainder);
+		const currentViewEndPosition: number =
+			state.waveformScrollPosition + state.windowWidth;
+		let currentPosition: number = 0;
+		if (ref.current) {
+			currentPosition = parseInt(ref.current?.style.left);
+		}
+
+		console.log(currentViewEndPosition, currentPosition);
+
+		if (currentPosition >= currentViewEndPosition) {
+			console.log('scrolling');
+			dispatch({
+				type: actions.SET_WAVEFORM_SCROLL_POSITION,
+				payload: state.waveformScrollPosition + state.windowWidth,
+			});
+			// scrollPositionRef.current = scrollPositionRef.current + state.windowWidth;
+		}
 	};
 
-	// useEffect(() => {
-	// 	if (Tone.Transport.state === 'started') {
-	// 		Tone.Transport.scheduleRepeat(handleScroll, 1 / 4, 0);
-	// 	}
-	// }, [state.isPlaying]);
+	useEffect(() => {
+		if (Tone.Transport.state === 'started') {
+			Tone.Transport.scheduleRepeat(handleScroll, 1 / 4, 0);
+		}
+	}, [state.isPlaying]);
 
 	const updatePosition = (): void => {
-		const position = calcPositionFromSeconds(
-			Tone.Transport.seconds,
-			state.audioDuration,
-			state.loudnessData
-		);
+		const position = calcPositionFromSeconds(Tone.Transport.seconds);
 		if (ref.current) {
 			ref.current.style.left = `${position}px`;
 		}
@@ -75,7 +53,7 @@ const SeekHandle: React.FC = () => {
 
 	useEffect(() => {
 		if (Tone.Transport.state === 'started') {
-			scheduledEventId = Tone.Transport.scheduleRepeat(
+			Tone.Transport.scheduleRepeat(
 				(time) => {
 					Tone.Draw.schedule(updatePosition, time);
 				},
@@ -95,17 +73,9 @@ const SeekHandle: React.FC = () => {
 		dispatch({ type: actions.SET_SEEK_HANDLE_MOUSE_DOWN, payload: false });
 	};
 
-	// useEffect(() => {
-	// 	console.log(state.mousePosition, state.seconds);
-	// }, [state.mousePosition, state.seconds]);
-
 	useEffect(() => {
 		// mouse position change not being detected when not-allowed?
-		const containerWidth: number = calcPositionFromSeconds(
-			state.audioDuration,
-			state.audioDuration,
-			state.loudnessData
-		);
+		const containerWidth: number = calcPositionFromSeconds(state.audioDuration);
 		let position: number = state.mousePosition.x + state.waveformScrollPosition;
 		position = position > containerWidth ? containerWidth : position;
 		position = position < 0 ? 0 : position;
@@ -113,11 +83,7 @@ const SeekHandle: React.FC = () => {
 			ref.current.style.left = `${position}px`;
 			dispatch({
 				type: actions.SET_SECONDS,
-				payload: calcSecondsFromPosition(
-					position,
-					state.audioDuration,
-					state.loudnessData
-				),
+				payload: calcSecondsFromPosition(position),
 			});
 		}
 	}, [
@@ -130,8 +96,6 @@ const SeekHandle: React.FC = () => {
 	return (
 		<Box
 			ref={ref}
-			onMouseEnter={handleOnMouseEnter}
-			onMouseLeave={handleOnMouseLeave}
 			onMouseDown={handleOnMouseDown}
 			onMouseUp={handleOnMouseUp}
 			sx={{

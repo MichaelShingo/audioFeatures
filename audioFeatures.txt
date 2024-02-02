@@ -1,16 +1,6 @@
 import { actions, useAppState } from '../context/AppStateContext';
 const { state, dispatch } = useAppState();
 
-- on first upload, the text needs to disappear
-
-- seek handle drag issue
-	- not a matter of speed
-	- not a matter of where on the handle you drag
-	- not a matter of click, then wait, then drag
-	- removing waveform/svg doesn't help
-	- making handle bigger doesn't help
-	- it works on firefox? 
-
 - auto scroll horizontally with playback
 	- there needs to be logic that detects when the seekHandle reaches the end of the current view, no matter where the scroll position is. 
 	- can you calculate based on current scroll position and current view width, where is the end of the view area?
@@ -24,6 +14,18 @@ const { state, dispatch } = useAppState();
 	// what about when you drag the handle
 
 	// should it be based on 
+	
+
+
+- seek handle drag issue
+	- not a matter of speed
+	- not a matter of where on the handle you drag
+	- not a matter of click, then wait, then drag
+	- removing waveform/svg doesn't help
+	- making handle bigger doesn't help
+	- it works on firefox? 
+
+
 	
 - clean up code after playback features are good 
 - test very longer audio

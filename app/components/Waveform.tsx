@@ -42,18 +42,6 @@ const Waveform: React.FC = () => {
 		};
 	}, []);
 
-	// const handleOnMouseEnter = (value: number) => {
-	// 	dispatch({ type: actions.SET_CURRENT_PCM, payload: value });
-	// 	dispatch({ type: actions.SET_IS_HOVERED_WAVEFORM, payload: true });
-	// };
-
-	// useEffect(() => {
-	// 	// the state is not changing at all after 1st update
-	// 	if (containerRef.current) {
-	// 		containerRef.current.scrollLeft = state.waveformScrollPosition;
-	// 	}
-	// }, [state.waveformScrollPosition]);
-
 	useEffect(() => {
 		if (!state.isUploading) {
 			generateWaveform();
@@ -104,13 +92,10 @@ const Waveform: React.FC = () => {
 	};
 
 	const handleOnMouseEnterStack = () => {
-		console.log('enter stack');
 		dispatch({ type: actions.SET_IS_HOVERED_WAVEFORM, payload: true });
 	};
 
 	const handleOnMouseLeave = () => {
-		console.log('leave stack');
-
 		dispatch({ type: actions.SET_IS_HOVERED_WAVEFORM, payload: false });
 	};
 
