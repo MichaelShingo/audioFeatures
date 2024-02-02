@@ -6,9 +6,9 @@ export type Timecode = {
 
 export type Time = { [key in 'minutes' | 'seconds' | 'milliseconds']: number };
 
-const MILLISECONDS_PER_MINUTE = 60000;
-const MILLISECONDS_PER_SECOND = 1000;
-const SECONDS_PER_MINUTE = 60;
+export const MILLISECONDS_PER_MINUTE = 60000;
+export const MILLISECONDS_PER_SECOND = 1000;
+export const SECONDS_PER_MINUTE = 60;
 
 export const calculateMilliseconds = (milliseconds: number): Timecode => {
 	if (milliseconds < MILLISECONDS_PER_SECOND) {

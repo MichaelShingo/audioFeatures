@@ -1,17 +1,18 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { actions, useAppState } from '../context/AppStateContext';
 import { LinearProgress, Typography } from '@mui/material';
-import HoverMarker from './HoverMarker';
 import { Box, Stack } from '@mui/system';
 import SeekHandle from './SeekHandle';
-import { calcSecondsFromPosition } from '../utils/positionCalculations';
+import usePositionCalculations from '../customHooks/usePositionCalculations';
 
 const Waveform: React.FC = () => {
 	const { state, dispatch } = useAppState();
+	const { calcSecondsFromPosition } = usePositionCalculations();
+
 	const [svgData, setSVGData] = useState<string>(
 		`<svg xmlns="http://www.w3.org/2000/svg" width="500" height="200" viewBox="0 0 500 200"></svg>`
 	);
-	const containerRef = useRef<HTMLDivElement>();
+	const containerRef = useRef<HTMLDivElement | undefined>();
 
 	useEffect(() => {
 		if (containerRef.current) {
@@ -111,11 +112,7 @@ const Waveform: React.FC = () => {
 
 	const handleOnClick = () => {
 		const position: number = state.mousePosition.x + state.waveformScrollPosition;
-		const seconds: number = calcSecondsFromPosition(
-			position,
-			state.audioDuration,
-			state.loudnessData
-		);
+		const seconds: number = calcSecondsFromPosition(position);
 		dispatch({ type: actions.SET_SECONDS, payload: seconds });
 	};
 

@@ -16,6 +16,8 @@ const { state, dispatch } = useAppState();
 - test longer audio
 - still issue of stopping at the previous audio spo point
 - when 2 consecutive uploads, they both play? 
+- make draggable highlighted selection that tracks beginning and end timecodes 
+- set up CI/CD and testing library when  playback features are set 
 
 
 - auto scroll horizontally with playback
