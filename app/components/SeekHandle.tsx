@@ -11,6 +11,7 @@ const SeekHandle: React.FC = () => {
 	const theme = useTheme();
 	const ref = useRef<HTMLElement>(null);
 	const scrollPositionRef = useRef<number>(state.waveformScrollPosition);
+	const windowWidthRef = useRef<number>(state.windowWidth);
 
 	useEffect(() => {
 		if (ref.current) {
@@ -18,23 +19,28 @@ const SeekHandle: React.FC = () => {
 		}
 	}, [state.isPlaying, state.seconds]);
 
+	useEffect(() => {
+		scrollPositionRef.current = state.waveformScrollPosition;
+	}, [state.waveformScrollPosition]);
+
+	useEffect(() => {
+		windowWidthRef.current = state.windowWidth;
+	}, [state.windowWidth]);
+
 	const handleScroll = (): void => {
 		const currentViewEndPosition: number =
-			state.waveformScrollPosition + state.windowWidth;
+			scrollPositionRef.current + windowWidthRef.current;
 		let currentPosition: number = 0;
 		if (ref.current) {
 			currentPosition = parseInt(ref.current?.style.left);
 		}
 
-		console.log(currentViewEndPosition, currentPosition);
-
 		if (currentPosition >= currentViewEndPosition) {
-			console.log('scrolling');
 			dispatch({
 				type: actions.SET_WAVEFORM_SCROLL_POSITION,
-				payload: state.waveformScrollPosition + state.windowWidth,
+				payload: scrollPositionRef.current + windowWidthRef.current,
 			});
-			// scrollPositionRef.current = scrollPositionRef.current + state.windowWidth;
+			scrollPositionRef.current = scrollPositionRef.current + windowWidthRef.current;
 		}
 	};
 

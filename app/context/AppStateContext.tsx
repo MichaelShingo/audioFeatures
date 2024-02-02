@@ -175,7 +175,6 @@ const appReducer = (state: GlobalState, action: AppAction): GlobalState => {
 		case actions.SET_IS_DRAGGING:
 			return { ...state, isDragging: action.payload as boolean };
 		case actions.SET_WAVEFORM_SCROLL_POSITION: {
-			console.log('setting waveform scroll', action.payload);
 			return { ...state, waveformScrollPosition: action.payload as number };
 		}
 		case actions.SET_SEEK_HANDLE_MOUSE_DOWN: {
