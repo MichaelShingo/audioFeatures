@@ -149,7 +149,10 @@ const Waveform: React.FC = () => {
 				direction="column"
 				sx={{
 					width: '100%',
-					display: state.isUploaded ? 'none' : 'block',
+					display:
+						(state.isUploading && !state.isUploaded) || state.isUploaded
+							? 'none'
+							: 'block',
 				}}
 			>
 				<Typography
