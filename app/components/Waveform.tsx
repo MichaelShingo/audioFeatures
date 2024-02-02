@@ -1,9 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { RefObject, useEffect, useRef, useState } from 'react';
 import { actions, useAppState } from '../context/AppStateContext';
 import { LinearProgress, Typography } from '@mui/material';
 import { Box, Stack } from '@mui/system';
 import SeekHandle from './SeekHandle';
 import usePositionCalculations from '../customHooks/usePositionCalculations';
+import HoverMarker from './HoverMarker';
 
 const Waveform: React.FC = () => {
 	const { state, dispatch } = useAppState();
@@ -12,7 +13,7 @@ const Waveform: React.FC = () => {
 	const [svgData, setSVGData] = useState<string>(
 		`<svg xmlns="http://www.w3.org/2000/svg" width="500" height="200" viewBox="0 0 500 200"></svg>`
 	);
-	const containerRef = useRef<HTMLDivElement | undefined>();
+	const containerRef: RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
 		if (containerRef.current) {
@@ -102,11 +103,14 @@ const Waveform: React.FC = () => {
 		}
 	};
 
-	// const handleOnMouseEnterStack = () => {
-	// 	dispatch({ type: actions.SET_IS_HOVERED_WAVEFORM, payload: true });
-	// };
+	const handleOnMouseEnterStack = () => {
+		console.log('enter stack');
+		dispatch({ type: actions.SET_IS_HOVERED_WAVEFORM, payload: true });
+	};
 
 	const handleOnMouseLeave = () => {
+		console.log('leave stack');
+
 		dispatch({ type: actions.SET_IS_HOVERED_WAVEFORM, payload: false });
 	};
 
@@ -120,7 +124,7 @@ const Waveform: React.FC = () => {
 		<div
 			ref={containerRef}
 			id="waveform-container"
-			// onMouseEnter={handleOnMouseEnterStack}
+			onMouseEnter={handleOnMouseEnterStack}
 			onMouseLeave={handleOnMouseLeave}
 			onClick={handleOnClick}
 			style={{
@@ -168,10 +172,11 @@ const Waveform: React.FC = () => {
 			>
 				<LinearProgress />
 			</Box>
-			{/* <HoverMarker /> */}
+
 			{state.isUploaded && !state.isUploading ? (
 				<>
 					<SeekHandle />
+					<HoverMarker />
 					<div
 						style={{
 							transform: `scaleY(${calcWaveformScalePercentage()}%)`,

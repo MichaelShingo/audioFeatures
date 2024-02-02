@@ -24,7 +24,6 @@ const Timecode = () => {
 	const refMinutes = useRef<HTMLInputElement>(null);
 	const refSeconds = useRef<HTMLInputElement>(null);
 	const refMilliseconds = useRef<HTMLInputElement>(null);
-
 	const [prevMinutes, setPrevMinutes] = useState<number>(0);
 	const [prevSeconds, setPrevSeconds] = useState<number>(0);
 	const [prevMilliseconds, setPrevMilliseconds] = useState<number>(0);
@@ -55,10 +54,8 @@ const Timecode = () => {
 
 	const handlePositionUpdate = (differenceInSeconds: number): void => {
 		const newSeconds: number = state.seconds + differenceInSeconds;
-
-		dispatch({ type: actions.SET_SECONDS, payload: newSeconds });
-
 		const newPosition: number = calcPositionFromSeconds(newSeconds);
+		dispatch({ type: actions.SET_SECONDS, payload: newSeconds });
 
 		if (!isPositionInCurrentView(newPosition)) {
 			dispatch({
@@ -85,21 +82,37 @@ const Timecode = () => {
 		setPrevMilliseconds(currentMilliseconds);
 	};
 
+	const validateInput = (input: string): boolean => {
+		return !(input === '' || input.includes('e') || input.includes('E'));
+	};
+
 	const handleBlurMinutes = (): void => {
-		const difference: number =
-			(parseInt(refMinutes.current?.value as string) - prevMinutes) * 60;
+		const value: string = refMinutes.current?.value as string;
+		if (!validateInput(value) && refMinutes.current) {
+			refMinutes.current.value = prevMinutes.toString();
+			return;
+		}
+		const difference: number = (parseFloat(value) - prevMinutes) * 60;
 		handlePositionUpdate(difference);
 	};
 
 	const handleBlurSeconds = (): void => {
-		const difference: number =
-			parseInt(refSeconds.current?.value as string) - prevSeconds;
+		const value: string = refSeconds.current?.value as string;
+		if (!validateInput(value) && refSeconds.current) {
+			refSeconds.current.value = prevSeconds.toString();
+			return;
+		}
+		const difference: number = parseFloat(value) - prevSeconds;
 		handlePositionUpdate(difference);
 	};
 
 	const handleBlurMilliseconds = (): void => {
-		const difference: number =
-			(parseInt(refMilliseconds.current?.value as string) - prevMilliseconds) / 1000;
+		const value: string = refMilliseconds.current?.value as string;
+		if (!validateInput(value) && refMilliseconds.current) {
+			refMilliseconds.current.value = prevMilliseconds.toString();
+			return;
+		}
+		const difference: number = (Math.round(parseInt(value)) - prevMilliseconds) / 1000;
 		handlePositionUpdate(difference);
 	};
 

@@ -11,14 +11,13 @@ const HoverMarker: React.FC = () => {
 			style={{
 				backgroundColor: theme.palette.common.brightRed,
 				height: `${state.resizePosition - 50}px`,
-				width: '1px',
+				width: '1.5px',
 				position: 'absolute',
 				left: `${state.mousePosition.x}px`,
 				opacity: '50%',
-				visibility:
-					state.isHoveredWaveform && !state.isSeekHandleHovered ? 'visible' : 'hidden',
+				visibility: state.isHoveredWaveform ? 'visible' : 'hidden',
 				pointerEvents: 'none',
-				zIndex: '2',
+				zIndex: '-1',
 			}}
 		></div>
 	);

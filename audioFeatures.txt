@@ -1,10 +1,7 @@
 import { actions, useAppState } from '../context/AppStateContext';
 const { state, dispatch } = useAppState();
 
-- timecode input change - how to handle decimals? just remove them before processing?
-
-- should not drag handle while playing
-- scroll to location on timecode input change
+- on first upload, the text needs to disappear
 
 - seek handle drag issue
 	- not a matter of speed
@@ -12,13 +9,7 @@ const { state, dispatch } = useAppState();
 	- not a matter of click, then wait, then drag
 	- removing waveform/svg doesn't help
 	- making handle bigger doesn't help
-- clean up code after playback features are good 
-- test longer audio
-- still issue of stopping at the previous audio spo point
-- when 2 consecutive uploads, they both play? 
-- make draggable highlighted selection that tracks beginning and end timecodes 
-- set up CI/CD and testing library when  playback features are set 
-
+	- it works on firefox? 
 
 - auto scroll horizontally with playback
 	- there needs to be logic that detects when the seekHandle reaches the end of the current view, no matter where the scroll position is. 
@@ -33,11 +24,15 @@ const { state, dispatch } = useAppState();
 	// what about when you drag the handle
 
 	// should it be based on 
-- timecode
-- draggable seek handle
+	
+- clean up code after playback features are good 
+- test very longer audio
 
-- why is seek handle flashing on animation
-- seek handle still lags sometimes (should you try a deploy?)
+- make draggable highlighted selection that tracks beginning and end timecodes 
+- set up CI/CD and testing library when  playback features are set 
+
+
+
 
 
 
