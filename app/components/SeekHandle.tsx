@@ -9,13 +9,13 @@ const SeekHandle: React.FC = () => {
 	const { state, dispatch } = useAppState();
 	const { calcPositionFromSeconds, calcSecondsFromPosition } = usePositionCalculations();
 	const theme = useTheme();
-	const ref = useRef<HTMLElement>(null);
+	const seekHandleRef = useRef<HTMLElement>(null);
 	const scrollPositionRef = useRef<number>(state.waveformScrollPosition);
 	const windowWidthRef = useRef<number>(state.windowWidth);
 
 	useEffect(() => {
-		if (ref.current) {
-			ref.current.style.left = `${calcPositionFromSeconds(state.seconds)}px`;
+		if (seekHandleRef.current) {
+			seekHandleRef.current.style.left = `${calcPositionFromSeconds(state.seconds)}px`;
 		}
 	}, [state.isPlaying, state.seconds]);
 
@@ -31,8 +31,8 @@ const SeekHandle: React.FC = () => {
 		const currentViewEndPosition: number =
 			scrollPositionRef.current + windowWidthRef.current;
 		let currentPosition: number = 0;
-		if (ref.current) {
-			currentPosition = parseInt(ref.current?.style.left);
+		if (seekHandleRef.current) {
+			currentPosition = parseInt(seekHandleRef.current?.style.left);
 		}
 
 		if (currentPosition >= currentViewEndPosition) {
@@ -52,8 +52,8 @@ const SeekHandle: React.FC = () => {
 
 	const updatePosition = (): void => {
 		const position = calcPositionFromSeconds(Tone.Transport.seconds);
-		if (ref.current) {
-			ref.current.style.left = `${position}px`;
+		if (seekHandleRef.current) {
+			seekHandleRef.current.style.left = `${position}px`;
 		}
 	};
 
@@ -71,6 +71,10 @@ const SeekHandle: React.FC = () => {
 
 	const handleOnMouseDown = (e: React.MouseEvent): void => {
 		e.stopPropagation();
+		e.preventDefault();
+		e.movementX = 500;
+		console.log('mouse down inside seek handle');
+
 		dispatch({ type: actions.SET_SEEK_HANDLE_MOUSE_DOWN, payload: true });
 	};
 	const handleOnMouseUp = (e: React.MouseEvent): void => {
@@ -80,13 +84,12 @@ const SeekHandle: React.FC = () => {
 	};
 
 	useEffect(() => {
-		// mouse position change not being detected when not-allowed?
 		const containerWidth: number = calcPositionFromSeconds(state.audioDuration);
 		let position: number = state.mousePosition.x + state.waveformScrollPosition;
 		position = position > containerWidth ? containerWidth : position;
 		position = position < 0 ? 0 : position;
-		if (state.seekHandleMouseDown && ref.current) {
-			ref.current.style.left = `${position}px`;
+		if (state.seekHandleMouseDown && seekHandleRef.current) {
+			seekHandleRef.current.style.left = `${position}px`;
 			dispatch({
 				type: actions.SET_SECONDS,
 				payload: calcSecondsFromPosition(position),
@@ -101,7 +104,7 @@ const SeekHandle: React.FC = () => {
 
 	return (
 		<Box
-			ref={ref}
+			ref={seekHandleRef}
 			onMouseDown={handleOnMouseDown}
 			onMouseUp={handleOnMouseUp}
 			sx={{
@@ -110,9 +113,13 @@ const SeekHandle: React.FC = () => {
 				width: '2px',
 				position: 'relative',
 				top: '0px',
-				zIndex: '2',
+				zIndex: '5',
+				pointerEvents: 'all',
 				'&:hover': {
 					cursor: 'grab',
+				},
+				'&: active': {
+					cursor: 'grabbing',
 				},
 			}}
 		>

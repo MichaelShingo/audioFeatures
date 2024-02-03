@@ -1,7 +1,7 @@
 import React, { RefObject, useEffect, useRef, useState } from 'react';
 import { actions, useAppState } from '../context/AppStateContext';
 import { LinearProgress, Typography } from '@mui/material';
-import { Box, Stack } from '@mui/system';
+import { Box, Stack, createContainer } from '@mui/system';
 import SeekHandle from './SeekHandle';
 import usePositionCalculations from '../customHooks/usePositionCalculations';
 import HoverMarker from './HoverMarker';
@@ -15,6 +15,23 @@ const Waveform: React.FC = () => {
 	);
 	const containerRef: RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
 
+	useEffect(() => {
+		if (state.seekHandleMouseDown && containerRef.current) {
+			const containerRect = containerRef.current.getBoundingClientRect();
+			const mouseX = state.mousePosition.x - containerRect.left;
+			const containerWidth = containerRef.current.clientWidth;
+
+			const scrollThreshold = 50;
+
+			const SCROLL_SPEED = 60;
+
+			if (mouseX < scrollThreshold) {
+				containerRef.current.scrollLeft -= SCROLL_SPEED;
+			} else if (mouseX > containerWidth - scrollThreshold) {
+				containerRef.current.scrollLeft += SCROLL_SPEED;
+			}
+		}
+	}, [state.mousePosition]);
 	useEffect(() => {
 		if (containerRef.current) {
 			containerRef.current.scrollLeft = state.waveformScrollPosition;
@@ -126,6 +143,7 @@ const Waveform: React.FC = () => {
 				flexWrap: 'nowrap',
 				gap: '0px',
 				marginBottom: '7px',
+				pointerEvents: 'all',
 			}}
 		>
 			<Stack
@@ -134,6 +152,7 @@ const Waveform: React.FC = () => {
 				direction="column"
 				sx={{
 					width: '100%',
+					backgroundColor: '',
 					display:
 						(state.isUploading && !state.isUploaded) || state.isUploaded
 							? 'none'

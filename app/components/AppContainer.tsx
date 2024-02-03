@@ -27,10 +27,6 @@ const AppContainer: React.FC<AppContainerProps> = ({ children }) => {
 		};
 	}, []);
 
-	useEffect(() => {
-		console.log(state.seekHandleMouseDown);
-	}, [state.seekHandleMouseDown]);
-
 	return (
 		<Box
 			data-label="app-container"
@@ -51,7 +47,6 @@ const AppContainer: React.FC<AppContainerProps> = ({ children }) => {
 				flexDirection: 'column',
 				alignItems: 'center',
 				justifyContent: 'center',
-				cursor: state.seekHandleMouseDown ? 'grabbing' : 'auto',
 			}}
 		>
 			{children}
