@@ -1,7 +1,7 @@
 import React, { RefObject, useEffect, useRef, useState } from 'react';
 import { actions, useAppState } from '../context/AppStateContext';
 import { LinearProgress, Typography } from '@mui/material';
-import { Box, Stack, createContainer } from '@mui/system';
+import { Box, Stack } from '@mui/system';
 import SeekHandle from './SeekHandle';
 import usePositionCalculations from '../customHooks/usePositionCalculations';
 import HoverMarker from './HoverMarker';
@@ -22,7 +22,6 @@ const Waveform: React.FC = () => {
 			const containerWidth = containerRef.current.clientWidth;
 
 			const scrollThreshold = 50;
-
 			const SCROLL_SPEED = 60;
 
 			if (mouseX < scrollThreshold) {

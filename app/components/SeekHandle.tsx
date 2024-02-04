@@ -73,13 +73,11 @@ const SeekHandle: React.FC = () => {
 		e.stopPropagation();
 		e.preventDefault();
 		e.movementX = 500;
-		console.log('mouse down inside seek handle');
 
 		dispatch({ type: actions.SET_SEEK_HANDLE_MOUSE_DOWN, payload: true });
 	};
 	const handleOnMouseUp = (e: React.MouseEvent): void => {
 		e.stopPropagation();
-		console.log('mouse up inside seek handle');
 		dispatch({ type: actions.SET_SEEK_HANDLE_MOUSE_DOWN, payload: false });
 	};
 

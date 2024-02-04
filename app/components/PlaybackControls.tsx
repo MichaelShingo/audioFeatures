@@ -20,8 +20,11 @@ const PlaybackControls: React.FC = () => {
 	const theme = useTheme();
 
 	useEffect(() => {
+		Tone.Transport.cancel(0);
 		player.dispose();
+		console.log('player disposed');
 		if (state.audioBuffer) {
+			console.log('audio buffer exists, settings new player');
 			player = new Tone.Player(state.audioBuffer).toDestination();
 			player.sync().start(0);
 		}
@@ -45,6 +48,7 @@ const PlaybackControls: React.FC = () => {
 		const startTime: number = state.seconds;
 		Tone.start();
 		Tone.Transport.seconds = startTime;
+
 		Tone.Transport.start();
 		dispatch({ type: actions.SET_IS_PLAYING, payload: true });
 
