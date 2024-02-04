@@ -1,25 +1,27 @@
 import { useTheme } from '@mui/material';
 import { useAppState } from '../context/AppStateContext';
 import React from 'react';
+import { Box } from '@mui/system';
 
 const HoverMarker: React.FC = () => {
 	const { state } = useAppState();
 	const theme = useTheme();
 
 	return (
-		<div
-			style={{
+		<Box
+			sx={{
 				backgroundColor: theme.palette.common.brightRed,
-				height: `${state.resizePosition - 50}px`,
+				height: `${(state.resizePosition / state.windowHeight) * 100}%`,
 				width: '1.5px',
-				position: 'absolute',
 				left: `${state.mousePosition.x}px`,
 				opacity: '50%',
 				visibility: state.isHoveredWaveform ? 'visible' : 'hidden',
 				pointerEvents: 'none',
 				zIndex: '-1',
+				position: 'absolute',
+				top: '0px',
 			}}
-		></div>
+		></Box>
 	);
 };
 

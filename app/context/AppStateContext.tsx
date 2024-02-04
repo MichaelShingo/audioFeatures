@@ -32,7 +32,6 @@ interface GlobalState {
 	isUploaded: boolean;
 	isUploading: boolean;
 	mousePosition: MousePosition;
-	waveformWidth: number;
 	wavelengthLength: number;
 	audioDuration: number;
 	isDragging: boolean;
@@ -62,7 +61,6 @@ const initialState: GlobalState = {
 	isUploaded: false,
 	isUploading: false,
 	mousePosition: { x: 0, y: 0 },
-	waveformWidth: 0,
 	wavelengthLength: 0,
 	audioDuration: 0,
 	isDragging: false,
@@ -113,7 +111,6 @@ export const actions: Record<string, string> = {
 	SET_IS_UPLOADING: 'SET_IS_UPLOADING',
 	SET_MOUSE_POSITION: 'SET_MOUSE_POSITION',
 	SET_IS_SEEK_HANDLE_HOVERED: 'SET_IS_SEEK_HANDLE_HOVERED',
-	SET_WAVEFORM_WIDTH: 'SET_WAVEFORM_WIDTH',
 	SET_WAVELENGTH_LENGTH: 'SET_WAVELENGTH_LENGTH',
 	SET_AUDIO_DURATION: 'SET_AUDIO_DURATION',
 	SET_IS_DRAGGING: 'SET_IS_DRAGGING',
@@ -165,9 +162,6 @@ const appReducer = (state: GlobalState, action: AppAction): GlobalState => {
 			return { ...state, isUploading: action.payload as boolean };
 		case actions.SET_MOUSE_POSITION:
 			return { ...state, mousePosition: action.payload as MousePosition };
-
-		case actions.SET_WAVEFORM_WIDTH:
-			return { ...state, waveformWidth: action.payload as number };
 		case actions.SET_WAVELENGTH_LENGTH:
 			return { ...state, wavelengthLength: action.payload as number };
 		case actions.SET_AUDIO_DURATION:

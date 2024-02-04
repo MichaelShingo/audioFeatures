@@ -99,11 +99,6 @@ const AudioComponent: React.FC = () => {
 				payload: spectralFlatnessResults as SpectralFlatness[],
 			});
 
-			console.log(
-				loudnessResults.length,
-				spectralFlatnessResults.length,
-				chromaResults.length
-			);
 			if (chromaResults === undefined) {
 				chromaResults = [[0]];
 			}

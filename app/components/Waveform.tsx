@@ -21,16 +21,17 @@ const Waveform: React.FC = () => {
 			const mouseX = state.mousePosition.x - containerRect.left;
 			const containerWidth = containerRef.current.clientWidth;
 
-			const scrollThreshold = 50;
-			const SCROLL_SPEED = 60;
+			const SCROLL_THRESHOLD = 50;
+			const SCROLL_SPEED = 80;
 
-			if (mouseX < scrollThreshold) {
+			if (mouseX < SCROLL_THRESHOLD) {
 				containerRef.current.scrollLeft -= SCROLL_SPEED;
-			} else if (mouseX > containerWidth - scrollThreshold) {
+			} else if (mouseX > containerWidth - SCROLL_THRESHOLD) {
 				containerRef.current.scrollLeft += SCROLL_SPEED;
 			}
 		}
 	}, [state.mousePosition]);
+
 	useEffect(() => {
 		if (containerRef.current) {
 			containerRef.current.scrollLeft = state.waveformScrollPosition;
@@ -101,7 +102,7 @@ const Waveform: React.FC = () => {
 		return state.loudnessData[index]?.total;
 	};
 
-	const calcWaveformScalePercentage = (): number | undefined => {
+	const calcVerticalScalePercentage = (): number | undefined => {
 		if (state.isDragging) {
 			return state.mousePosition.y / 5;
 		}
@@ -185,7 +186,8 @@ const Waveform: React.FC = () => {
 					<HoverMarker />
 					<div
 						style={{
-							transform: `scaleY(${calcWaveformScalePercentage()}%)`,
+							backgroundColor: 'navy',
+							transform: `scaleY(${calcVerticalScalePercentage()}%) scaleX(90%)`,
 							pointerEvents: 'none',
 						}}
 						dangerouslySetInnerHTML={{ __html: svgData }}

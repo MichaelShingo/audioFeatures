@@ -22,9 +22,7 @@ const PlaybackControls: React.FC = () => {
 	useEffect(() => {
 		Tone.Transport.cancel(0);
 		player.dispose();
-		console.log('player disposed');
 		if (state.audioBuffer) {
-			console.log('audio buffer exists, settings new player');
 			player = new Tone.Player(state.audioBuffer).toDestination();
 			player.sync().start(0);
 		}

@@ -93,15 +93,10 @@ const SeekHandle: React.FC = () => {
 				payload: calcSecondsFromPosition(position),
 			});
 		}
-	}, [
-		state.mousePosition,
-		state.seekHandleMouseDown,
-		state.waveformScrollPosition,
-		state.waveformWidth,
-	]);
+	}, [state.mousePosition, state.seekHandleMouseDown, state.waveformScrollPosition]);
 
 	return (
-		<Box
+		<Box // red line
 			ref={seekHandleRef}
 			onMouseDown={handleOnMouseDown}
 			onMouseUp={handleOnMouseUp}
@@ -121,9 +116,9 @@ const SeekHandle: React.FC = () => {
 				},
 			}}
 		>
-			<Box
+			<Box // blue box
 				sx={{
-					width: '10px',
+					width: '8.5px',
 					height: '10px',
 					position: 'relative',
 					left: '-4px',
@@ -131,7 +126,7 @@ const SeekHandle: React.FC = () => {
 					backgroundColor: theme.palette.common.lightBlue,
 				}}
 			></Box>
-			<Box
+			<Box // blue triangle
 				sx={{
 					width: '0px',
 					height: '0px',
