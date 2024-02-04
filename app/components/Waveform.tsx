@@ -9,10 +9,11 @@ import HoverMarker from './HoverMarker';
 const Waveform: React.FC = () => {
 	const { state, dispatch } = useAppState();
 	const { calcSecondsFromPosition } = usePositionCalculations();
+	const [svgPathData, setSVGPathData] = useState<string>('');
 
-	const [svgData, setSVGData] = useState<string>(
-		`<svg xmlns="http://www.w3.org/2000/svg" width="500" height="200" viewBox="0 0 500 200"></svg>`
-	);
+	// const [svgData, setSVGData] = useState<string>(
+	// 	`<svg xmlns="http://www.w3.org/2000/svg" width="500" height="200" viewBox="0 0 500 200"></svg>`
+	// );
 	const containerRef: RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
@@ -71,10 +72,12 @@ const Waveform: React.FC = () => {
 		}
 
 		const loudnessDataLength: number = state.loudnessData.length;
-		let newSVGData: string = `<svg xmlns="http://www.w3.org/2000/svg" 
+		const OLD: string = `<svg xmlns="http://www.w3.org/2000/svg" 
 			width="${loudnessDataLength}" viewBox="0 0 ${loudnessDataLength} 1000">
 			<g fill="#3498db" stroke="#3498db" stroke-width="1">
 			<path d="M0 500, `;
+
+		let newSVGData = 'M0 500,';
 
 		for (let i = 0; i < loudnessDataLength; i++) {
 			newSVGData += createSVGCoordinate(i, getLoudnessTotal(i));
@@ -86,8 +89,12 @@ const Waveform: React.FC = () => {
 			newSVGData += createSVGCoordinate(i, loudnessTotal);
 		}
 
+		console.log(newSVGData);
+
+		setSVGPathData(newSVGData);
+
 		newSVGData += `" fill-opacity="0.3" /></g></svg>`;
-		setSVGData(newSVGData);
+		// setSVGData(newSVGData);
 	};
 
 	const createSVGCoordinate = (x: number, y: number | undefined): string => {
@@ -186,12 +193,21 @@ const Waveform: React.FC = () => {
 					<HoverMarker />
 					<div
 						style={{
-							backgroundColor: 'navy',
-							transform: `scaleY(${calcVerticalScalePercentage()}%) scaleX(90%)`,
+							backgroundColor: '',
+							transform: `scaleY(${calcVerticalScalePercentage()}%) scaleX(100%)`,
 							pointerEvents: 'none',
 						}}
-						dangerouslySetInnerHTML={{ __html: svgData }}
-					/>
+					>
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							width={state.loudnessData.length}
+							viewBox={`0 0 ${state.loudnessData.length} 1000`}
+						>
+							<g fill="#3498db" stroke="#3498db" strokeWidth="1">
+								<path d={svgPathData} fillOpacity="0.3" />
+							</g>
+						</svg>
+					</div>
 				</>
 			) : (
 				<></>
