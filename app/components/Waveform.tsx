@@ -194,14 +194,16 @@ const Waveform: React.FC = () => {
 					<div
 						style={{
 							backgroundColor: '',
-							transform: `scaleY(${calcVerticalScalePercentage()}%) scaleX(100%)`,
+							transform: `scaleY(${calcVerticalScalePercentage()}%)`,
 							pointerEvents: 'none',
 						}}
 					>
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
-							width={state.loudnessData.length}
+							height="1000px"
+							width={`${state.loudnessData.length * state.zoomFactor}px`}
 							viewBox={`0 0 ${state.loudnessData.length} 1000`}
+							preserveAspectRatio="none"
 						>
 							<g fill="#3498db" stroke="#3498db" strokeWidth="1">
 								<path d={svgPathData} fillOpacity="0.3" />

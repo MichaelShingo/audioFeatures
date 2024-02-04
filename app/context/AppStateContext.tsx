@@ -11,8 +11,6 @@ type MousePosition = {
 };
 
 interface GlobalState {
-	dark_mode: boolean;
-	settings_open: boolean;
 	rms: number;
 	audioFile: File | null;
 	waveform: Float32Array | null;
@@ -37,11 +35,10 @@ interface GlobalState {
 	isDragging: boolean;
 	waveformScrollPosition: number;
 	seekHandleMouseDown: boolean;
+	zoomFactor: number;
 }
 
 const initialState: GlobalState = {
-	dark_mode: true,
-	settings_open: false,
 	rms: 20,
 	audioFile: null,
 	waveform: null,
@@ -66,6 +63,7 @@ const initialState: GlobalState = {
 	isDragging: false,
 	waveformScrollPosition: 0,
 	seekHandleMouseDown: false,
+	zoomFactor: 1,
 };
 
 export type AppAction = {
@@ -90,8 +88,6 @@ interface AppStateContextType {
 }
 
 export const actions: Record<string, string> = {
-	DARK_MODE: 'DARK_MODE',
-	SETTINGS_OPEN: 'SETTINGS_OPEN',
 	SET_RMS: 'SET_RMS',
 	SET_AUDIO_FILE: 'SET_AUDIO_FILE',
 	SET_WAVEFORM: 'SET_WAVEFORM',
@@ -116,12 +112,11 @@ export const actions: Record<string, string> = {
 	SET_IS_DRAGGING: 'SET_IS_DRAGGING',
 	SET_WAVEFORM_SCROLL_POSITION: 'SET_WAVEFORM_SCROLL_POSITION',
 	SET_SEEK_HANDLE_MOUSE_DOWN: 'SET_SEEK_HANDLE_MOUSE_DOWN',
+	SET_ZOOM_FACTOR: 'SET_ZOOM_FACTOR',
 };
 
 const appReducer = (state: GlobalState, action: AppAction): GlobalState => {
 	switch (action.type) {
-		case actions.SETTINGS_OPEN:
-			return { ...state, settings_open: !state.settings_open };
 		case actions.SET_RMS:
 			return { ...state, rms: action.payload as number };
 		case actions.SET_AUDIO_FILE:
@@ -168,16 +163,14 @@ const appReducer = (state: GlobalState, action: AppAction): GlobalState => {
 			return { ...state, audioDuration: action.payload as number };
 		case actions.SET_IS_DRAGGING:
 			return { ...state, isDragging: action.payload as boolean };
-		case actions.SET_WAVEFORM_SCROLL_POSITION: {
+		case actions.SET_WAVEFORM_SCROLL_POSITION:
 			return { ...state, waveformScrollPosition: action.payload as number };
-		}
-		case actions.SET_SEEK_HANDLE_MOUSE_DOWN: {
+		case actions.SET_SEEK_HANDLE_MOUSE_DOWN:
 			return { ...state, seekHandleMouseDown: action.payload as boolean };
-		}
-		case actions.SET_GLOBAL_MOUSE_UP: {
+		case actions.SET_GLOBAL_MOUSE_UP:
 			return { ...state, seekHandleMouseDown: false };
-		}
-
+		case actions.SET_ZOOM_FACTOR:
+			return { ...state, zoomFactor: action.payload as number };
 		default:
 			return state;
 	}

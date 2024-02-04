@@ -10,6 +10,7 @@ import ResizeInterface from './ResizeInterface';
 import React, { useEffect } from 'react';
 import AudioUpload from './AudioUpload';
 import * as Tone from 'tone';
+import ZoomSlider from './ZoomSlider';
 
 let player: Tone.Player;
 player = new Tone.Player('/ringtone.mp3');
@@ -109,6 +110,7 @@ const PlaybackControls: React.FC = () => {
 				icon={<KeyboardVoiceIcon />}
 			/>
 			<ResizeInterface />
+			<ZoomSlider />
 		</Stack>
 	);
 };
