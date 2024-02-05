@@ -5,11 +5,13 @@ import { Box, Stack } from '@mui/system';
 import SeekHandle from './SeekHandle';
 import usePositionCalculations from '../customHooks/usePositionCalculations';
 import HoverMarker from './HoverMarker';
+import DraggableSelection from './DraggableSelection';
 
 const Waveform: React.FC = () => {
 	const { state, dispatch } = useAppState();
 	const { calcSecondsFromPosition, calcPositionFromSeconds } = usePositionCalculations();
 	const [svgPathData, setSVGPathData] = useState<string>('');
+	const [isDragging, setIsDragging] = useState<boolean>(false);
 
 	const containerRef: RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
 
@@ -133,12 +135,43 @@ const Waveform: React.FC = () => {
 		return 1 / state.zoomFactor + 0.1;
 	};
 
+	const handleDragSelection = () => {
+		setIsDragging(true);
+		dispatch({
+			type: actions.SET_SELECTION_START_POSITION,
+			payload: state.mousePosition.x,
+		});
+		dispatch({
+			type: actions.SET_SELECTION_END_POSITION,
+			payload: state.mousePosition.x,
+		});
+	};
+
+	const handleEndDragSelection = () => {
+		setIsDragging(false);
+		dispatch({
+			type: actions.SET_SELECTION_END_POSITION,
+			payload: state.mousePosition.x,
+		});
+	};
+
+	useEffect(() => {
+		if (isDragging) {
+			dispatch({
+				type: actions.SET_SELECTION_END_POSITION,
+				payload: state.mousePosition.x,
+			});
+		}
+	}, [state.mousePosition, state.selectionStartPosition]);
+
 	return (
 		<div
 			ref={containerRef}
 			id="waveform-container"
 			onMouseEnter={handleOnMouseEnterStack}
 			onMouseLeave={handleOnMouseLeave}
+			onMouseDown={handleDragSelection}
+			onMouseUp={handleEndDragSelection}
 			onClick={state.isUploaded ? handleOnClick : () => {}}
 			style={{
 				width: '100vw',
@@ -195,6 +228,7 @@ const Waveform: React.FC = () => {
 				<>
 					<SeekHandle />
 					<HoverMarker />
+					<DraggableSelection />
 					<div
 						style={{
 							backgroundColor: '',

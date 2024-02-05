@@ -1,10 +1,13 @@
 import { actions, useAppState } from '../context/AppStateContext';
 const { state, dispatch } = useAppState();
 
-- continuously have Tone playing something so it doesn't lag on first start.
+
+- make draggable highlighted selection that tracks beginning and end timecodes 
+	- position must be relative to container with scroll
+	- position scales to zoom level
+	
 - clean up code after playback features are good 
 - hover marker length is slightly off
-- make draggable highlighted selection that tracks beginning and end timecodes 
 - set up CI/CD and testing library when  playback features are set 
 
 

@@ -36,6 +36,8 @@ interface GlobalState {
 	waveformScrollPosition: number;
 	seekHandleMouseDown: boolean;
 	zoomFactor: number;
+	selectionStartPosition: number;
+	selectionEndPosition: number;
 }
 
 const initialState: GlobalState = {
@@ -64,6 +66,8 @@ const initialState: GlobalState = {
 	waveformScrollPosition: 0,
 	seekHandleMouseDown: false,
 	zoomFactor: 1,
+	selectionStartPosition: 0,
+	selectionEndPosition: 500,
 };
 
 export type AppAction = {
@@ -113,6 +117,8 @@ export const actions: Record<string, string> = {
 	SET_WAVEFORM_SCROLL_POSITION: 'SET_WAVEFORM_SCROLL_POSITION',
 	SET_SEEK_HANDLE_MOUSE_DOWN: 'SET_SEEK_HANDLE_MOUSE_DOWN',
 	SET_ZOOM_FACTOR: 'SET_ZOOM_FACTOR',
+	SET_SELECTION_START_POSITION: 'SET_SELECTION_START_POSITION',
+	SET_SELECTION_END_POSITION: 'SET_SELECTION_END_POSITION',
 };
 
 const appReducer = (state: GlobalState, action: AppAction): GlobalState => {
@@ -169,8 +175,12 @@ const appReducer = (state: GlobalState, action: AppAction): GlobalState => {
 			return { ...state, seekHandleMouseDown: action.payload as boolean };
 		case actions.SET_GLOBAL_MOUSE_UP:
 			return { ...state, seekHandleMouseDown: false };
+		case actions.SET_SELECTION_START_POSITION:
+			return { ...state, selectionStartPosition: action.payload as number };
 		case actions.SET_ZOOM_FACTOR:
 			return { ...state, zoomFactor: action.payload as number };
+		case actions.SET_SELECTION_END_POSITION:
+			return { ...state, selectionEndPosition: action.payload as number };
 		default:
 			return state;
 	}

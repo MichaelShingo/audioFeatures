@@ -15,10 +15,11 @@ const DataContainer: React.FC<DataContainerProps> = ({ children }) => {
 	return (
 		<Box
 			sx={{
-				backgroundColor: '',
+				backgroundColor: theme.palette.background.default,
 				height: `${positionPercentage}%`,
 				width: '100%',
 				padding: '1%',
+				zIndex: '-1',
 			}}
 		>
 			{children}

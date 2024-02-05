@@ -18,6 +18,7 @@ export const theme = createTheme({
 			lightGrey: '#423c3b',
 			mediumGrey: '#2e2e2e',
 			lightBlue: '#02b0fe',
+			lightBlueTrans: 'rgba(2, 176, 254, 0.5)',
 		},
 		primary: {
 			main: '#df4440',
