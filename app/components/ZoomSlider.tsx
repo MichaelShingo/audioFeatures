@@ -7,6 +7,10 @@ import ZoomInIcon from '@mui/icons-material/ZoomIn';
 import { actions, useAppState } from '../context/AppStateContext';
 import { IconButton, useTheme } from '@mui/material';
 
+const ZOOM_INCREMENT_VALUE: number = 0.05;
+const ZOOM_MAX: number = 6;
+const ZOOM_MIN: number = 0.2;
+
 const ZoomSlider: React.FC = () => {
 	const { state, dispatch } = useAppState();
 	const theme = useTheme();
@@ -20,16 +24,22 @@ const ZoomSlider: React.FC = () => {
 	};
 
 	const incrementZoomFactor = (amount: number) => {
+		let newAmount: number = state.zoomFactor + amount;
+		newAmount = newAmount < ZOOM_MIN ? ZOOM_MIN : newAmount;
+		newAmount = newAmount > ZOOM_MAX ? ZOOM_MAX : newAmount;
 		dispatch({
 			type: actions.SET_ZOOM_FACTOR,
-			payload: state.zoomFactor + amount,
+			payload: newAmount,
 		});
 	};
 
 	return (
 		<Box sx={{ width: 300 }}>
 			<Stack spacing={1} direction="row" alignItems="center">
-				<IconButton onClick={() => incrementZoomFactor(-0.01)}>
+				<IconButton
+					disabled={isDisabled()}
+					onClick={() => incrementZoomFactor(-1 * ZOOM_INCREMENT_VALUE)}
+				>
 					<ZoomOutIcon />
 				</IconButton>
 				<Slider
@@ -64,7 +74,10 @@ const ZoomSlider: React.FC = () => {
 						},
 					}}
 				/>
-				<IconButton onClick={() => incrementZoomFactor(0.01)}>
+				<IconButton
+					disabled={isDisabled()}
+					onClick={() => incrementZoomFactor(ZOOM_INCREMENT_VALUE)}
+				>
 					<ZoomInIcon />
 				</IconButton>
 			</Stack>

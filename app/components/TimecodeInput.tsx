@@ -1,5 +1,6 @@
 import { useTheme } from '@mui/material';
 import React from 'react';
+import { useAppState } from '../context/AppStateContext';
 
 interface TimecodeInputProps {
 	refObj: React.RefObject<HTMLInputElement>;
@@ -12,6 +13,7 @@ const TimecodeInput: React.FC<TimecodeInputProps> = ({
 	handleBlur,
 	handleFocus,
 }) => {
+	const { state } = useAppState();
 	const theme = useTheme();
 
 	const inputStyle = {
@@ -35,6 +37,7 @@ const TimecodeInput: React.FC<TimecodeInputProps> = ({
 
 	return (
 		<input
+			disabled={!state.isUploaded}
 			step="1"
 			ref={refObj}
 			type="number"

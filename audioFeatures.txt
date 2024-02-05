@@ -3,8 +3,6 @@ const { state, dispatch } = useAppState();
 
 - continuously have Tone playing something so it doesn't lag on first start.
 - clean up code after playback features are good 
-- timecode should be disabled before upload 
-- zoom slider disabled red 
 - hover marker length is slightly off
 - make draggable highlighted selection that tracks beginning and end timecodes 
 - set up CI/CD and testing library when  playback features are set 

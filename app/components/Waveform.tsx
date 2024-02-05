@@ -76,10 +76,6 @@ const Waveform: React.FC = () => {
 		}
 
 		const loudnessDataLength: number = state.loudnessData.length;
-		const OLD: string = `<svg xmlns="http://www.w3.org/2000/svg" 
-			width="${loudnessDataLength}" viewBox="0 0 ${loudnessDataLength} 1000">
-			<g fill="#3498db" stroke="#3498db" stroke-width="1">
-			<path d="M0 500, `;
 
 		let newSVGData = 'M0 500,';
 
@@ -93,12 +89,9 @@ const Waveform: React.FC = () => {
 			newSVGData += createSVGCoordinate(i, loudnessTotal);
 		}
 
-		console.log(newSVGData);
-
 		setSVGPathData(newSVGData);
 
 		newSVGData += `" fill-opacity="0.3" /></g></svg>`;
-		// setSVGData(newSVGData);
 	};
 
 	const createSVGCoordinate = (x: number, y: number | undefined): string => {
@@ -146,7 +139,7 @@ const Waveform: React.FC = () => {
 			id="waveform-container"
 			onMouseEnter={handleOnMouseEnterStack}
 			onMouseLeave={handleOnMouseLeave}
-			onClick={handleOnClick}
+			onClick={state.isUploaded ? handleOnClick : () => {}}
 			style={{
 				width: '100vw',
 				backgroundColor: '',

@@ -2,6 +2,20 @@ import React, { ChangeEvent } from 'react';
 import { actions, useAppState } from '../context/AppStateContext';
 import { IconButton, styled } from '@mui/material';
 import FileUpload from '@mui/icons-material/FileUpload';
+import * as Tone from 'tone';
+
+const osc = new Tone.Oscillator(0, 'sine').toDestination();
+
+const startSilentOsc = async () => {
+	await Tone.start();
+	try {
+		osc.start('+0.5');
+		osc.mute = true;
+		Tone.Transport.cancel();
+	} catch (e) {
+		console.log(e);
+	}
+};
 
 const VisuallyHiddenInput = styled('input')({
 	clip: 'rect(0 0 0 0)',
@@ -27,7 +41,7 @@ const AudioUpload: React.FC = () => {
 	};
 
 	return (
-		<IconButton component="label">
+		<IconButton component="label" onClick={startSilentOsc}>
 			<FileUpload />
 			<VisuallyHiddenInput type="file" accept="audio/*" onChange={handleFileChange} />
 		</IconButton>
