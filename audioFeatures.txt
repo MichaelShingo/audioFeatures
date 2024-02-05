@@ -1,19 +1,11 @@
 import { actions, useAppState } from '../context/AppStateContext';
 const { state, dispatch } = useAppState();
 
-	
-- zoom into waveform??
-	- make svg more proper, use actual svg element, no dangerously set html? firefox compatibility
-	- create state that tracks the percentage of the scale
-	- use that state in the function that converts between seconds and position and vice versa
-	- put this state in Waveform.tsx transform: scaleX(scaleState)
-	- Container width is set based on svg's absolute width
-	
-- hover marker length is slightly off
 - continuously have Tone playing something so it doesn't lag on first start.
-- 
 - clean up code after playback features are good 
-	
+- timecode should be disabled before upload 
+- zoom slider disabled red 
+- hover marker length is slightly off
 - make draggable highlighted selection that tracks beginning and end timecodes 
 - set up CI/CD and testing library when  playback features are set 
 

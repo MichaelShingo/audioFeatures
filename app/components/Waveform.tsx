@@ -8,12 +8,9 @@ import HoverMarker from './HoverMarker';
 
 const Waveform: React.FC = () => {
 	const { state, dispatch } = useAppState();
-	const { calcSecondsFromPosition } = usePositionCalculations();
+	const { calcSecondsFromPosition, calcPositionFromSeconds } = usePositionCalculations();
 	const [svgPathData, setSVGPathData] = useState<string>('');
 
-	// const [svgData, setSVGData] = useState<string>(
-	// 	`<svg xmlns="http://www.w3.org/2000/svg" width="500" height="200" viewBox="0 0 500 200"></svg>`
-	// );
 	const containerRef: RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
@@ -38,6 +35,13 @@ const Waveform: React.FC = () => {
 			containerRef.current.scrollLeft = state.waveformScrollPosition;
 		}
 	}, [state.waveformScrollPosition]);
+
+	useEffect(() => {
+		if (containerRef.current) {
+			containerRef.current.scrollLeft =
+				calcPositionFromSeconds(state.seconds) - state.windowWidth / 2;
+		}
+	}, [state.zoomFactor]);
 
 	useEffect(() => {
 		const handleScroll = () => {
@@ -129,6 +133,13 @@ const Waveform: React.FC = () => {
 		dispatch({ type: actions.SET_SECONDS, payload: seconds });
 	};
 
+	const calcStrokeWidth = (): number => {
+		if (state.zoomFactor < 0.5) {
+			return 0.6;
+		}
+		return 1 / state.zoomFactor + 0.1;
+	};
+
 	return (
 		<div
 			ref={containerRef}
@@ -140,7 +151,7 @@ const Waveform: React.FC = () => {
 				width: '100vw',
 				backgroundColor: '',
 				height: '90%',
-				overflowX: 'auto',
+				overflowX: 'scroll',
 				overflowY: 'hidden',
 				paddingInline: '0px',
 				display: 'flex',
@@ -205,7 +216,7 @@ const Waveform: React.FC = () => {
 							viewBox={`0 0 ${state.loudnessData.length} 1000`}
 							preserveAspectRatio="none"
 						>
-							<g fill="#3498db" stroke="#3498db" strokeWidth="1">
+							<g fill="#3498db" stroke="#3498db" strokeWidth={calcStrokeWidth()}>
 								<path d={svgPathData} fillOpacity="0.3" />
 							</g>
 						</svg>

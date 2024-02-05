@@ -32,7 +32,7 @@ const SeekHandle: React.FC = () => {
 			scrollPositionRef.current + windowWidthRef.current;
 		let currentPosition: number = 0;
 		if (seekHandleRef.current) {
-			currentPosition = parseInt(seekHandleRef.current?.style.left);
+			currentPosition = parseInt(seekHandleRef.current.style.left);
 		}
 
 		if (currentPosition >= currentViewEndPosition) {
@@ -94,6 +94,12 @@ const SeekHandle: React.FC = () => {
 			});
 		}
 	}, [state.mousePosition, state.seekHandleMouseDown, state.waveformScrollPosition]);
+
+	useEffect(() => {
+		if (seekHandleRef.current) {
+			seekHandleRef.current.style.left = `${calcPositionFromSeconds(state.seconds)}px`;
+		}
+	}, [state.zoomFactor]);
 
 	return (
 		<Box // red line

@@ -85,6 +85,7 @@ const PlaybackControls: React.FC = () => {
 		<Stack
 			direction="row"
 			justifyContent="center"
+			alignItems="center"
 			sx={{ backgroundColor: theme.palette.background.default }}
 		>
 			<Timecode />

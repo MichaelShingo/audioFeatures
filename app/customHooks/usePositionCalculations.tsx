@@ -10,12 +10,12 @@ const usePositionCalculations = () => {
 
 	const calcSecondsFromPosition = (currentPosition: number): number => {
 		const playbackPercentage = currentPosition / calcWavelengthLength();
-		return playbackPercentage * state.audioDuration;
+		return (playbackPercentage * state.audioDuration) / state.zoomFactor;
 	};
 
 	const calcPositionFromSeconds = (currentTimeInSeconds: number): number => {
 		const playbackPercentage: number = currentTimeInSeconds / state.audioDuration;
-		return playbackPercentage * calcWavelengthLength();
+		return playbackPercentage * calcWavelengthLength() * state.zoomFactor;
 	};
 
 	const isPositionInCurrentView = (position: number) => {
