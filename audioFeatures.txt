@@ -3,13 +3,16 @@ const { state, dispatch } = useAppState();
 
 
 - make draggable highlighted selection that tracks beginning and end timecodes 
-	- position must be relative to container with scroll
 	- position scales to zoom level
+	- dragging across boundary auto scrolls and doesn't break the drag
+	- scroll bar after selection doesn't deselect
+	- scroll bar doesn't select things 
 	
 - clean up code after playback features are good 
 - hover marker length is slightly off
 - set up CI/CD and testing library when  playback features are set 
-
+- make a logo 
+- test deploy for intermediate portfolio item
 
 
 

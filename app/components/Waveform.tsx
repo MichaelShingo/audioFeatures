@@ -137,32 +137,39 @@ const Waveform: React.FC = () => {
 
 	const handleDragSelection = () => {
 		setIsDragging(true);
+		const startSeconds: number = calcSecondsFromPosition(
+			state.mousePosition.x + state.waveformScrollPosition
+		);
 		dispatch({
-			type: actions.SET_SELECTION_START_POSITION,
-			payload: state.mousePosition.x,
+			type: actions.SET_SELECTION_START_SECONDS,
+			payload: startSeconds,
 		});
 		dispatch({
-			type: actions.SET_SELECTION_END_POSITION,
-			payload: state.mousePosition.x,
+			type: actions.SET_SELECTION_END_SECONDS,
+			payload: startSeconds,
 		});
 	};
 
 	const handleEndDragSelection = () => {
 		setIsDragging(false);
 		dispatch({
-			type: actions.SET_SELECTION_END_POSITION,
-			payload: state.mousePosition.x,
+			type: actions.SET_SELECTION_END_SECONDS,
+			payload: calcSecondsFromPosition(
+				state.mousePosition.x + state.waveformScrollPosition
+			),
 		});
 	};
 
 	useEffect(() => {
 		if (isDragging) {
 			dispatch({
-				type: actions.SET_SELECTION_END_POSITION,
-				payload: state.mousePosition.x,
+				type: actions.SET_SELECTION_END_SECONDS,
+				payload: calcSecondsFromPosition(
+					state.mousePosition.x + state.waveformScrollPosition
+				),
 			});
 		}
-	}, [state.mousePosition, state.selectionStartPosition]);
+	}, [state.mousePosition, state.selectionStartSeconds]);
 
 	return (
 		<div
@@ -228,14 +235,16 @@ const Waveform: React.FC = () => {
 				<>
 					<SeekHandle />
 					<HoverMarker />
-					<DraggableSelection />
+
 					<div
 						style={{
 							backgroundColor: '',
 							transform: `scaleY(${calcVerticalScalePercentage()}%)`,
 							pointerEvents: 'none',
+							position: 'relative',
 						}}
 					>
+						<DraggableSelection />
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
 							height="1000px"
