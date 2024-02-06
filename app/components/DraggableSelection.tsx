@@ -6,32 +6,18 @@ import { useEffect, useRef } from 'react';
 
 const DraggableSelection = () => {
 	const { state, dispatch } = useAppState();
-	const { calcPositionFromSeconds, calcSecondsFromPosition } = usePositionCalculations();
+	const { calcPositionFromSeconds } = usePositionCalculations();
 	const theme = useTheme();
-	const prevZoomFactor = useRef<number>(state.zoomFactor);
 
+	const prevZoomFactor = useRef<number>(state.zoomFactor);
 	const selectionWidth: number = calcPositionFromSeconds(
 		state.selectionEndSeconds - state.selectionStartSeconds
 	);
-
 	const isVisible = selectionWidth > 0;
 
 	useEffect(() => {
-		console.log(state.selectionStartSeconds, state.selectionEndSeconds);
-	}, [state.selectionStartSeconds, state.selectionEndSeconds]);
+		const zoomFactorDifference: number = state.zoomFactor - prevZoomFactor.current;
 
-	// on drag, capture the seconds at that position, and set the position based on seconds
-	// on zoom, you're still setting position based on conversion from seconds
-	useEffect(() => {
-		// what if you calculate the position based on seconds?
-		const zoomFactorDifference: number =
-			Math.round((state.zoomFactor - prevZoomFactor.current) * 100) / 100;
-		console.log(
-			'zoom factor diff',
-			prevZoomFactor.current,
-			state.zoomFactor,
-			zoomFactorDifference
-		);
 		dispatch({
 			type: actions.SET_SELECTION_START_POSITION,
 			payload: state.selectionStartSeconds * (zoomFactorDifference + 1),

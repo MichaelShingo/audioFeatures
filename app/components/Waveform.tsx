@@ -122,7 +122,11 @@ const Waveform: React.FC = () => {
 		dispatch({ type: actions.SET_IS_HOVERED_WAVEFORM, payload: false });
 	};
 
-	const handleOnClick = () => {
+	const handleOnClick = (event: React.MouseEvent<HTMLDivElement>) => {
+		const target = event.target as HTMLDivElement;
+		if (target.tagName.toLowerCase() !== 'div') {
+			return;
+		}
 		const position: number = state.mousePosition.x + state.waveformScrollPosition;
 		const seconds: number = calcSecondsFromPosition(position);
 		dispatch({ type: actions.SET_SECONDS, payload: seconds });
@@ -135,7 +139,17 @@ const Waveform: React.FC = () => {
 		return 1 / state.zoomFactor + 0.1;
 	};
 
+	const isDraggingScrollbar = (): boolean => {
+		if (containerRef.current) {
+			return state.mousePosition.y > containerRef.current.clientHeight;
+		}
+		return false;
+	};
+
 	const handleDragSelection = () => {
+		if (isDraggingScrollbar()) {
+			return;
+		}
 		setIsDragging(true);
 		const startSeconds: number = calcSecondsFromPosition(
 			state.mousePosition.x + state.waveformScrollPosition
@@ -151,6 +165,9 @@ const Waveform: React.FC = () => {
 	};
 
 	const handleEndDragSelection = () => {
+		if (isDraggingScrollbar()) {
+			return;
+		}
 		setIsDragging(false);
 		dispatch({
 			type: actions.SET_SELECTION_END_SECONDS,
@@ -179,7 +196,11 @@ const Waveform: React.FC = () => {
 			onMouseLeave={handleOnMouseLeave}
 			onMouseDown={handleDragSelection}
 			onMouseUp={handleEndDragSelection}
-			onClick={state.isUploaded ? handleOnClick : () => {}}
+			onClick={
+				state.isUploaded
+					? (e: React.MouseEvent<HTMLDivElement>) => handleOnClick(e)
+					: () => {}
+			}
 			style={{
 				width: '100vw',
 				backgroundColor: '',
