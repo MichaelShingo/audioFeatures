@@ -9,9 +9,11 @@ import usePositionCalculations from '../customHooks/usePositionCalculations';
 const calcMinutes = (seconds: number): string => {
 	return Math.floor(seconds / 60).toString();
 };
+
 const calcSeconds = (seconds: number): string => {
 	return Math.floor(seconds % 60).toString();
 };
+
 const calcMilliseconds = (seconds: number): string => {
 	return Math.round((seconds * 1000) % 1000).toString();
 };
@@ -82,13 +84,13 @@ const Timecode = () => {
 		setPrevMilliseconds(currentMilliseconds);
 	};
 
-	const validateInput = (input: string): boolean => {
+	const isInputValid = (input: string): boolean => {
 		return !(input === '' || input.includes('e') || input.includes('E'));
 	};
 
 	const handleBlurMinutes = (): void => {
 		const value: string = refMinutes.current?.value as string;
-		if (!validateInput(value) && refMinutes.current) {
+		if (!isInputValid(value) && refMinutes.current) {
 			refMinutes.current.value = prevMinutes.toString();
 			return;
 		}
@@ -98,7 +100,7 @@ const Timecode = () => {
 
 	const handleBlurSeconds = (): void => {
 		const value: string = refSeconds.current?.value as string;
-		if (!validateInput(value) && refSeconds.current) {
+		if (!isInputValid(value) && refSeconds.current) {
 			refSeconds.current.value = prevSeconds.toString();
 			return;
 		}
@@ -108,7 +110,7 @@ const Timecode = () => {
 
 	const handleBlurMilliseconds = (): void => {
 		const value: string = refMilliseconds.current?.value as string;
-		if (!validateInput(value) && refMilliseconds.current) {
+		if (!isInputValid(value) && refMilliseconds.current) {
 			refMilliseconds.current.value = prevMilliseconds.toString();
 			return;
 		}
