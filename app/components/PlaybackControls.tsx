@@ -7,27 +7,31 @@ import KeyboardVoiceIcon from '@mui/icons-material/KeyboardVoice';
 import Timecode from './Timecode';
 import FilledIconButton from './FilledIconButton';
 import ResizeInterface from './ResizeInterface';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import AudioUpload from './AudioUpload';
 import * as Tone from 'tone';
 import ZoomSlider from './ZoomSlider';
 
-let player: Tone.Player;
-player = new Tone.Player('/ringtone.mp3');
 let scheduleRepeaterId: number = -1;
 
 const PlaybackControls: React.FC = () => {
 	const { state, dispatch } = useAppState();
 	const theme = useTheme();
+	const [player, setPlayer] = useState<Tone.Player | null>(null);
 
 	useEffect(() => {
-		Tone.Transport.cancel(0);
-		player.dispose();
+		if (player) {
+			Tone.Transport.cancel(0);
+			player.dispose();
+		}
 		if (state.audioBuffer) {
-			player = new Tone.Player(state.audioBuffer).toDestination();
-			player.sync().start(0);
+			setPlayer(new Tone.Player(state.audioBuffer).toDestination());
 		}
 	}, [state.audioBuffer]);
+
+	useEffect(() => {
+		player?.sync().start(0);
+	}, [player]);
 
 	useEffect(() => {
 		if (scheduleRepeaterId !== -1) {
