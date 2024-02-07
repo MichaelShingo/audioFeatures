@@ -5,12 +5,11 @@ import { Box, Stack } from '@mui/system';
 import SeekHandle from './SeekHandle';
 import usePositionCalculations from '../customHooks/usePositionCalculations';
 import HoverMarker from './HoverMarker';
-import DraggableSelection from './DraggableSelection';
+import WaveformSVG from './WaveformSVG';
 
-const Waveform: React.FC = () => {
+const WaveformContainer: React.FC = () => {
 	const { state, dispatch } = useAppState();
 	const { calcSecondsFromPosition, calcPositionFromSeconds } = usePositionCalculations();
-	const [svgPathData, setSVGPathData] = useState<string>('');
 	const [isDragging, setIsDragging] = useState<boolean>(false);
 
 	const containerRef: RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
@@ -66,54 +65,6 @@ const Waveform: React.FC = () => {
 		};
 	}, []);
 
-	useEffect(() => {
-		if (!state.isUploading) {
-			generateWaveform();
-		}
-	}, [state.isUploading]);
-
-	const generateWaveform = (): void => {
-		if (!state.waveform) {
-			return;
-		}
-
-		const loudnessDataLength: number = state.loudnessData.length;
-
-		let newSVGData = 'M0 500,';
-
-		for (let i = 0; i < loudnessDataLength; i++) {
-			newSVGData += createSVGCoordinate(i, getLoudnessTotal(i));
-		}
-
-		for (let i = loudnessDataLength - 1; i >= 0; i--) {
-			let loudnessTotal: number | undefined = getLoudnessTotal(i);
-			loudnessTotal = loudnessTotal ? loudnessTotal * -1 : 0;
-			newSVGData += createSVGCoordinate(i, loudnessTotal);
-		}
-
-		setSVGPathData(newSVGData);
-
-		newSVGData += `" fill-opacity="0.3" /></g></svg>`;
-	};
-
-	const createSVGCoordinate = (x: number, y: number | undefined): string => {
-		let yValue: number | undefined = y;
-		const offset: number = 100;
-		const scale: number = 5;
-		yValue = y ? y + offset : offset;
-		return `L${x} ${Math.round(yValue * scale)}, `;
-	};
-
-	const getLoudnessTotal = (index: number): number | undefined => {
-		return state.loudnessData[index]?.total;
-	};
-
-	const calcVerticalScalePercentage = (): number | undefined => {
-		if (state.isDragging) {
-			return state.mousePosition.y / 5;
-		}
-	};
-
 	const handleOnMouseEnterStack = () => {
 		dispatch({ type: actions.SET_IS_HOVERED_WAVEFORM, payload: true });
 	};
@@ -130,13 +81,6 @@ const Waveform: React.FC = () => {
 		const position: number = state.mousePosition.x + state.waveformScrollPosition;
 		const seconds: number = calcSecondsFromPosition(position);
 		dispatch({ type: actions.SET_SECONDS, payload: seconds });
-	};
-
-	const calcStrokeWidth = (): number => {
-		if (state.zoomFactor < 0.5) {
-			return 0.6;
-		}
-		return 1 / state.zoomFactor + 0.1;
 	};
 
 	const isDraggingScrollbar = (): boolean => {
@@ -256,28 +200,7 @@ const Waveform: React.FC = () => {
 				<>
 					<SeekHandle />
 					<HoverMarker />
-
-					<div
-						style={{
-							backgroundColor: '',
-							transform: `scaleY(${calcVerticalScalePercentage()}%)`,
-							pointerEvents: 'none',
-							position: 'relative',
-						}}
-					>
-						<DraggableSelection />
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							height="1000px"
-							width={`${state.loudnessData.length * state.zoomFactor}px`}
-							viewBox={`0 0 ${state.loudnessData.length} 1000`}
-							preserveAspectRatio="none"
-						>
-							<g fill="#3498db" stroke="#3498db" strokeWidth={calcStrokeWidth()}>
-								<path d={svgPathData} fillOpacity="0.3" />
-							</g>
-						</svg>
-					</div>
+					<WaveformSVG />
 				</>
 			) : (
 				<></>
@@ -286,4 +209,4 @@ const Waveform: React.FC = () => {
 	);
 };
 
-export default Waveform;
+export default WaveformContainer;

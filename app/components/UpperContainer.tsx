@@ -1,6 +1,6 @@
 import { Box } from '@mui/system';
 import { useAppState } from '../context/AppStateContext';
-import Waveform from './Waveform';
+import WaveformContainer from './WaveformContainer';
 import PlaybackControls from './PlaybackControls';
 import { useTheme } from '@mui/material';
 interface UpperContainerProps {}
@@ -17,7 +17,7 @@ const UpperContainer: React.FC<UpperContainerProps> = () => {
 				backgroundColor: '',
 			}}
 		>
-			<Waveform />
+			<WaveformContainer />
 
 			<Box
 				sx={{
