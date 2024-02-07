@@ -38,6 +38,7 @@ interface GlobalState {
 	zoomFactor: number;
 	selectionStartSeconds: number;
 	selectionEndSeconds: number;
+	globalMouseUp: boolean;
 }
 
 const initialState: GlobalState = {
@@ -68,6 +69,7 @@ const initialState: GlobalState = {
 	zoomFactor: 1,
 	selectionStartSeconds: 0,
 	selectionEndSeconds: 0,
+	globalMouseUp: true,
 };
 
 export type AppAction = {
@@ -119,6 +121,7 @@ export const actions: Record<string, string> = {
 	SET_ZOOM_FACTOR: 'SET_ZOOM_FACTOR',
 	SET_SELECTION_START_SECONDS: 'SET_SELECTION_START_SECONDS',
 	SET_SELECTION_END_SECONDS: 'SET_SELECTION_END_SECONDS',
+	SET_GLOBAL_MOUSE_UP: 'SET_GLOBAL_MOUSE_UP',
 };
 
 const appReducer = (state: GlobalState, action: AppAction): GlobalState => {

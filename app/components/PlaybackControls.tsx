@@ -47,6 +47,7 @@ const PlaybackControls: React.FC = () => {
 			stopAudio();
 		}
 	};
+
 	const playAudio = () => {
 		const startTime: number = state.seconds;
 		Tone.start();

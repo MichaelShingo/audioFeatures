@@ -12,6 +12,13 @@ const ResizeInterface = () => {
 		dispatch({ type: actions.SET_IS_DRAGGING, payload: false });
 		dragStartRef.current = -1;
 	};
+	useEffect(() => {
+		window.addEventListener('mouseup', handleMouseUp);
+
+		return () => {
+			window.removeEventListener('mouseup', handleMouseUp);
+		};
+	}, []);
 
 	useEffect(() => {
 		if (state.isDragging) {
@@ -23,14 +30,6 @@ const ResizeInterface = () => {
 		e.stopPropagation();
 		dispatch({ type: actions.SET_IS_DRAGGING, payload: true });
 	};
-
-	useEffect(() => {
-		window.addEventListener('mouseup', handleMouseUp);
-
-		return () => {
-			window.removeEventListener('mouseup', handleMouseUp);
-		};
-	}, []);
 
 	return (
 		<IconButton

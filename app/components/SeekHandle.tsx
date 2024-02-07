@@ -5,6 +5,39 @@ import { Box } from '@mui/system';
 import * as Tone from 'tone';
 import usePositionCalculations from '../customHooks/usePositionCalculations';
 
+const redLineStyles = {
+	height: `100%`,
+	width: '2px',
+	position: 'relative',
+	top: '0px',
+	zIndex: '5',
+	pointerEvents: 'all',
+	'&:hover': {
+		cursor: 'grab',
+	},
+	'&: active': {
+		cursor: 'grabbing',
+	},
+};
+
+const blueBoxStyles = {
+	width: '8.5px',
+	height: '10px',
+	position: 'relative',
+	left: '-4px',
+	top: '0px',
+};
+
+const blueTriangleStyles = {
+	width: '0px',
+	height: '0px',
+	borderLeft: '5px solid transparent',
+	borderRight: '5px solid transparent',
+	position: 'relative',
+	left: '-4px',
+	top: '0px',
+};
+
 const SeekHandle: React.FC = () => {
 	const { state, dispatch } = useAppState();
 	const { calcPositionFromSeconds, calcSecondsFromPosition } = usePositionCalculations();
@@ -17,7 +50,7 @@ const SeekHandle: React.FC = () => {
 		if (seekHandleRef.current) {
 			seekHandleRef.current.style.left = `${calcPositionFromSeconds(state.seconds)}px`;
 		}
-	}, [state.isPlaying, state.seconds]);
+	}, [state.seconds]);
 
 	useEffect(() => {
 		scrollPositionRef.current = state.waveformScrollPosition;
@@ -44,12 +77,6 @@ const SeekHandle: React.FC = () => {
 		}
 	};
 
-	useEffect(() => {
-		if (Tone.Transport.state === 'started') {
-			Tone.Transport.scheduleRepeat(handleScroll, 1 / 4, 0);
-		}
-	}, [state.isPlaying]);
-
 	const updatePosition = (): void => {
 		const position = calcPositionFromSeconds(Tone.Transport.seconds);
 		if (seekHandleRef.current) {
@@ -59,6 +86,7 @@ const SeekHandle: React.FC = () => {
 
 	useEffect(() => {
 		if (Tone.Transport.state === 'started') {
+			Tone.Transport.scheduleRepeat(handleScroll, 1 / 4, 0);
 			Tone.Transport.scheduleRepeat(
 				(time) => {
 					Tone.Draw.schedule(updatePosition, time);
@@ -76,6 +104,7 @@ const SeekHandle: React.FC = () => {
 
 		dispatch({ type: actions.SET_SEEK_HANDLE_MOUSE_DOWN, payload: true });
 	};
+
 	const handleOnMouseUp = (e: React.MouseEvent): void => {
 		e.stopPropagation();
 		dispatch({ type: actions.SET_SEEK_HANDLE_MOUSE_DOWN, payload: false });
@@ -102,46 +131,19 @@ const SeekHandle: React.FC = () => {
 	}, [state.zoomFactor]);
 
 	return (
-		<Box // red line
+		<Box
 			ref={seekHandleRef}
 			onMouseDown={handleOnMouseDown}
 			onMouseUp={handleOnMouseUp}
-			sx={{
-				backgroundColor: theme.palette.common.brightRed,
-				height: `100%`,
-				width: '2px',
-				position: 'relative',
-				top: '0px',
-				zIndex: '5',
-				pointerEvents: 'all',
-				'&:hover': {
-					cursor: 'grab',
-				},
-				'&: active': {
-					cursor: 'grabbing',
-				},
-			}}
+			sx={{ ...redLineStyles, backgroundColor: theme.palette.common.brightRed }}
 		>
-			<Box // blue box
-				sx={{
-					width: '8.5px',
-					height: '10px',
-					position: 'relative',
-					left: '-4px',
-					top: '0px',
-					backgroundColor: theme.palette.common.lightBlue,
-				}}
+			<Box
+				sx={{ ...blueBoxStyles, backgroundColor: theme.palette.common.lightBlue }}
 			></Box>
-			<Box // blue triangle
+			<Box
 				sx={{
-					width: '0px',
-					height: '0px',
-					borderLeft: '5px solid transparent',
-					borderRight: '5px solid transparent',
+					...blueTriangleStyles,
 					borderTop: `5px solid ${theme.palette.common.lightBlue}`,
-					position: 'relative',
-					left: '-4px',
-					top: '0px',
 				}}
 			></Box>
 		</Box>
