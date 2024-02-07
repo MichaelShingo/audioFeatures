@@ -1,11 +1,10 @@
 import React, { RefObject, useEffect, useRef, useState } from 'react';
 import { actions, useAppState } from '../context/AppStateContext';
-import { LinearProgress, Typography } from '@mui/material';
-import { Box, Stack } from '@mui/system';
 import SeekHandle from './SeekHandle';
 import usePositionCalculations from '../customHooks/usePositionCalculations';
 import HoverMarker from './HoverMarker';
 import WaveformSVG from './WaveformSVG';
+import PreUpload from './PreUpload';
 
 const WaveformContainer: React.FC = () => {
 	const { state, dispatch } = useAppState();
@@ -13,6 +12,40 @@ const WaveformContainer: React.FC = () => {
 	const [isDragging, setIsDragging] = useState<boolean>(false);
 
 	const containerRef: RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
+
+	useEffect(() => {
+		const handleScroll = () => {
+			if (containerRef.current) {
+				dispatch({
+					type: actions.SET_WAVEFORM_SCROLL_POSITION,
+					payload: containerRef.current.scrollLeft,
+				});
+			}
+		};
+
+		if (containerRef.current) {
+			containerRef.current.addEventListener('scroll', handleScroll);
+		}
+
+		const localContainerRefCurrent = containerRef.current;
+
+		return () => {
+			localContainerRefCurrent?.removeEventListener('scroll', handleScroll);
+		};
+	}, []);
+
+	useEffect(() => {
+		if (containerRef.current) {
+			containerRef.current.scrollLeft = state.waveformScrollPosition;
+		}
+	}, [state.waveformScrollPosition]);
+
+	useEffect(() => {
+		if (containerRef.current) {
+			containerRef.current.scrollLeft =
+				calcPositionFromSeconds(state.seconds) - state.windowWidth / 2;
+		}
+	}, [state.zoomFactor]);
 
 	useEffect(() => {
 		if (state.seekHandleMouseDown && containerRef.current) {
@@ -29,41 +62,18 @@ const WaveformContainer: React.FC = () => {
 				containerRef.current.scrollLeft += SCROLL_SPEED;
 			}
 		}
-	}, [state.mousePosition]);
+	}, [state.mousePosition, state.seekHandleMouseDown]);
 
 	useEffect(() => {
-		if (containerRef.current) {
-			containerRef.current.scrollLeft = state.waveformScrollPosition;
+		if (isDragging) {
+			dispatch({
+				type: actions.SET_SELECTION_END_SECONDS,
+				payload: calcSecondsFromPosition(
+					state.mousePosition.x + state.waveformScrollPosition
+				),
+			});
 		}
-	}, [state.waveformScrollPosition]);
-
-	useEffect(() => {
-		if (containerRef.current) {
-			containerRef.current.scrollLeft =
-				calcPositionFromSeconds(state.seconds) - state.windowWidth / 2;
-		}
-	}, [state.zoomFactor]);
-
-	useEffect(() => {
-		const handleScroll = () => {
-			if (containerRef.current) {
-				dispatch({
-					type: actions.SET_WAVEFORM_SCROLL_POSITION,
-					payload: containerRef.current.scrollLeft,
-				});
-			}
-		};
-
-		if (containerRef.current) {
-			containerRef.current.addEventListener('scroll', handleScroll);
-		}
-
-		return () => {
-			if (containerRef.current) {
-				containerRef.current.removeEventListener('scroll', handleScroll);
-			}
-		};
-	}, []);
+	}, [state.mousePosition, state.selectionStartSeconds]);
 
 	const handleOnMouseEnterStack = () => {
 		dispatch({ type: actions.SET_IS_HOVERED_WAVEFORM, payload: true });
@@ -121,17 +131,6 @@ const WaveformContainer: React.FC = () => {
 		});
 	};
 
-	useEffect(() => {
-		if (isDragging) {
-			dispatch({
-				type: actions.SET_SELECTION_END_SECONDS,
-				payload: calcSecondsFromPosition(
-					state.mousePosition.x + state.waveformScrollPosition
-				),
-			});
-		}
-	}, [state.mousePosition, state.selectionStartSeconds]);
-
 	return (
 		<div
 			ref={containerRef}
@@ -162,40 +161,7 @@ const WaveformContainer: React.FC = () => {
 				pointerEvents: 'all',
 			}}
 		>
-			<Stack
-				alignItems="center"
-				justifyContent="center"
-				direction="column"
-				sx={{
-					width: '100%',
-					backgroundColor: '',
-					display:
-						(state.isUploading && !state.isUploaded) || state.isUploaded
-							? 'none'
-							: 'block',
-				}}
-			>
-				<Typography
-					sx={{
-						textAlign: 'center',
-						marginBottom: '25px',
-						width: '100%',
-					}}
-					variant="h4"
-				>
-					Upload audio or activate microphone.
-				</Typography>
-			</Stack>
-			<Box
-				sx={{
-					width: '50%',
-					marginInline: 'auto',
-					display: state.isUploading ? 'block' : 'none',
-				}}
-			>
-				<LinearProgress />
-			</Box>
-
+			<PreUpload />
 			{state.isUploaded && !state.isUploading ? (
 				<>
 					<SeekHandle />

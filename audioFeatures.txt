@@ -2,6 +2,7 @@ import { actions, useAppState } from '../context/AppStateContext';
 const { state, dispatch } = useAppState();
 
 - waveform is not going down to 0 amplitude...
+- on drag zoom handle, use debounce? 
 
 - clean up code after playback features are good 
 - hover marker length is slightly off
