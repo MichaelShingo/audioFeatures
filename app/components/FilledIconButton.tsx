@@ -8,6 +8,7 @@ interface FilledIconButtonProps {
 	onClickHandler: (e: React.MouseEvent<HTMLElement>) => void;
 	isActive: boolean;
 }
+
 const iconButtonStyles = {
 	zIndex: '1',
 	backgroundColor: 'red',
@@ -19,7 +20,6 @@ const FilledIconButton: React.FC<FilledIconButtonProps> = ({
 	isActive,
 }) => {
 	const theme = useTheme();
-
 	const disabledClick = () => {};
 
 	return (
