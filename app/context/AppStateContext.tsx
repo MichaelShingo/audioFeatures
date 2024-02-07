@@ -179,8 +179,13 @@ const appReducer = (state: GlobalState, action: AppAction): GlobalState => {
 			return { ...state, selectionStartSeconds: action.payload as number };
 		case actions.SET_ZOOM_FACTOR:
 			return { ...state, zoomFactor: action.payload as number };
-		case actions.SET_SELECTION_END_SECONDS:
-			return { ...state, selectionEndSeconds: action.payload as number };
+		case actions.SET_SELECTION_END_SECONDS: {
+			let res: number = action.payload as number;
+			if (res > state.audioDuration) {
+				res = state.audioDuration;
+			}
+			return { ...state, selectionEndSeconds: res };
+		}
 		default:
 			return state;
 	}
