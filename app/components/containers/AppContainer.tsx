@@ -1,14 +1,14 @@
 import { Box } from '@mui/system';
 import { ReactNode, useEffect } from 'react';
 import { useMediaQuery, Theme, useTheme } from '@mui/material';
-import { actions, useAppState } from '../context/AppStateContext';
+import { actions, useAppState } from '../../context/AppStateContext';
 
 interface AppContainerProps {
 	children: ReactNode;
 }
 
 const AppContainer: React.FC<AppContainerProps> = ({ children }) => {
-	const { state, dispatch } = useAppState();
+	const { dispatch } = useAppState();
 	const isSmallScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
 	const theme = useTheme();
 

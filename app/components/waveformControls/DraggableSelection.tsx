@@ -1,7 +1,7 @@
 import { useTheme } from '@mui/material';
-import { useAppState } from '../context/AppStateContext';
+import { useAppState } from '../../context/AppStateContext';
 import { Box } from '@mui/system';
-import usePositionCalculations from '../customHooks/usePositionCalculations';
+import usePositionCalculations from '../../customHooks/usePositionCalculations';
 
 const DraggableSelection = () => {
 	const { state } = useAppState();

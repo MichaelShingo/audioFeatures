@@ -1,5 +1,5 @@
 import DraggableSelection from './DraggableSelection';
-import { useAppState } from '../context/AppStateContext';
+import { useAppState } from '../../context/AppStateContext';
 import { useEffect, useState } from 'react';
 
 const WaveformSVG = () => {

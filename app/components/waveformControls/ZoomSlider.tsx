@@ -4,7 +4,7 @@ import Stack from '@mui/material/Stack';
 import Slider from '@mui/material/Slider';
 import ZoomOutIcon from '@mui/icons-material/ZoomOut';
 import ZoomInIcon from '@mui/icons-material/ZoomIn';
-import { actions, useAppState } from '../context/AppStateContext';
+import { actions, useAppState } from '../../context/AppStateContext';
 import { IconButton, useTheme } from '@mui/material';
 
 const ZOOM_INCREMENT_VALUE: number = 0.05;

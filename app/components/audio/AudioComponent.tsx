@@ -6,8 +6,8 @@ import {
 	PITCH_LETTERS,
 	PitchData,
 	SpectralFlatness,
-} from '../data/constants';
-import { actions, useAppState } from '../context/AppStateContext';
+} from '../../data/constants';
+import { actions, useAppState } from '../../context/AppStateContext';
 import * as Tone from 'tone';
 
 const AudioComponent: React.FC = () => {
@@ -54,7 +54,7 @@ const AudioComponent: React.FC = () => {
 		return PITCH_LETTERS[getNoteIndex(chroma)];
 	};
 
-	const getFeatures = async (fileBuffer: File) => {
+	const getFeatures = async (fileBuffer: File): Promise<number[][]> => {
 		const audioBinaryFile: ArrayBuffer = await fileBuffer.arrayBuffer();
 
 		if (Tone.context) {
@@ -104,6 +104,7 @@ const AudioComponent: React.FC = () => {
 			}
 			return chromaResults;
 		}
+		return [[0]];
 	};
 
 	return <></>;

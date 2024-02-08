@@ -1,5 +1,5 @@
 import { IconButton } from '@mui/material';
-import { actions, useAppState } from '../context/AppStateContext';
+import { actions, useAppState } from '../../context/AppStateContext';
 import { useEffect, useRef } from 'react';
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 

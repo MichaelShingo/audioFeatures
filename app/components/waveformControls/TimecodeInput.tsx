@@ -1,6 +1,6 @@
 import { useTheme } from '@mui/material';
 import React from 'react';
-import { useAppState } from '../context/AppStateContext';
+import { useAppState } from '../../context/AppStateContext';
 
 interface TimecodeInputProps {
 	refObj: React.RefObject<HTMLInputElement>;

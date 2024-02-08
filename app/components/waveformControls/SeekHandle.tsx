@@ -1,9 +1,9 @@
 import { useTheme } from '@mui/material';
 import React, { useEffect, useRef } from 'react';
-import { actions, useAppState } from '../context/AppStateContext';
+import { actions, useAppState } from '../../context/AppStateContext';
 import { Box } from '@mui/system';
 import * as Tone from 'tone';
-import usePositionCalculations from '../customHooks/usePositionCalculations';
+import usePositionCalculations from '../../customHooks/usePositionCalculations';
 
 const redLineStyles = {
 	height: `100%`,

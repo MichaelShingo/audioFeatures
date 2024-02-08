@@ -1,5 +1,5 @@
 import React, { ChangeEvent, useEffect, useState } from 'react';
-import { actions, useAppState } from '../context/AppStateContext';
+import { actions, useAppState } from '../../context/AppStateContext';
 import { IconButton, styled } from '@mui/material';
 import FileUpload from '@mui/icons-material/FileUpload';
 import * as Tone from 'tone';
@@ -41,7 +41,7 @@ const AudioUpload: React.FC = () => {
 				Tone.Transport.cancel();
 			}
 		} catch (e) {
-			console.log(e);
+			return;
 		}
 	};
 

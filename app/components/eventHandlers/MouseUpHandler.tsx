@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { actions, useAppState } from '../context/AppStateContext';
+import { actions, useAppState } from '../../context/AppStateContext';
 const MouseUpHandler = () => {
 	const { dispatch } = useAppState();
 

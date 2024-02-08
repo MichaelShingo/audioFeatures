@@ -1,7 +1,7 @@
 import { Box } from '@mui/system';
 import React, { ReactNode } from 'react';
 import { useTheme } from '@mui/material';
-import { useAppState } from '../context/AppStateContext';
+import { useAppState } from '../../context/AppStateContext';
 
 interface DataContainerProps {
 	children: ReactNode;

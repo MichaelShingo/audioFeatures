@@ -1,7 +1,7 @@
 import { Box } from '@mui/system';
-import { useAppState } from '../context/AppStateContext';
+import { useAppState } from '../../context/AppStateContext';
 import WaveformContainer from './WaveformContainer';
-import PlaybackControls from './PlaybackControls';
+import PlaybackControls from '../waveformControls/PlaybackControls';
 import { useTheme } from '@mui/material';
 interface UpperContainerProps {}
 

@@ -1,4 +1,4 @@
-import { actions, useAppState } from '../context/AppStateContext';
+import { actions, useAppState } from '../../context/AppStateContext';
 import { Stack, useTheme } from '@mui/material';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import PauseIcon from '@mui/icons-material/Pause';
@@ -8,7 +8,7 @@ import Timecode from './Timecode';
 import FilledIconButton from './FilledIconButton';
 import ResizeInterface from './ResizeInterface';
 import React, { useEffect, useState } from 'react';
-import AudioUpload from './AudioUpload';
+import AudioUpload from '../audio/AudioUpload';
 import * as Tone from 'tone';
 import ZoomSlider from './ZoomSlider';
 

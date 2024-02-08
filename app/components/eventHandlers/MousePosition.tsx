@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { actions, useAppState } from '../context/AppStateContext';
+import { actions, useAppState } from '../../context/AppStateContext';
 
 interface MousePosition {
 	x: number;

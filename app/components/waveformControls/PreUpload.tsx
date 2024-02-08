@@ -1,6 +1,6 @@
 import { Box, Stack } from '@mui/system';
 import React from 'react';
-import { useAppState } from '../context/AppStateContext';
+import { useAppState } from '../../context/AppStateContext';
 import { LinearProgress, Typography } from '@mui/material';
 
 const PreUpload: React.FC = () => {

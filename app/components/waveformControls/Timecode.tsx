@@ -1,10 +1,10 @@
 import { Stack } from '@mui/system';
-import { useAppState, actions } from '../context/AppStateContext';
+import { useAppState, actions } from '../../context/AppStateContext';
 import React, { useEffect, useRef, useState } from 'react';
 import { Typography } from '@mui/material';
 import * as Tone from 'tone';
 import TimecodeInput from './TimecodeInput';
-import usePositionCalculations from '../customHooks/usePositionCalculations';
+import usePositionCalculations from '../../customHooks/usePositionCalculations';
 
 const calcMinutes = (seconds: number): string => {
 	return Math.floor(seconds / 60).toString();
