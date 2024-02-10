@@ -10,6 +10,7 @@ const WaveformContainer: React.FC = () => {
 	const { state, dispatch } = useAppState();
 	const { calcSecondsFromPosition, calcPositionFromSeconds } = usePositionCalculations();
 	const [isDragging, setIsDragging] = useState<boolean>(false);
+	const [mouseDownTime, setMouseDownTime] = useState<number>(Date.now());
 
 	const containerRef: RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
 
@@ -84,6 +85,9 @@ const WaveformContainer: React.FC = () => {
 	};
 
 	const handleOnClick = (event: React.MouseEvent<HTMLDivElement>) => {
+		if (Date.now() - mouseDownTime > 150) {
+			return;
+		}
 		const target = event.target as HTMLDivElement;
 		if (target.tagName.toLowerCase() !== 'div') {
 			return;
@@ -105,6 +109,7 @@ const WaveformContainer: React.FC = () => {
 			return;
 		}
 		setIsDragging(true);
+		setMouseDownTime(Date.now());
 		const startSeconds: number = calcSecondsFromPosition(
 			state.mousePosition.x + state.waveformScrollPosition
 		);
