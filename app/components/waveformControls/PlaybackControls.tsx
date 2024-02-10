@@ -1,5 +1,5 @@
 import { actions, useAppState } from '../../context/AppStateContext';
-import { Stack, useTheme } from '@mui/material';
+import { Stack, Typography, useTheme } from '@mui/material';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import PauseIcon from '@mui/icons-material/Pause';
 import StopIcon from '@mui/icons-material/Stop';
@@ -11,6 +11,12 @@ import React, { useEffect, useState } from 'react';
 import AudioUpload from '../audio/AudioUpload';
 import * as Tone from 'tone';
 import ZoomSlider from './ZoomSlider';
+import {
+	calcMilliseconds,
+	calcMinutes,
+	calcSeconds,
+} from '@/app/utils/timecodeCalculations';
+import { Box } from '@mui/system';
 
 let scheduleRepeaterId: number = -1;
 
@@ -84,6 +90,10 @@ const PlaybackControls: React.FC = () => {
 		});
 	};
 
+	const calcTimecodeText = (seconds: number): string => {
+		return `${calcMinutes(seconds)}:${calcSeconds(seconds)}:${calcMilliseconds(seconds)}`;
+	};
+
 	const listenAudio = () => {};
 
 	return (
@@ -117,6 +127,14 @@ const PlaybackControls: React.FC = () => {
 			/>
 			<ResizeInterface />
 			<ZoomSlider />
+			<Box sx={{ width: '150px' }}>
+				<Typography>
+					{state.selectionStartSeconds === state.selectionEndSeconds
+						? 'Selection Range'
+						: `${calcTimecodeText(state.selectionStartSeconds)} —
+					${calcTimecodeText(state.selectionEndSeconds)}`}
+				</Typography>
+			</Box>
 		</Stack>
 	);
 };

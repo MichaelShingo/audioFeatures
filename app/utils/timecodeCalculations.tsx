@@ -10,33 +10,16 @@ export const MILLISECONDS_PER_MINUTE = 60000;
 export const MILLISECONDS_PER_SECOND = 1000;
 export const SECONDS_PER_MINUTE = 60;
 
-export const calculateMilliseconds = (milliseconds: number): Timecode => {
-	if (milliseconds < MILLISECONDS_PER_SECOND) {
-		return { minutes: 0, seconds: 0, milliseconds: milliseconds };
-	} else if (milliseconds < MILLISECONDS_PER_MINUTE) {
-		return {
-			minutes: 0,
-			seconds: Math.floor(milliseconds / MILLISECONDS_PER_SECOND),
-			milliseconds: milliseconds % MILLISECONDS_PER_SECOND,
-		};
-	}
-	return {
-		minutes: Math.floor(milliseconds / MILLISECONDS_PER_MINUTE),
-		seconds: Math.floor(milliseconds / MILLISECONDS_PER_SECOND),
-		milliseconds: milliseconds % MILLISECONDS_PER_SECOND,
-	};
+export const calcMinutes = (seconds: number): string => {
+	return Math.floor(seconds / 60).toString();
 };
 
-export const calculateSeconds = (
-	seconds: number
-): { minutes: number; seconds: number } => {
-	if (seconds < SECONDS_PER_MINUTE) {
-		return { minutes: 0, seconds: seconds };
-	}
-	return {
-		minutes: Math.floor(seconds / SECONDS_PER_MINUTE),
-		seconds: seconds % SECONDS_PER_MINUTE,
-	};
+export const calcSeconds = (seconds: number): string => {
+	return Math.floor(seconds % 60).toString();
+};
+
+export const calcMilliseconds = (seconds: number): string => {
+	return Math.round((seconds * 1000) % 1000).toString();
 };
 
 export const roundSeconds = (seconds: number): number => {
