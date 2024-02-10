@@ -13,16 +13,18 @@ const WaveformSVG = () => {
 			}
 
 			const loudnessDataLength: number = state.loudnessData.length;
-			let newSVGData = 'M0 500,';
+			let newSVGData = 'M0 530,';
 
 			for (let i = 0; i < loudnessDataLength; i++) {
-				newSVGData += createSVGCoordinate(i, getLoudnessTotal(i));
+				const loudnessTotal = getLoudnessTotal(i);
+				console.log(loudnessTotal);
+				newSVGData += createSVGCoordinate(i, loudnessTotal, 100);
 			}
 
 			for (let i = loudnessDataLength - 1; i >= 0; i--) {
 				let loudnessTotal: number | undefined = getLoudnessTotal(i);
-				loudnessTotal = loudnessTotal ? loudnessTotal * -1 : 0;
-				newSVGData += createSVGCoordinate(i, loudnessTotal);
+				loudnessTotal = loudnessTotal ? loudnessTotal * -1 : -5;
+				newSVGData += createSVGCoordinate(i, loudnessTotal, 109.5);
 			}
 
 			setSVGPathData(newSVGData);
@@ -37,6 +39,18 @@ const WaveformSVG = () => {
 		}
 	}, [state.isUploading, state.loudnessData, state.waveform]);
 
+	const createSVGCoordinate = (
+		x: number,
+		y: number | undefined,
+		offset: number
+	): string => {
+		let yValue: number | undefined = y;
+		const scale: number = 5;
+		yValue = y ? y + offset : offset + 4.65;
+		yValue = Math.abs(yValue);
+		return `L${x} ${Math.round(yValue * scale)}, `;
+	};
+
 	const calcVerticalScalePercentage = (): number | undefined => {
 		if (state.isDragging) {
 			return state.mousePosition.y / 5;
@@ -48,14 +62,6 @@ const WaveformSVG = () => {
 			return 0.6;
 		}
 		return 1 / state.zoomFactor + 0.1;
-	};
-
-	const createSVGCoordinate = (x: number, y: number | undefined): string => {
-		let yValue: number | undefined = y;
-		const offset: number = 100;
-		const scale: number = 5;
-		yValue = y ? y + offset : offset;
-		return `L${x} ${Math.round(yValue * scale)}, `;
 	};
 
 	return (
