@@ -16,6 +16,55 @@ const DraggableSelection = () => {
 
 	const isVisible = selectionWidth > 0;
 
+	const handleOnMouseDownRight = (e: React.MouseEvent) => {
+		e.stopPropagation();
+		e.preventDefault();
+		dispatch({ type: actions.SET_IS_DRAGGING_SELECTION_HANDLE_RIGHT, payload: true });
+	};
+	const handleOnMouseDownLeft = (e: React.MouseEvent) => {
+		e.stopPropagation();
+		e.preventDefault();
+		dispatch({ type: actions.SET_IS_DRAGGING_SELECTION_HANDLE_LEFT, payload: true });
+	};
+
+	useEffect(() => {
+		if (!state.isDraggingSelectionHandleRight && !state.isDraggingSelectionHandleLeft) {
+			return;
+		}
+
+		const position: number = state.mousePosition.x + state.waveformScrollPosition;
+		const seconds: number = calcSecondsFromPosition(position);
+
+		if (state.isDraggingSelectionHandleRight) {
+			dispatch({
+				type: actions.SET_SELECTION_END_SECONDS,
+				payload: seconds,
+			});
+		} else if (state.isDraggingSelectionHandleLeft) {
+			dispatch({
+				type: actions.SET_SELECTION_START_SECONDS,
+				payload: seconds,
+			});
+		}
+	}, [state.mousePosition]);
+
+	const handleStyles = {
+		opacity: handleVisibility ? '100%' : '0%',
+		transition: '0.2s ease-in-out',
+		width: '12px',
+		height: '12px',
+		borderRadius: '50%',
+		border: `1px solid ${theme.palette.common.lightBlue}`,
+		backgroundColor: `${theme.palette.background.default}`,
+		position: 'absolute',
+		top: '50%',
+		pointerEvents: 'all',
+		'&:hover': {
+			backgroundColor: theme.palette.common.lightBlue,
+			cursor: 'ew-resize',
+		},
+	};
+
 	return (
 		<Box
 			onMouseOver={() => setHandleVisibility(true)}
@@ -33,79 +82,33 @@ const DraggableSelection = () => {
 				pointerEvents: 'all',
 			}}
 		>
-			<DragHandle right="-7px" left={null} visible={handleVisibility} label="right" />
-			<DragHandle right={null} left="-7px" visible={handleVisibility} label="left" />
+			<Box
+				onMouseDown={(e: React.MouseEvent) => handleOnMouseDownLeft(e)}
+				onMouseUp={() => {
+					dispatch({
+						type: actions.SET_IS_DRAGGING_SELECTION_HANDLE_LEFT,
+						payload: false,
+					});
+				}}
+				sx={{
+					...handleStyles,
+					left: '-7px',
+				}}
+			></Box>
+			<Box
+				onMouseDown={(e: React.MouseEvent) => handleOnMouseDownRight(e)}
+				onMouseUp={() => {
+					dispatch({
+						type: actions.SET_IS_DRAGGING_SELECTION_HANDLE_RIGHT,
+						payload: false,
+					});
+				}}
+				sx={{
+					...handleStyles,
+					right: '-7px',
+				}}
+			></Box>
 		</Box>
-	);
-};
-
-interface DragHandlesProps {
-	right: string | null;
-	left: string | null;
-	visible: boolean;
-	label: 'right' | 'left';
-}
-
-const DragHandle: React.FC<DragHandlesProps> = ({ right, left, visible, label }) => {
-	const theme = useTheme();
-	const { state, dispatch } = useAppState();
-	const { calcSecondsFromPosition } = usePositionCalculations();
-
-	useEffect(() => {
-		if (!state.isDraggingSelectionHandle) {
-			return;
-		}
-		right !== null ? console.log('dragging right') : console.log('dragging left');
-		const endPosition: number = state.mousePosition.x + state.waveformScrollPosition;
-		const endSeconds: number = calcSecondsFromPosition(endPosition);
-
-		if (label === 'right') {
-			// console.log('dispatch right');
-			dispatch({
-				type: actions.SET_SELECTION_END_SECONDS,
-				payload: endSeconds,
-			});
-		} else {
-			// console.log('dispatch left');
-			dispatch({
-				type: actions.SET_SELECTION_START_SECONDS,
-				payload: endSeconds,
-			});
-		}
-	}, [state.mousePosition]);
-
-	const handleOnMouseDown = (e: React.MouseEvent) => {
-		e.stopPropagation();
-		e.preventDefault();
-		dispatch({ type: actions.SET_IS_DRAGGING_SELECTION_HANDLE, payload: true });
-		dispatch({ type: actions.SET_GLOBAL_MOUSE_UP, payload: false });
-	};
-
-	return (
-		<Box
-			onMouseDown={(e: React.MouseEvent) => handleOnMouseDown(e)}
-			onMouseUp={() =>
-				dispatch({ type: actions.SET_IS_DRAGGING_SELECTION_HANDLE, payload: false })
-			}
-			sx={{
-				opacity: visible ? '100%' : '0%',
-				transition: '0.2s ease-in-out',
-				width: '12px',
-				height: '12px',
-				borderRadius: '50%',
-				border: `1px solid ${theme.palette.common.lightBlue}`,
-				backgroundColor: `${theme.palette.background.default}`,
-				position: 'absolute',
-				top: '50%',
-				right: right,
-				left: left,
-				pointerEvents: 'all',
-				'&:hover': {
-					backgroundColor: theme.palette.common.lightBlue,
-					cursor: 'ew-resize',
-				},
-			}}
-		></Box>
 	);
 };
 

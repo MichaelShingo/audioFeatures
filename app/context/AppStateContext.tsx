@@ -39,7 +39,8 @@ interface GlobalState {
 	selectionStartSeconds: number;
 	selectionEndSeconds: number;
 	globalMouseUp: boolean;
-	isDraggingSelectionHandle: boolean;
+	isDraggingSelectionHandleRight: boolean;
+	isDraggingSelectionHandleLeft: boolean;
 }
 
 const initialState: GlobalState = {
@@ -71,7 +72,8 @@ const initialState: GlobalState = {
 	selectionStartSeconds: 0,
 	selectionEndSeconds: 0,
 	globalMouseUp: true,
-	isDraggingSelectionHandle: false,
+	isDraggingSelectionHandleRight: false,
+	isDraggingSelectionHandleLeft: false,
 };
 
 export type AppAction = {
@@ -124,7 +126,8 @@ export const actions: Record<string, string> = {
 	SET_SELECTION_START_SECONDS: 'SET_SELECTION_START_SECONDS',
 	SET_SELECTION_END_SECONDS: 'SET_SELECTION_END_SECONDS',
 	SET_GLOBAL_MOUSE_UP: 'SET_GLOBAL_MOUSE_UP',
-	SET_IS_DRAGGING_SELECTION_HANDLE: 'SET_IS_DRAGGING_SELECTION_HANDLE',
+	SET_IS_DRAGGING_SELECTION_HANDLE_RIGHT: 'SET_IS_DRAGGING_SELECTION_HANDLE_RIGHT',
+	SET_IS_DRAGGING_SELECTION_HANDLE_LEFT: 'SET_IS_DRAGGING_SELECTION_HANDLE_LEFT',
 };
 
 const appReducer = (state: GlobalState, action: AppAction): GlobalState => {
@@ -183,15 +186,13 @@ const appReducer = (state: GlobalState, action: AppAction): GlobalState => {
 			return {
 				...state,
 				seekHandleMouseDown: false,
-				isDraggingSelectionHandle: false,
-				globalMouseUp: action.payload as boolean,
+				isDraggingSelectionHandleRight: false,
+				isDraggingSelectionHandleLeft: false,
 			};
-		case actions.SET_SELECTION_START_SECONDS:
-			return { ...state, selectionStartSeconds: action.payload as number };
-		case actions.SET_ZOOM_FACTOR:
-			return { ...state, zoomFactor: action.payload as number };
-		case actions.SET_IS_DRAGGING_SELECTION_HANDLE:
-			return { ...state, isDraggingSelectionHandle: action.payload as boolean };
+		case actions.SET_SELECTION_START_SECONDS: {
+			const res: number = (action.payload as number) < 0 ? 0 : (action.payload as number);
+			return { ...state, selectionStartSeconds: res };
+		}
 		case actions.SET_SELECTION_END_SECONDS: {
 			let res: number = action.payload as number;
 			if (res > state.audioDuration) {
@@ -199,7 +200,12 @@ const appReducer = (state: GlobalState, action: AppAction): GlobalState => {
 			}
 			return { ...state, selectionEndSeconds: res };
 		}
-
+		case actions.SET_ZOOM_FACTOR:
+			return { ...state, zoomFactor: action.payload as number };
+		case actions.SET_IS_DRAGGING_SELECTION_HANDLE_RIGHT:
+			return { ...state, isDraggingSelectionHandleRight: action.payload as boolean };
+		case actions.SET_IS_DRAGGING_SELECTION_HANDLE_LEFT:
+			return { ...state, isDraggingSelectionHandleLeft: action.payload as boolean };
 		default:
 			return state;
 	}

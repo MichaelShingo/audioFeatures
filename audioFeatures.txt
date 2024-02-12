@@ -5,7 +5,7 @@ const { state, dispatch } = useAppState();
 
 Finetuning playback
 - waveform is crossing itself at beginning and end
-- selection should be adjustable 
+- selection drag handles should not scale with waveform....
 - on drag zoom handle, use debounce? 
 - should there be horizontal margins to to make it easier to drag to the end?
 - global mouseUp detection for selectionDrag?

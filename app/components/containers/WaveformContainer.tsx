@@ -66,7 +66,10 @@ const WaveformContainer: React.FC = () => {
 	}, [state.mousePosition, state.seekHandleMouseDown]);
 
 	useEffect(() => {
-		if (isDragging) {
+		if (
+			(isDragging && !state.isDraggingSelectionHandleLeft) ||
+			state.isDraggingSelectionHandleRight
+		) {
 			dispatch({
 				type: actions.SET_SELECTION_END_SECONDS,
 				payload: calcSecondsFromPosition(
@@ -74,7 +77,11 @@ const WaveformContainer: React.FC = () => {
 				),
 			});
 		}
-	}, [state.mousePosition, state.selectionStartSeconds]);
+	}, [
+		state.mousePosition,
+		state.isDraggingSelectionHandleLeft,
+		state.isDraggingSelectionHandleRight,
+	]);
 
 	const handleOnMouseEnterStack = () => {
 		dispatch({ type: actions.SET_IS_HOVERED_WAVEFORM, payload: true });
@@ -104,10 +111,15 @@ const WaveformContainer: React.FC = () => {
 		return false;
 	};
 
-	const handleDragSelection = () => {
+	const handleDragSelection = (e: React.MouseEvent) => {
+		e.stopPropagation();
 		if (isDraggingScrollbar()) {
 			return;
 		}
+		if (state.isDraggingSelectionHandleLeft || state.isDraggingSelectionHandleRight) {
+			return;
+		}
+
 		setIsDragging(true);
 		setMouseDownTime(Date.now());
 		const startSeconds: number = calcSecondsFromPosition(
@@ -124,6 +136,9 @@ const WaveformContainer: React.FC = () => {
 	};
 
 	const handleEndDragSelection = () => {
+		if (state.isDraggingSelectionHandleLeft || state.isDraggingSelectionHandleRight) {
+			return;
+		}
 		if (isDraggingScrollbar()) {
 			return;
 		}
