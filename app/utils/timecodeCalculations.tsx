@@ -11,15 +11,21 @@ export const MILLISECONDS_PER_SECOND = 1000;
 export const SECONDS_PER_MINUTE = 60;
 
 export const calcMinutes = (seconds: number): string => {
-	return Math.floor(seconds / 60).toString();
+	return Math.floor(seconds / 60)
+		.toString()
+		.padStart(2, '0');
 };
 
 export const calcSeconds = (seconds: number): string => {
-	return Math.floor(seconds % 60).toString();
+	return Math.floor(seconds % 60)
+		.toString()
+		.padStart(2, '0');
 };
 
 export const calcMilliseconds = (seconds: number): string => {
-	return Math.round((seconds * 1000) % 1000).toString();
+	return Math.round((seconds * 1000) % 1000)
+		.toString()
+		.padStart(3, '0');
 };
 
 export const roundSeconds = (seconds: number): number => {

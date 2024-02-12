@@ -5,7 +5,7 @@ const MouseUpHandler = () => {
 
 	useEffect(() => {
 		const handleMouseUp = () => {
-			dispatch({ type: actions.SET_GLOBAL_MOUSE_UP });
+			dispatch({ type: actions.SET_GLOBAL_MOUSE_UP, payload: true });
 		};
 
 		window.addEventListener('mouseup', handleMouseUp);

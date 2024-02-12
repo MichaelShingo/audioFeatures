@@ -127,10 +127,18 @@ const PlaybackControls: React.FC = () => {
 			/>
 			<ResizeInterface />
 			<ZoomSlider />
-			<Box sx={{ width: '150px' }}>
+			<Box
+				sx={{
+					width: '155px',
+					backgroundColor: theme.palette.common.lightBlueTrans,
+					border: `1px solid ${theme.palette.common.lightBlue}`,
+					borderRadius: '5px',
+					textAlign: 'center',
+				}}
+			>
 				<Typography>
-					{state.selectionStartSeconds === state.selectionEndSeconds
-						? 'Selection Range'
+					{state.selectionStartSeconds >= state.selectionEndSeconds
+						? 'Selected Range'
 						: `${calcTimecodeText(state.selectionStartSeconds)} —
 					${calcTimecodeText(state.selectionEndSeconds)}`}
 				</Typography>

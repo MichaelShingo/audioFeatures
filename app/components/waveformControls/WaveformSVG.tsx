@@ -17,7 +17,6 @@ const WaveformSVG = () => {
 
 			for (let i = 0; i < loudnessDataLength; i++) {
 				const loudnessTotal = getLoudnessTotal(i);
-				console.log(loudnessTotal);
 				newSVGData += createSVGCoordinate(i, loudnessTotal, 100);
 			}
 
