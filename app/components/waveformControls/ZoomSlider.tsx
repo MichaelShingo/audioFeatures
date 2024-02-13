@@ -15,6 +15,16 @@ const ZoomSlider: React.FC = () => {
 	const { state, dispatch } = useAppState();
 	const theme = useTheme();
 
+	const debounce = (callback: () => void, delay: number) => {
+		let timer = setTimeout(() => {});
+		return function () {
+			clearTimeout(timer);
+			timer = setTimeout(() => {
+				callback();
+			}, delay);
+		};
+	};
+
 	const handleChange = (event: Event, newValue: number | number[]) => {
 		dispatch({ type: actions.SET_ZOOM_FACTOR, payload: (newValue as number) / 100 });
 	};

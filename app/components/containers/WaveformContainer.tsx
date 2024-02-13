@@ -49,7 +49,12 @@ const WaveformContainer: React.FC = () => {
 	}, [state.zoomFactor]);
 
 	useEffect(() => {
-		if (state.seekHandleMouseDown && containerRef.current) {
+		const shouldDetectScroll: boolean =
+			state.seekHandleMouseDown ||
+			state.isDraggingSelectionHandleLeft ||
+			state.isDraggingSelectionHandleRight ||
+			isDragging;
+		if (shouldDetectScroll && containerRef.current) {
 			const containerRect = containerRef.current.getBoundingClientRect();
 			const mouseX = state.mousePosition.x - containerRect.left;
 			const containerWidth = containerRef.current.clientWidth;
@@ -113,6 +118,7 @@ const WaveformContainer: React.FC = () => {
 
 	const handleDragSelection = (e: React.MouseEvent) => {
 		e.stopPropagation();
+		e.preventDefault();
 		if (isDraggingScrollbar()) {
 			return;
 		}
