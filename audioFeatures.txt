@@ -4,13 +4,10 @@ const { state, dispatch } = useAppState();
 
 
 Finetuning playback
-- waveform is crossing itself at beginning and end
-- on drag zoom handle, use debounce? 
-- should there be horizontal margins to to make it easier to drag to the end?
-- hover marker length is slightly off
 - make a logo 
-- waveform isnt' centered
-- blue handle should be an svg
+- hover marker length is slightly off
+- waveform is crossing itself at beginning and end
+
 
 - test deploy for intermediate portfolio item
 

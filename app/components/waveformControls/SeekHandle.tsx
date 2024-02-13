@@ -20,24 +20,6 @@ const redLineStyles = {
 	},
 };
 
-const blueBoxStyles = {
-	width: '8.5px',
-	height: '10px',
-	position: 'relative',
-	left: '-4px',
-	top: '0px',
-};
-
-const blueTriangleStyles = {
-	width: '0px',
-	height: '0px',
-	borderLeft: '5px solid transparent',
-	borderRight: '5px solid transparent',
-	position: 'relative',
-	left: '-4px',
-	top: '0px',
-};
-
 const SeekHandle: React.FC = () => {
 	const { state, dispatch } = useAppState();
 	const { calcPositionFromSeconds, calcSecondsFromPosition } = usePositionCalculations();
@@ -137,15 +119,21 @@ const SeekHandle: React.FC = () => {
 			onMouseUp={handleOnMouseUp}
 			sx={{ ...redLineStyles, backgroundColor: theme.palette.common.brightRed }}
 		>
-			<Box
-				sx={{ ...blueBoxStyles, backgroundColor: theme.palette.common.lightBlue }}
-			></Box>
-			<Box
-				sx={{
-					...blueTriangleStyles,
-					borderTop: `5px solid ${theme.palette.common.lightBlue}`,
+			<svg
+				xmlns="http://www.w3.org/2000/svg"
+				viewBox="0 0 158.92 291.35"
+				fill="#37a9e5"
+				style={{
+					width: '8.5px',
+					height: '10px',
+					position: 'relative',
+					left: '-4px',
+					top: '-03px',
+					transform: 'scale(200%)',
 				}}
-			></Box>
+			>
+				<polygon points="0 0 0 152.97 0 152.97 79.46 291.35 158.92 152.97 158.92 152.97 158.92 0 0 0" />
+			</svg>
 		</Box>
 	);
 };

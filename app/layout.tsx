@@ -7,7 +7,7 @@ const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
 	manifest: '/manifest.json',
-	title: 'Cactus Player',
+	title: 'Anna Lyze',
 	description: 'A 3D cactus music visualizer.',
 };
 

@@ -21,6 +21,7 @@ const DraggableSelection = () => {
 		e.preventDefault();
 		dispatch({ type: actions.SET_IS_DRAGGING_SELECTION_HANDLE_RIGHT, payload: true });
 	};
+
 	const handleOnMouseDownLeft = (e: React.MouseEvent) => {
 		e.stopPropagation();
 		e.preventDefault();
@@ -56,7 +57,7 @@ const DraggableSelection = () => {
 		border: `1px solid ${theme.palette.common.lightBlue}`,
 		backgroundColor: `${theme.palette.background.default}`,
 		position: 'absolute',
-		top: '50%',
+		top: '50.8%',
 		pointerEvents: 'all',
 		'&:hover': {
 			backgroundColor: theme.palette.common.lightBlue,

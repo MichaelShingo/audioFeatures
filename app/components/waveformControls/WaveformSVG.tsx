@@ -67,7 +67,7 @@ const WaveformSVG = () => {
 		<div
 			style={{
 				backgroundColor: '',
-				transform: `scaleY(${calcVerticalScalePercentage()}%)`,
+				transform: `scaleY(${calcVerticalScalePercentage()}%) translateY(-30px)`,
 				pointerEvents: 'none',
 				position: 'relative',
 			}}
