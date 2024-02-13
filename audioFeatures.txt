@@ -4,12 +4,9 @@ const { state, dispatch } = useAppState();
 
 
 Finetuning playback
-- make a logo 
+- before upload, prevent click to set begin and end selection points
 - hover marker length is slightly off
 - waveform is crossing itself at beginning and end
-
-
-- test deploy for intermediate portfolio item
 
 - set up CI/CD
 
@@ -26,8 +23,6 @@ playhead blue 02b0fe
 
 
 Features
-- Audio playback that follows with the waveform.
-- Zoom in and out of waveform.
 - Select a portion of the waveform to see an average of values
 - Playback auto-updates values.
 - Data to display:

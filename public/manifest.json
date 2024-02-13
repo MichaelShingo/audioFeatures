@@ -1,8 +1,8 @@
 {
-    "id": "miitronome",
-    "name": "Miitronome",
-    "short_name": "Miitronome",
-    "description": "Miitronome, a customizable web metronome controllable from your keyboard. Great for desktop, mobile, and tablet.",
+    "id": "annalyze",
+    "name": "Anna Lyze",
+    "short_name": "Anna Lyze",
+    "description": "Anna Lyze a waveform visualizer and audio analyser.",
     "icons": [
       {
         "src": "./logo72x72.png",
