@@ -1,10 +1,7 @@
 import { actions, useAppState } from '../context/AppStateContext';
 const { state, dispatch } = useAppState();
 
-
-
 Finetuning playback
-- before upload, prevent click to set begin and end selection points
 - hover marker length is slightly off
 - waveform is crossing itself at beginning and end
 

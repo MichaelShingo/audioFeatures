@@ -184,7 +184,7 @@ const WaveformContainer: React.FC = () => {
 				flexWrap: 'nowrap',
 				gap: '0px',
 				marginBottom: '7px',
-				pointerEvents: 'all',
+				pointerEvents: state.isUploaded ? 'all' : 'none',
 			}}
 		>
 			<PreUpload />

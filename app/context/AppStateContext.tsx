@@ -140,8 +140,18 @@ const appReducer = (state: GlobalState, action: AppAction): GlobalState => {
 			return { ...state, waveform: action.payload as Float32Array };
 		case actions.SET_CURRENT_PCM:
 			return { ...state, currentPCM: action.payload as number };
-		case actions.SET_RESIZE_POSITION:
-			return { ...state, resizePosition: action.payload as number };
+		case actions.SET_RESIZE_POSITION: {
+			const LOWER_THRESHOLD = 100;
+			const UPPER_THRESHOLD = state.windowHeight - 100;
+			const position: number = action.payload as number;
+			let dragging: boolean = true;
+			if (!(LOWER_THRESHOLD < position && position < UPPER_THRESHOLD)) {
+				dragging = false;
+			}
+			let res: number = position < LOWER_THRESHOLD ? LOWER_THRESHOLD : position;
+			res = position > UPPER_THRESHOLD ? UPPER_THRESHOLD : res;
+			return { ...state, resizePosition: res, isDragging: dragging };
+		}
 		case actions.SET_WINDOW_HEIGHT:
 			return { ...state, windowHeight: action.payload as number };
 		case actions.SET_WINDOW_WIDTH:
