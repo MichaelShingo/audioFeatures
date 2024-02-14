@@ -11,7 +11,7 @@ const HoverMarker: React.FC = () => {
 		<Box
 			sx={{
 				backgroundColor: theme.palette.common.brightRed,
-				height: `${(state.resizePosition / state.windowHeight) * 100}%`,
+				height: `100%`,
 				width: '1.5px',
 				left: `${state.mousePosition.x}px`,
 				opacity: '50%',

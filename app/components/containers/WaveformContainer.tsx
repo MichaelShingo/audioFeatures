@@ -191,7 +191,6 @@ const WaveformContainer: React.FC = () => {
 			{state.isUploaded && !state.isUploading ? (
 				<>
 					<SeekHandle />
-					<HoverMarker />
 					<WaveformSVG />
 				</>
 			) : (

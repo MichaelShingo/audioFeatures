@@ -1,6 +1,7 @@
 import DraggableSelection from './DraggableSelection';
 import { useAppState } from '../../context/AppStateContext';
 import { useEffect, useState } from 'react';
+import HoverMarker from './HoverMarker';
 
 const WaveformSVG = () => {
 	const { state } = useAppState();
@@ -73,6 +74,8 @@ const WaveformSVG = () => {
 			}}
 		>
 			<DraggableSelection />
+			<HoverMarker />
+
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				height="1000px"
