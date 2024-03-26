@@ -1,15 +1,31 @@
 import { Midi } from '@tonejs/midi';
 import { useEffect } from 'react';
 import * as Tone from 'tone';
+import { useAppState } from '../../context/AppStateContext';
+const synths: Tone.PolySynth[] = [];
+
 const MidiParser = () => {
+	const { state } = useAppState();
+
+	useEffect(() => {
+		if (state.isPlaying) {
+			synths.forEach((synth) => {
+				synth.volume.value = 5;
+			});
+		} else {
+			synths.forEach((synth) => {
+				synth.volume.value = -100;
+			});
+		}
+	}, [state.isPlaying]);
 	useEffect(() => {
 		triggerNotes();
-		// scheduleNotes();
 	}, []);
+
+	// test multi-track midi
 
 	const triggerNotes = async () => {
 		await Tone.start();
-		const synths: Tone.PolySynth[] = [];
 		const midi = await Midi.fromUrl('/simpleMidi.mid');
 
 		midi.tracks.forEach((track) => {
@@ -24,6 +40,7 @@ const MidiParser = () => {
 
 			synth.sync();
 			synths.push(synth);
+
 			track.notes.forEach((note) => {
 				synth.triggerAttackRelease(
 					note.name,
@@ -35,33 +52,6 @@ const MidiParser = () => {
 		});
 	};
 
-	const scheduleNotes = async () => {
-		const synths: Tone.PolySynth[] = [];
-		const now = Tone.now() + 0.5;
-		const midi = await Midi.fromUrl('/simpleMidi.mid');
-
-		midi.tracks.forEach((track) => {
-			const synth = new Tone.PolySynth(Tone.Synth, {
-				envelope: {
-					attack: 0.02,
-					decay: 0.1,
-					sustain: 0.3,
-					release: 1,
-				},
-			}).toDestination();
-			synths.push(synth);
-			track.notes.forEach((note) => {
-				const startTime = Tone.Time(note.time).toSeconds();
-				const duration = Tone.Time(note.duration).toSeconds();
-				Tone.Transport.schedule((time) => {
-					synth.triggerAttackRelease(note.name, duration, 0, note.velocity);
-				}, startTime);
-
-				console.log('start time = ', startTime);
-			});
-		});
-		console.log(Tone.Transport);
-	};
 	return <></>;
 };
 
