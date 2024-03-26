@@ -18,6 +18,7 @@
     "@mui/icons-material": "^5.14.18",
     "@mui/material": "^5.14.18",
     "@mui/system": "^5.15.0",
+    "@tonejs/midi": "^2.0.28",
     "@types/meyda": "^4.3.8",
     "@types/node": "20.9.4",
     "@types/react": "18.2.38",

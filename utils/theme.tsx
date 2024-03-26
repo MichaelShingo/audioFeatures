@@ -1,9 +1,11 @@
 import { createTheme } from '@mui/material/styles';
+
 import { Share_Tech } from 'next/font/google';
 const shareTech = Share_Tech({
 	weight: ['400'],
 	style: ['normal'],
 	subsets: ['latin'],
+	fallback: ['Arial'],
 });
 
 export const theme = createTheme({

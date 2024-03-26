@@ -9,12 +9,14 @@ import DataContainer from './components/containers/DataContainer';
 import UpperContainer from './components/containers/UpperContainer';
 import MousePosition from './components/eventHandlers/MousePosition';
 import MouseUpHandler from './components/eventHandlers/MouseUpHandler';
+import MidiParser from './components/audio/MidiParser';
 
 export default function Home() {
 	return (
 		<ThemeProvider theme={theme}>
 			<AppStateProvider>
 				<AppContainer>
+					<MidiParser />
 					<MousePosition />
 					<MouseUpHandler />
 					<AudioComponent />

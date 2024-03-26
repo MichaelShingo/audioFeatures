@@ -2,7 +2,6 @@ import React, { RefObject, useEffect, useRef, useState } from 'react';
 import { actions, useAppState } from '../../context/AppStateContext';
 import SeekHandle from '../waveformControls/SeekHandle';
 import usePositionCalculations from '../../customHooks/usePositionCalculations';
-import HoverMarker from '../waveformControls/HoverMarker';
 import WaveformSVG from '../waveformControls/WaveformSVG';
 import PreUpload from '../waveformControls/PreUpload';
 

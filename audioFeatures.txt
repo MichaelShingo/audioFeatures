@@ -1,6 +1,11 @@
 import { actions, useAppState } from '../context/AppStateContext';
 const { state, dispatch } = useAppState();
 
+
+
+
+
+
 Finetuning playback
 - waveform is crossing itself at beginning and end
 

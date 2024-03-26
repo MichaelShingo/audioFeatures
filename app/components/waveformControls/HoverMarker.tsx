@@ -13,7 +13,7 @@ const HoverMarker: React.FC = () => {
 				backgroundColor: theme.palette.common.brightRed,
 				height: `100%`,
 				width: '1.5px',
-				left: `${state.mousePosition.x}px`,
+				left: `${state.mousePosition.x + state.waveformScrollPosition}px`,
 				opacity: '50%',
 				visibility: state.isHoveredWaveform ? 'visible' : 'hidden',
 				pointerEvents: 'none',
