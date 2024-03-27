@@ -17,7 +17,6 @@ import {
 	calcSeconds,
 } from '@/app/utils/timecodeCalculations';
 import { Box } from '@mui/system';
-import useMidi from '@/app/customHooks/useMidi';
 
 let scheduleRepeaterId: number = -1;
 
@@ -25,7 +24,6 @@ const PlaybackControls: React.FC = () => {
 	const { state, dispatch } = useAppState();
 	const theme = useTheme();
 	const [player, setPlayer] = useState<Tone.Player | null>(null);
-	const convertToJSON = useMidi();
 
 	useEffect(() => {
 		if (player) {
@@ -96,10 +94,7 @@ const PlaybackControls: React.FC = () => {
 		return `${calcMinutes(seconds)}:${calcSeconds(seconds)}:${calcMilliseconds(seconds)}`;
 	};
 
-	const listenAudio = async () => {
-		const midiJSON = await convertToJSON();
-		console.log(midiJSON);
-	};
+	const listenAudio = async () => {};
 
 	return (
 		<Stack

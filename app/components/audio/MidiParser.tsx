@@ -8,25 +8,19 @@ const MidiParser = () => {
 	const { state } = useAppState();
 
 	useEffect(() => {
-		if (state.isPlaying) {
+		if (!state.isPlaying) {
 			synths.forEach((synth) => {
-				synth.volume.value = 5;
-			});
-		} else {
-			synths.forEach((synth) => {
-				synth.volume.value = -100;
+				synth.releaseAll();
 			});
 		}
 	}, [state.isPlaying]);
 	useEffect(() => {
-		triggerNotes();
+		scheduleNotes();
 	}, []);
 
-	// test multi-track midi
-
-	const triggerNotes = async () => {
+	const scheduleNotes = async () => {
 		await Tone.start();
-		const midi = await Midi.fromUrl('/simpleMidi.mid');
+		const midi = await Midi.fromUrl('/jazzTest.mid');
 
 		midi.tracks.forEach((track) => {
 			const synth = new Tone.PolySynth(Tone.Synth, {
@@ -37,7 +31,6 @@ const MidiParser = () => {
 					release: 1,
 				},
 			}).toDestination();
-
 			synth.sync();
 			synths.push(synth);
 
