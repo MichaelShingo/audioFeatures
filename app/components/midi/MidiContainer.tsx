@@ -51,21 +51,29 @@ const MidiContainer = () => {
 				const note = track.notes[i];
 				const pitchClassName: string = note.name.slice(0, -1);
 				const pitchClass: number = midiPitchToInt[pitchClassName];
+				// let prevDuration: number = 0;
+				// if (i > 0) {
+				// 	prevDuration = track.notes[i - 1].duration;
+				// }
 				res[pitchClass].push(
-					<Tooltip title={pitchClassName}>
+					<Tooltip key={i} title={pitchClassName} sx={{ pointerEvents: 'all' }}>
 						<Box
-							key={i}
 							sx={{
 								position: 'absolute',
-								height: '25px',
+								height: `${100 / 12}%`,
 								backgroundColor: theme.palette.common.lightBlueTransSolid,
-								left: calcPositionFromSeconds(note.time),
-								width: calcPositionFromSeconds(note.duration),
-								boxShadow: `inszet 0 0 0 1px ${theme.palette.common.lightBlue}`,
+								left: `${calcPositionFromSeconds(note.time)}px`,
+								width: `${calcPositionFromSeconds(note.duration)}px`,
+								boxShadow: `inset 0 0 0 1px ${theme.palette.common.lightBlue}`,
 								borderRadius: '6px',
+								pointerEvents: 'all',
+								display: 'flex',
+								alignItems: 'center',
+								justifyContent: 'center',
+								color: theme.palette.common.lightBlue,
 							}}
 						>
-							{/* {pitchClassName} */}
+							{pitchClassName}
 						</Box>
 					</Tooltip>
 				);
@@ -86,13 +94,25 @@ const MidiContainer = () => {
 						backgroundColor: i % 2 !== 0 ? theme.palette.common.darkGrey : 'none',
 						display: 'flex',
 						flexDirection: 'row',
+						width: '2000px', // TODO set the width according to audio length
 					}}
 				>
-					<Typography
-						sx={{ position: 'fixed', margin: '3px', color: 'white', zIndex: 10 }}
+					<Box
+						sx={{
+							backgroundColor: theme.palette.common.darkGrey,
+						}}
 					>
-						{pitchList[i]}
-					</Typography>
+						<Typography
+							sx={{
+								position: 'sticky',
+								transform: 'translateY(25%)',
+								color: 'white',
+								zIndex: 10,
+							}}
+						>
+							{pitchList[i]}
+						</Typography>
+					</Box>
 					{noteRows[i]}
 				</Box>
 			);
@@ -103,11 +123,12 @@ const MidiContainer = () => {
 	return (
 		<Box
 			sx={{
+				backgroundColor: '',
+				transform: 'translateY(0%)',
 				position: 'relative',
 				width: '100%',
-				height: '40%',
+				height: '100%',
 				zIndex: -1,
-				transform: 'translateY(37%)',
 			}}
 		>
 			{generateRows()}

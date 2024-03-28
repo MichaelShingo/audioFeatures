@@ -6,6 +6,7 @@ import WaveformSVG from '../waveformControls/WaveformSVG';
 import PreUpload from '../waveformControls/PreUpload';
 import MidiContainer from '../midi/MidiContainer';
 import { debounce } from 'lodash';
+import { Box } from '@mui/system';
 
 const WaveformContainer: React.FC = () => {
 	const { state, dispatch } = useAppState();
@@ -178,13 +179,13 @@ const WaveformContainer: React.FC = () => {
 				backgroundColor: '',
 				height: '90%',
 				overflowX: 'scroll',
-				overflowY: 'hidden',
+				overflowY: 'scroll',
 				paddingInline: '0px',
 				display: 'flex',
-				alignItems: 'center',
-				justifyContent: 'flex-start',
-				flexDirection: 'row',
-				flexWrap: 'nowrap',
+				// alignItems: 'center',
+				// justifyContent: 'flex-start',
+				flexDirection: 'column',
+				// flexWrap: 'nowrap',
 				gap: '0px',
 				marginBottom: '7px',
 				pointerEvents: state.isUploaded ? 'all' : 'none',
@@ -193,9 +194,12 @@ const WaveformContainer: React.FC = () => {
 			<PreUpload />
 			{state.isUploaded && !state.isUploading ? (
 				<>
-					<SeekHandle />
-					<WaveformSVG />
-					<MidiContainer />
+					<Box sx={{ height: '30%', backgroundColor: 'grey' }}></Box>
+					<Box sx={{ height: '70%', backgroundColor: '' }}>
+						<MidiContainer />
+					</Box>
+					{/* <WaveformSVG /> */}
+					{/* <SeekHandle /> */}
 				</>
 			) : (
 				<></>
