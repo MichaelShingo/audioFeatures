@@ -48,7 +48,7 @@ const initialState: GlobalState = {
 	audioFile: null,
 	waveform: null,
 	currentPCM: 0,
-	resizePosition: 500,
+	resizePosition: 679,
 	windowWidth: 2000,
 	windowHeight: 1000,
 	pitchData: [],

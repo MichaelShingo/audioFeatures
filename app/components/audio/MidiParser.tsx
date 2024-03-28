@@ -14,6 +14,7 @@ const MidiParser = () => {
 			});
 		}
 	}, [state.isPlaying]);
+
 	useEffect(() => {
 		scheduleNotes();
 	}, []);

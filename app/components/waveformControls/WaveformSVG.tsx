@@ -53,7 +53,9 @@ const WaveformSVG = () => {
 
 	const calcVerticalScalePercentage = (): number | undefined => {
 		if (state.isDragging) {
-			return state.mousePosition.y / 5;
+			return state.mousePosition.y / 10;
+		} else {
+			return 67.9;
 		}
 	};
 
@@ -68,14 +70,13 @@ const WaveformSVG = () => {
 		<div
 			style={{
 				backgroundColor: '',
-				transform: `scaleY(${calcVerticalScalePercentage()}%) translateY(-30px)`,
+				transform: `scaleY(67.9%) translateY(-275px)`,
 				pointerEvents: 'none',
 				position: 'relative',
 			}}
 		>
 			<DraggableSelection />
 			<HoverMarker />
-
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				height="1000px"

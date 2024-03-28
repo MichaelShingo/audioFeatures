@@ -8,6 +8,14 @@ const { state, dispatch } = useAppState();
 - Chord ID visualization
 
 
+// get midi data stored globally
+// get midi container set up 
+// position midi notes vertically based on pitch class
+// position midi notes horizontally based on timing data
+// calculate length of midi notes based on duration
+// do they scale horizontally when zooming?
+
+
 
 
 Finetuning playback

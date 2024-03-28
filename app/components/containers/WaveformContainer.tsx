@@ -4,6 +4,7 @@ import SeekHandle from '../waveformControls/SeekHandle';
 import usePositionCalculations from '../../customHooks/usePositionCalculations';
 import WaveformSVG from '../waveformControls/WaveformSVG';
 import PreUpload from '../waveformControls/PreUpload';
+import MidiContainer from '../midi/MidiContainer';
 
 const WaveformContainer: React.FC = () => {
 	const { state, dispatch } = useAppState();
@@ -191,6 +192,7 @@ const WaveformContainer: React.FC = () => {
 				<>
 					<SeekHandle />
 					<WaveformSVG />
+					<MidiContainer />
 				</>
 			) : (
 				<></>
