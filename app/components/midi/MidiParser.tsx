@@ -1,11 +1,11 @@
 import { Midi } from '@tonejs/midi';
 import { useEffect } from 'react';
 import * as Tone from 'tone';
-import { useAppState } from '../../context/AppStateContext';
+import { actions, useAppState } from '../../context/AppStateContext';
 const synths: Tone.PolySynth[] = [];
 
 const MidiParser = () => {
-	const { state } = useAppState();
+	const { state, dispatch } = useAppState();
 
 	useEffect(() => {
 		if (!state.isPlaying) {
@@ -21,7 +21,9 @@ const MidiParser = () => {
 
 	const scheduleNotes = async () => {
 		await Tone.start();
-		const midi = await Midi.fromUrl('/jazzTest.mid');
+		const midi: Midi = await Midi.fromUrl('/jazzTest.mid');
+
+		dispatch({ type: actions.SET_MIDI_DATA, payload: midi });
 
 		midi.tracks.forEach((track) => {
 			const synth = new Tone.PolySynth(Tone.Synth, {

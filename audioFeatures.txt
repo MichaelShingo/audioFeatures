@@ -1,4 +1,4 @@
-import { actions, useAppState } from '../context/AppStateContext';
+import { actions, useAppState } from '../../context/AppStateContext';
 const { state, dispatch } = useAppState();
 
 - Can you get audio data from youtube or another source? https://github.com/liwa-dev/YTAudioConverterAPI
@@ -10,16 +10,7 @@ const { state, dispatch } = useAppState();
 - WaveformSVG.tsx:39 - scroll of waveform container is being set every time waveformScrollPosition, changes. 
 
 
-// makethe rows and color them
-// make the pitch lables on the left 
-
-// get midi data stored globally
-// position midi notes vertically based on pitch class
-// position midi notes horizontally based on timing data
-// calculate length of midi notes based on duration
-// do they scale horizontally when zooming?
-
-
+- extract chord symbols 
 
 
 Finetuning playback

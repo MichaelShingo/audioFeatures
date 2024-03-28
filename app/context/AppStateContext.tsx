@@ -1,6 +1,7 @@
 import React, { createContext, useReducer, useContext, Dispatch } from 'react';
 import { Loudness, PitchData, SpectralFlatness } from '../data/constants';
 import { Timecode, roundSeconds } from '../utils/timecodeCalculations';
+import { Midi } from '@tonejs/midi';
 
 export const H_BREAKPOINT = 440;
 export const SETTINGS_ROW_SPACING: string = '10px';
@@ -41,6 +42,7 @@ interface GlobalState {
 	globalMouseUp: boolean;
 	isDraggingSelectionHandleRight: boolean;
 	isDraggingSelectionHandleLeft: boolean;
+	midiData: Midi | null;
 }
 
 const initialState: GlobalState = {
@@ -74,6 +76,7 @@ const initialState: GlobalState = {
 	globalMouseUp: true,
 	isDraggingSelectionHandleRight: false,
 	isDraggingSelectionHandleLeft: false,
+	midiData: null,
 };
 
 export type AppAction = {
@@ -89,7 +92,8 @@ export type AppAction = {
 		| boolean
 		| Timecode
 		| AudioBuffer
-		| SpectralFlatness[];
+		| SpectralFlatness[]
+		| Midi;
 };
 
 interface AppStateContextType {
@@ -128,6 +132,7 @@ export const actions: Record<string, string> = {
 	SET_GLOBAL_MOUSE_UP: 'SET_GLOBAL_MOUSE_UP',
 	SET_IS_DRAGGING_SELECTION_HANDLE_RIGHT: 'SET_IS_DRAGGING_SELECTION_HANDLE_RIGHT',
 	SET_IS_DRAGGING_SELECTION_HANDLE_LEFT: 'SET_IS_DRAGGING_SELECTION_HANDLE_LEFT',
+	SET_MIDI_DATA: 'SET_MIDI_DATA',
 };
 
 const appReducer = (state: GlobalState, action: AppAction): GlobalState => {
@@ -216,6 +221,8 @@ const appReducer = (state: GlobalState, action: AppAction): GlobalState => {
 			return { ...state, isDraggingSelectionHandleRight: action.payload as boolean };
 		case actions.SET_IS_DRAGGING_SELECTION_HANDLE_LEFT:
 			return { ...state, isDraggingSelectionHandleLeft: action.payload as boolean };
+		case actions.SET_MIDI_DATA:
+			return { ...state, midiData: action.payload as Midi };
 		default:
 			return state;
 	}
