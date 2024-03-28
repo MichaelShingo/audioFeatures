@@ -5,6 +5,7 @@ import usePositionCalculations from '../../customHooks/usePositionCalculations';
 import WaveformSVG from '../waveformControls/WaveformSVG';
 import PreUpload from '../waveformControls/PreUpload';
 import MidiContainer from '../midi/MidiContainer';
+import { debounce } from 'lodash';
 
 const WaveformContainer: React.FC = () => {
 	const { state, dispatch } = useAppState();
@@ -15,14 +16,16 @@ const WaveformContainer: React.FC = () => {
 	const containerRef: RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
-		const handleScroll = () => {
+		const handleScroll = debounce(() => {
 			if (containerRef.current) {
+				console.log('scroll left', containerRef.current.scrollLeft);
+
 				dispatch({
 					type: actions.SET_WAVEFORM_SCROLL_POSITION,
 					payload: containerRef.current.scrollLeft,
 				});
 			}
-		};
+		}, 300);
 
 		if (containerRef.current) {
 			containerRef.current.addEventListener('scroll', handleScroll);

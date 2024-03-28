@@ -25,6 +25,7 @@ const MidiContainer = () => {
 		for (let i = 0; i < 12; i++) {
 			res.push(
 				<Box
+					key={i}
 					sx={{
 						height: `${100 / 12}%`,
 						backgroundColor: i % 2 === 0 ? theme.palette.common.darkGrey : 'none',

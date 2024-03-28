@@ -7,9 +7,13 @@ const { state, dispatch } = useAppState();
 - Midi visualization
 - Chord ID visualization
 
+- WaveformSVG.tsx:39 - scroll of waveform container is being set every time waveformScrollPosition, changes. 
+
+
+// makethe rows and color them
+// make the pitch lables on the left 
 
 // get midi data stored globally
-// get midi container set up 
 // position midi notes vertically based on pitch class
 // position midi notes horizontally based on timing data
 // calculate length of midi notes based on duration
