@@ -2,10 +2,11 @@ import { actions, useAppState } from '../../context/AppStateContext';
 const { state, dispatch } = useAppState();
 
 - Can you get audio data from youtube or another source? https://github.com/liwa-dev/YTAudioConverterAPI
-- make POST request to backend sending mp3 file.
-- Audio upload
-- Midi visualization
-- Chord ID visualization
+	https://www.npmjs.com/package/ytdl-core
+	https://medium.com/@pritubera/how-i-made-a-youtube-audio-downloader-using-node-js-and-react-js-c51bb757bbbf
+
+- midi note positioning with relative position.
+	- 
 
 - WaveformSVG.tsx:39 - scroll of waveform container is being set every time waveformScrollPosition, changes. 
 
@@ -16,7 +17,7 @@ const { state, dispatch } = useAppState();
 Finetuning playback
 - waveform is crossing itself at beginning and end
 
-- set up CI/CD
+- set up CI/CDf
 
 
 Typescript cheat sheet:

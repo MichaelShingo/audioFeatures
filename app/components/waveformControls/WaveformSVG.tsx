@@ -70,7 +70,7 @@ const WaveformSVG = () => {
 		<div
 			style={{
 				backgroundColor: '',
-				transform: `scaleY(67.9%) translateY(0px)`,
+				transform: `scaleY(67.9%) translateY(-65%)`,
 				pointerEvents: 'none',
 				position: 'relative',
 			}}
@@ -79,9 +79,9 @@ const WaveformSVG = () => {
 			<HoverMarker />
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
-				height="1000px"
+				height="400px"
 				width={`${state.loudnessData.length * state.zoomFactor}px`}
-				viewBox={`0 0 ${state.loudnessData.length} 1000`}
+				viewBox={`0 0 ${state.loudnessData.length} 700`}
 				preserveAspectRatio="none"
 			>
 				<g fill="#3498db" stroke="#3498db" strokeWidth={calcStrokeWidth()}>
