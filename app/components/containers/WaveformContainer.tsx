@@ -1,6 +1,5 @@
 import React, { RefObject, useEffect, useRef, useState } from 'react';
 import { actions, useAppState } from '../../context/AppStateContext';
-import SeekHandle from '../waveformControls/SeekHandle';
 import usePositionCalculations from '../../customHooks/usePositionCalculations';
 import WaveformSVG from '../waveformControls/WaveformSVG';
 import PreUpload from '../waveformControls/PreUpload';
@@ -17,10 +16,17 @@ const WaveformContainer: React.FC = () => {
 	const containerRef: RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
-		const handleScroll = debounce(() => {
+		const handleScrollImmediately = () => {
 			if (containerRef.current) {
-				console.log('scroll left', containerRef.current.scrollLeft);
+				dispatch({
+					type: actions.SET_WAVEFORM_SCROLL_POSITION,
+					payload: containerRef.current.scrollLeft,
+				});
+			}
+		};
 
+		const handleScrollDebounce = debounce(() => {
+			if (containerRef.current) {
 				dispatch({
 					type: actions.SET_WAVEFORM_SCROLL_POSITION,
 					payload: containerRef.current.scrollLeft,
@@ -29,20 +35,21 @@ const WaveformContainer: React.FC = () => {
 		}, 300);
 
 		if (containerRef.current) {
-			containerRef.current.addEventListener('scroll', handleScroll);
+			containerRef.current.addEventListener('scroll', handleScrollImmediately);
 		}
 
 		const localContainerRefCurrent = containerRef.current;
 
 		return () => {
-			localContainerRefCurrent?.removeEventListener('scroll', handleScroll);
+			localContainerRefCurrent?.removeEventListener('scroll', handleScrollImmediately);
 		};
 	}, []);
 
 	useEffect(() => {
-		if (containerRef.current) {
-			containerRef.current.scrollLeft = state.waveformScrollPosition;
-		}
+		// don't do this when scrollbar is dragging
+		// if (containerRef.current) {
+		// 	containerRef.current.scrollLeft = state.waveformScrollPosition;
+		// }
 	}, [state.waveformScrollPosition]);
 
 	useEffect(() => {
@@ -115,9 +122,15 @@ const WaveformContainer: React.FC = () => {
 
 	const isDraggingScrollbar = (): boolean => {
 		if (containerRef.current) {
+			// console.log(
+			// 	'is dragging scroll',
+			// 	state.mousePosition.y,
+			// 	containerRef.current.clientHeight,
+			// 	state.mousePosition.y > containerRef.current.clientHeight
+			// );
 			return state.mousePosition.y > containerRef.current.clientHeight;
 		}
-		return false;
+		return true;
 	};
 
 	const handleDragSelection = (e: React.MouseEvent) => {
@@ -194,13 +207,13 @@ const WaveformContainer: React.FC = () => {
 			<PreUpload />
 			{state.isUploaded && !state.isUploading ? (
 				<>
-					<Box sx={{ height: '30%', backgroundColor: '' }}>
+					{/* <SeekHandle /> */}
+					<Box sx={{ height: '40%', backgroundColor: '' }}>
 						<WaveformSVG />
 					</Box>
-					<Box sx={{ height: '70%', backgroundColor: '' }}>
+					<Box sx={{ height: '60%', backgroundColor: '' }}>
 						<MidiContainer />
 					</Box>
-					{/* <SeekHandle /> */}
 				</>
 			) : (
 				<></>

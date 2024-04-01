@@ -5,21 +5,6 @@ import { Box } from '@mui/system';
 import * as Tone from 'tone';
 import usePositionCalculations from '../../customHooks/usePositionCalculations';
 
-const redLineStyles = {
-	height: `100%`,
-	width: '2px',
-	position: 'relative',
-	top: '0px',
-	zIndex: '5',
-	pointerEvents: 'all',
-	'&:hover': {
-		cursor: 'grab',
-	},
-	'&: active': {
-		cursor: 'grabbing',
-	},
-};
-
 const SeekHandle: React.FC = () => {
 	const { state, dispatch } = useAppState();
 	const { calcPositionFromSeconds, calcSecondsFromPosition } = usePositionCalculations();
@@ -30,12 +15,18 @@ const SeekHandle: React.FC = () => {
 
 	useEffect(() => {
 		if (seekHandleRef.current) {
-			seekHandleRef.current.style.left = `${calcPositionFromSeconds(state.seconds)}px`;
+			seekHandleRef.current.style.left = `${
+				calcPositionFromSeconds(state.seconds) - state.waveformScrollPosition
+			}px`;
 		}
 	}, [state.seconds]);
 
 	useEffect(() => {
+		// const position = calcPositionFromSeconds(state.seconds);
 		scrollPositionRef.current = state.waveformScrollPosition;
+		// if (seekHandleRef.current) {
+		// 	seekHandleRef.current.style.left = `${position - state.waveformScrollPosition}px`;
+		// }
 	}, [state.waveformScrollPosition]);
 
 	useEffect(() => {
@@ -62,7 +53,7 @@ const SeekHandle: React.FC = () => {
 	const updatePosition = (): void => {
 		const position = calcPositionFromSeconds(Tone.Transport.seconds);
 		if (seekHandleRef.current) {
-			seekHandleRef.current.style.left = `${position}px`;
+			seekHandleRef.current.style.left = `${position - state.waveformScrollPosition}px`;
 		}
 	};
 
@@ -98,7 +89,7 @@ const SeekHandle: React.FC = () => {
 		position = position > containerWidth ? containerWidth : position;
 		position = position < 0 ? 0 : position;
 		if (state.seekHandleMouseDown && seekHandleRef.current) {
-			seekHandleRef.current.style.left = `${position}px`;
+			seekHandleRef.current.style.left = `${position - state.waveformScrollPosition}px`;
 			dispatch({
 				type: actions.SET_SECONDS,
 				payload: calcSecondsFromPosition(position),
@@ -108,16 +99,33 @@ const SeekHandle: React.FC = () => {
 
 	useEffect(() => {
 		if (seekHandleRef.current) {
-			seekHandleRef.current.style.left = `${calcPositionFromSeconds(state.seconds)}px`;
+			seekHandleRef.current.style.left = `${
+				calcPositionFromSeconds(state.seconds) - state.waveformScrollPosition
+			}px`;
 		}
 	}, [state.zoomFactor]);
 
 	return (
 		<Box
+			id="seek-handle"
 			ref={seekHandleRef}
 			onMouseDown={handleOnMouseDown}
 			onMouseUp={handleOnMouseUp}
-			sx={{ ...redLineStyles, backgroundColor: theme.palette.common.brightRed }}
+			sx={{
+				height: `200%`,
+				width: '2px',
+				position: 'relative',
+				top: '0px',
+				zIndex: '50',
+				pointerEvents: 'all',
+				'&:hover': {
+					cursor: 'grab',
+				},
+				'&: active': {
+					cursor: 'grabbing',
+				},
+				backgroundColor: theme.palette.common.brightRed,
+			}}
 		>
 			<svg
 				xmlns="http://www.w3.org/2000/svg"

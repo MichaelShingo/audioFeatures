@@ -1,4 +1,10 @@
-import React, { createContext, useReducer, useContext, Dispatch } from 'react';
+import React, {
+	createContext,
+	useReducer,
+	useContext,
+	Dispatch,
+	MutableRefObject,
+} from 'react';
 import { Loudness, PitchData, SpectralFlatness } from '../data/constants';
 import { Timecode, roundSeconds } from '../utils/timecodeCalculations';
 import { Midi } from '@tonejs/midi';
@@ -43,6 +49,8 @@ interface GlobalState {
 	isDraggingSelectionHandleRight: boolean;
 	isDraggingSelectionHandleLeft: boolean;
 	midiData: Midi | null;
+	waveformContainerWidth: number;
+	seekHandleContainerRef: MutableRefObject<HTMLDivElement | null> | null;
 }
 
 const initialState: GlobalState = {
@@ -77,6 +85,8 @@ const initialState: GlobalState = {
 	isDraggingSelectionHandleRight: false,
 	isDraggingSelectionHandleLeft: false,
 	midiData: null,
+	waveformContainerWidth: 0,
+	seekHandleContainerRef: null,
 };
 
 export type AppAction = {
@@ -93,6 +103,7 @@ export type AppAction = {
 		| Timecode
 		| AudioBuffer
 		| SpectralFlatness[]
+		| MutableRefObject<HTMLDivElement | null>
 		| Midi;
 };
 
@@ -133,6 +144,8 @@ export const actions: Record<string, string> = {
 	SET_IS_DRAGGING_SELECTION_HANDLE_RIGHT: 'SET_IS_DRAGGING_SELECTION_HANDLE_RIGHT',
 	SET_IS_DRAGGING_SELECTION_HANDLE_LEFT: 'SET_IS_DRAGGING_SELECTION_HANDLE_LEFT',
 	SET_MIDI_DATA: 'SET_MIDI_DATA',
+	SET_WAVEFORM_CONTAINER_WIDTH: 'SET_WAVEFORM_CONTAINER_WIDTH',
+	SET_SEEK_HANDLE_CONTAINER_REF: 'SET_SEEK_HANDLE_CONTAINER_REF',
 };
 
 const appReducer = (state: GlobalState, action: AppAction): GlobalState => {
@@ -223,6 +236,13 @@ const appReducer = (state: GlobalState, action: AppAction): GlobalState => {
 			return { ...state, isDraggingSelectionHandleLeft: action.payload as boolean };
 		case actions.SET_MIDI_DATA:
 			return { ...state, midiData: action.payload as Midi };
+		case actions.SET_WAVEFORM_CONTAINER_WIDTH:
+			return { ...state, waveformContainerWidth: action.payload as number };
+		case actions.SET_SEEK_HANDLE_CONTAINER_REF:
+			return {
+				...state,
+				seekHandleContainerRef: action.payload as MutableRefObject<HTMLDivElement | null>,
+			};
 		default:
 			return state;
 	}

@@ -2,6 +2,7 @@ import DraggableSelection from './DraggableSelection';
 import { useAppState } from '../../context/AppStateContext';
 import { useEffect, useState } from 'react';
 import HoverMarker from './HoverMarker';
+import SeekHandle from './SeekHandle';
 
 const WaveformSVG = () => {
 	const { state } = useAppState();
@@ -71,12 +72,14 @@ const WaveformSVG = () => {
 			style={{
 				backgroundColor: '',
 				transform: `scaleY(67.9%) translateY(-65%)`,
-				pointerEvents: 'none',
+				pointerEvents: 'all',
 				position: 'relative',
 			}}
 		>
+			{/* <SeekHandle /> */}
 			<DraggableSelection />
 			<HoverMarker />
+
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				height="400px"

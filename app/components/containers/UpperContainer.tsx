@@ -3,6 +3,7 @@ import { useAppState } from '../../context/AppStateContext';
 import WaveformContainer from './WaveformContainer';
 import PlaybackControls from '../waveformControls/PlaybackControls';
 import { useTheme } from '@mui/material';
+import SeekHandleContainer from './SeekHandleContainer';
 interface UpperContainerProps {}
 
 const UpperContainer: React.FC<UpperContainerProps> = () => {
@@ -18,6 +19,7 @@ const UpperContainer: React.FC<UpperContainerProps> = () => {
 			}}
 		>
 			<WaveformContainer />
+			{/* <SeekHandleContainer /> */}
 
 			<Box
 				sx={{

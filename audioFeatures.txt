@@ -5,8 +5,14 @@ const { state, dispatch } = useAppState();
 	https://www.npmjs.com/package/ytdl-core
 	https://medium.com/@pritubera/how-i-made-a-youtube-audio-downloader-using-node-js-and-react-js-c51bb757bbbf
 
-- midi note positioning with relative position.
-	- 
+- grey rows need to be same length as waveform 
+- position playhead 
+	- what if you have 2 of them? one in waveform, one in midi? 
+	- or overlay container?
+	
+	- you can't link it to scrolling position because it's terrible without debouncing. 
+	- what if you have a separate scrollable container whose scroll is linked to the main container, so you draw on top of it? 
+- hitting pause doesn't stop midi current notes
 
 - WaveformSVG.tsx:39 - scroll of waveform container is being set every time waveformScrollPosition, changes. 
 
