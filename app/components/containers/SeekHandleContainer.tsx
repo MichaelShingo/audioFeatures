@@ -1,13 +1,25 @@
 import { Box } from '@mui/system';
-import { actions, useAppState } from '../../context/AppStateContext';
+import { useAppState } from '../../context/AppStateContext';
 import WaveformSVG from '../waveformControls/WaveformSVG';
 import SeekHandle from '../waveformControls/SeekHandle';
 import { useEffect, useRef } from 'react';
 
 const SeekHandleContainer = () => {
-	const { state, dispatch } = useAppState();
+	const { state } = useAppState();
 	const ref = useRef<HTMLDivElement | null>(null);
 
+	useEffect(() => {
+		const preventScroll = (e: MouseEvent) => {
+			e.preventDefault();
+		};
+		if (ref.current) {
+			ref.current.addEventListener('wheel', preventScroll);
+			// ref.current.style.scrollbarWidth = 'none'; // Hide scrollbar for Firefox
+			// ref.current.style['&::-webkit-scrollbar'] = {
+			// 	display: 'none', // Hide the scrollbar for Chrome/Safari
+			// };
+		}
+	}, []);
 	useEffect(() => {
 		if (ref.current) {
 			ref.current.scrollLeft = state.waveformScrollPosition;
@@ -38,7 +50,7 @@ const SeekHandleContainer = () => {
 			}}
 		>
 			<SeekHandle />
-			<Box sx={{ opacity: 0.5, zIndex: -5, height: '0px' }}>
+			<Box sx={{ opacity: 0, zIndex: -5, height: '0px', pointerEvents: 'none' }}>
 				<WaveformSVG />
 			</Box>
 		</div>

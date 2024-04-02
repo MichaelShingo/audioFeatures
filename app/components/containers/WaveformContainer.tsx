@@ -114,11 +114,7 @@ const WaveformContainer: React.FC = () => {
 	};
 
 	const handleOnClick = (event: React.MouseEvent<HTMLDivElement>) => {
-		if (Date.now() - mouseDownTime > 150) {
-			return;
-		}
-		const target = event.target as HTMLDivElement;
-		if (target.tagName.toLowerCase() !== 'div') {
+		if (Date.now() - mouseDownTime > 400) {
 			return;
 		}
 		const position: number = state.mousePosition.x + state.waveformScrollPosition;

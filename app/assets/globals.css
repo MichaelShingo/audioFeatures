@@ -22,6 +22,10 @@ input[type='number'] {
 	width: 6px; /* Set the width of the scrollbar */
 }
 
+#seek-handle-container::-webkit-scrollbar {
+	width: 0px; /* Set the width of the scrollbar */
+}
+
 /* Style the scrollbar handle (thumb) */
 ::-webkit-scrollbar-thumb {
 	background-color: #2e2e2e; /* Set the color of the thumb */
