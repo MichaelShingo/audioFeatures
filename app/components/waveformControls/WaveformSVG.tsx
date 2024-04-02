@@ -76,10 +76,6 @@ const WaveformSVG = () => {
 				position: 'relative',
 			}}
 		>
-			{/* <SeekHandle /> */}
-			<DraggableSelection />
-			<HoverMarker />
-
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				height="400px"

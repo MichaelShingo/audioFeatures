@@ -3,6 +3,8 @@ import { useAppState } from '../../context/AppStateContext';
 import WaveformSVG from '../waveformControls/WaveformSVG';
 import SeekHandle from '../waveformControls/SeekHandle';
 import { useEffect, useRef } from 'react';
+import DraggableSelection from '../waveformControls/DraggableSelection';
+import HoverMarker from '../waveformControls/HoverMarker';
 
 const SeekHandleContainer = () => {
 	const { state } = useAppState();
@@ -50,6 +52,8 @@ const SeekHandleContainer = () => {
 			}}
 		>
 			<SeekHandle />
+			<DraggableSelection />
+			<HoverMarker />
 			<Box sx={{ opacity: 0, zIndex: -5, height: '0px', pointerEvents: 'none' }}>
 				<WaveformSVG />
 			</Box>

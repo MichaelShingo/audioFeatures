@@ -113,7 +113,7 @@ const WaveformContainer: React.FC = () => {
 		dispatch({ type: actions.SET_IS_HOVERED_WAVEFORM, payload: false });
 	};
 
-	const handleOnClick = (event: React.MouseEvent<HTMLDivElement>) => {
+	const handleOnClick = () => {
 		if (Date.now() - mouseDownTime > 400) {
 			return;
 		}

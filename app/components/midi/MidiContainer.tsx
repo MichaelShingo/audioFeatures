@@ -91,21 +91,25 @@ const MidiContainer = () => {
 					key={i}
 					sx={{
 						height: `${100 / 12}%`,
-						backgroundColor: i % 2 !== 0 ? theme.palette.common.darkGrey : 'none',
+						backgroundColor: i % 2 !== 0 ? theme.palette.common.lightBlue : 'none',
 						display: 'flex',
 						flexDirection: 'row',
-						width: '2000px', // TODO set the width according to audio length
+						width: `${state.waveformContainerWidth}px`,
 					}}
 				>
 					<Box
 						sx={{
-							backgroundColor: theme.palette.common.darkGrey,
+							backgroundColor: '',
+							marginLeft: '3px',
+							position: 'sticky',
+							zIndex: 5,
 						}}
 					>
 						<Typography
 							sx={{
-								position: 'sticky',
+								position: 'absolute',
 								transform: 'translateY(25%)',
+								left: '0',
 								color: 'white',
 								zIndex: 10,
 							}}

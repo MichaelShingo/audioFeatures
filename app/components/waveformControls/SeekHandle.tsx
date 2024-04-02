@@ -15,9 +15,7 @@ const SeekHandle: React.FC = () => {
 
 	useEffect(() => {
 		if (seekHandleRef.current) {
-			seekHandleRef.current.style.left = `${
-				calcPositionFromSeconds(state.seconds) - state.waveformScrollPosition
-			}px`;
+			seekHandleRef.current.style.left = `${calcPositionFromSeconds(state.seconds)}px`;
 		}
 	}, [state.seconds]);
 
@@ -53,7 +51,7 @@ const SeekHandle: React.FC = () => {
 	const updatePosition = (): void => {
 		const position = calcPositionFromSeconds(Tone.Transport.seconds);
 		if (seekHandleRef.current) {
-			seekHandleRef.current.style.left = `${position - state.waveformScrollPosition}px`;
+			seekHandleRef.current.style.left = `${position}px`;
 		}
 	};
 
@@ -89,7 +87,7 @@ const SeekHandle: React.FC = () => {
 		position = position > containerWidth ? containerWidth : position;
 		position = position < 0 ? 0 : position;
 		if (state.seekHandleMouseDown && seekHandleRef.current) {
-			seekHandleRef.current.style.left = `${position - state.waveformScrollPosition}px`;
+			seekHandleRef.current.style.left = `${position}px`;
 			dispatch({
 				type: actions.SET_SECONDS,
 				payload: calcSecondsFromPosition(position),
@@ -99,9 +97,7 @@ const SeekHandle: React.FC = () => {
 
 	useEffect(() => {
 		if (seekHandleRef.current) {
-			seekHandleRef.current.style.left = `${
-				calcPositionFromSeconds(state.seconds) - state.waveformScrollPosition
-			}px`;
+			seekHandleRef.current.style.left = `${calcPositionFromSeconds(state.seconds)}px`;
 		}
 	}, [state.zoomFactor]);
 
