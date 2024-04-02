@@ -6,7 +6,6 @@ import StopIcon from '@mui/icons-material/Stop';
 import KeyboardVoiceIcon from '@mui/icons-material/KeyboardVoice';
 import Timecode from './Timecode';
 import FilledIconButton from './FilledIconButton';
-import ResizeInterface from './ResizeInterface';
 import React, { useEffect, useState } from 'react';
 import AudioUpload from '../audio/AudioUpload';
 import * as Tone from 'tone';
@@ -120,12 +119,11 @@ const PlaybackControls: React.FC = () => {
 				onClickHandler={pauseAudio}
 				icon={<PauseIcon />}
 			/>
-			<FilledIconButton
+			{/* <FilledIconButton
 				isActive={!state.isPlaying}
 				onClickHandler={listenAudio}
 				icon={<KeyboardVoiceIcon />}
-			/>
-			<ResizeInterface />
+			/> */}
 			<ZoomSlider />
 			<Box
 				sx={{

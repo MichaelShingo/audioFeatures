@@ -25,7 +25,6 @@ const WaveformContainer: React.FC = () => {
 		};
 
 		const handleScrollImmediately = () => {
-			// console.log('seek handle container ref', state.seekHandleContainerRef);
 			if (containerRef.current && seekHandleContainer) {
 				seekHandleContainer.scrollLeft = containerRef.current.scrollLeft;
 			}
@@ -124,12 +123,6 @@ const WaveformContainer: React.FC = () => {
 
 	const isDraggingScrollbar = (): boolean => {
 		if (containerRef.current) {
-			// console.log(
-			// 	'is dragging scroll',
-			// 	state.mousePosition.y,
-			// 	containerRef.current.clientHeight,
-			// 	state.mousePosition.y > containerRef.current.clientHeight
-			// );
 			return state.mousePosition.y > containerRef.current.clientHeight;
 		}
 		return true;
@@ -194,13 +187,10 @@ const WaveformContainer: React.FC = () => {
 				backgroundColor: '',
 				height: '90%',
 				overflowX: 'scroll',
-				overflowY: 'scroll',
+				overflowY: 'hidden',
 				paddingInline: '0px',
 				display: 'flex',
-				// alignItems: 'center',
-				// justifyContent: 'flex-start',
 				flexDirection: 'column',
-				// flexWrap: 'nowrap',
 				gap: '0px',
 				marginBottom: '7px',
 				pointerEvents: state.isUploaded ? 'all' : 'none',
@@ -209,7 +199,6 @@ const WaveformContainer: React.FC = () => {
 			<PreUpload />
 			{state.isUploaded && !state.isUploading ? (
 				<>
-					{/* <SeekHandle /> */}
 					<Box sx={{ height: '40%', backgroundColor: '' }}>
 						<WaveformSVG />
 					</Box>

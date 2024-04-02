@@ -40,7 +40,7 @@ const SeekHandleContainer = () => {
 				width: `${state.waveformContainerWidth}px`, // deleting this makes seek handle disappear
 				backgroundColor: '',
 				zIndex: 50,
-				height: '78.4%',
+				height: '90%',
 				overflowX: 'scroll',
 				overflowY: 'scroll',
 				paddingInline: '0px',

@@ -14,7 +14,7 @@ const UpperContainer: React.FC<UpperContainerProps> = () => {
 	return (
 		<Box
 			sx={{
-				height: `${positionPercentage}%`,
+				height: '100%',
 				backgroundColor: '',
 			}}
 		>

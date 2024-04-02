@@ -22,6 +22,10 @@ input[type='number'] {
 	width: 6px; /* Set the width of the scrollbar */
 }
 
+#seek-handle-container {
+	background-color: 'red';
+}
+
 #seek-handle-container::-webkit-scrollbar {
 	width: 0px; /* Set the width of the scrollbar */
 }

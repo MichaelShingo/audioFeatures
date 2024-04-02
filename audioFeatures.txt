@@ -5,11 +5,9 @@ const { state, dispatch } = useAppState();
 	https://www.npmjs.com/package/ytdl-core
 	https://medium.com/@pritubera/how-i-made-a-youtube-audio-downloader-using-node-js-and-react-js-c51bb757bbbf
 
-- no resizeable container icon, and app should take up proportional space depending on screen size. 
-
 - on initial screen positioning or objects and hide seek handle
 
-- hide scrollbar of playhead container
+- waveform should vertically scale according to VH
 - chord analysis on bottom 
 - midi nodes are held when pausing, something even after stopping
 

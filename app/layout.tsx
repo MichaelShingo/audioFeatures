@@ -8,7 +8,7 @@ const inter = Inter({ subsets: ['latin'] });
 export const metadata: Metadata = {
 	manifest: '/manifest.json',
 	title: 'Anna Lyze',
-	description: 'A 3D cactus music visualizer.',
+	description: 'A chord analyzer.',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

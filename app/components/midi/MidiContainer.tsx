@@ -1,7 +1,7 @@
 import { Tooltip, Typography, useTheme } from '@mui/material';
 import { Box } from '@mui/system';
 import React, { ReactNode } from 'react';
-import { actions, useAppState } from '../../context/AppStateContext';
+import { useAppState } from '../../context/AppStateContext';
 import usePositionCalculations from '@/app/customHooks/usePositionCalculations';
 
 const midiPitchToInt: Record<string, number> = {
@@ -35,7 +35,7 @@ const pitchList: string[] = [
 
 const MidiContainer = () => {
 	const theme = useTheme();
-	const { state, dispatch } = useAppState();
+	const { state } = useAppState();
 	const { calcPositionFromSeconds } = usePositionCalculations();
 
 	const generateNotes = (): ReactNode[][] => {
@@ -51,10 +51,7 @@ const MidiContainer = () => {
 				const note = track.notes[i];
 				const pitchClassName: string = note.name.slice(0, -1);
 				const pitchClass: number = midiPitchToInt[pitchClassName];
-				// let prevDuration: number = 0;
-				// if (i > 0) {
-				// 	prevDuration = track.notes[i - 1].duration;
-				// }
+
 				res[pitchClass].push(
 					<Tooltip key={i} title={pitchClassName} sx={{ pointerEvents: 'all' }}>
 						<Box
