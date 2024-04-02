@@ -10,21 +10,13 @@ const SeekHandleContainer = () => {
 
 	useEffect(() => {
 		if (ref.current) {
-			ref.current.scrollLeft = 500;
-		}
-		setTimeout(() => {
-			dispatch({ type: actions.SET_SEEK_HANDLE_CONTAINER_REF, payload: ref });
-		}, 1000);
-	}, []);
-
-	useEffect(() => {
-		if (ref.current) {
 			ref.current.scrollLeft = state.waveformScrollPosition;
 		}
 	}, [state.waveformScrollPosition]);
 
 	return (
 		<div
+			id="seek-handle-container"
 			ref={ref}
 			style={{
 				position: 'absolute',
@@ -52,7 +44,5 @@ const SeekHandleContainer = () => {
 		</div>
 	);
 };
-
-// set width based on waveformcontainer width value
 
 export default SeekHandleContainer;

@@ -5,11 +5,21 @@ const { state, dispatch } = useAppState();
 	https://www.npmjs.com/package/ytdl-core
 	https://medium.com/@pritubera/how-i-made-a-youtube-audio-downloader-using-node-js-and-react-js-c51bb757bbbf
 
+- you shouldn't be able to manually scroll the playhead container with its scrollbar, or with mouse horizontal scrolling
+- hide scrollbar of playhead container
+
+
 - grey rows need to be same length as waveform 
+- dragging playhead when scrolled is offset (it doens't account for scroll position?)
+- waveform contianer onClick not working 
+- you really need selected range? 
+- chord analysis  on bottom 
+- midi nodes are held when pausing, something even after stopping
+
+
 - position playhead 
 	- what if you have 2 of them? one in waveform, one in midi? 
 	- or overlay container?
-	
 	- you can't link it to scrolling position because it's terrible without debouncing. 
 	- what if you have a separate scrollable container whose scroll is linked to the main container, so you draw on top of it? 
 - hitting pause doesn't stop midi current notes

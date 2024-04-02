@@ -19,8 +19,7 @@ const UpperContainer: React.FC<UpperContainerProps> = () => {
 			}}
 		>
 			<WaveformContainer />
-			{/* <SeekHandleContainer /> */}
-
+			<SeekHandleContainer />
 			<Box
 				sx={{
 					width: '100%',

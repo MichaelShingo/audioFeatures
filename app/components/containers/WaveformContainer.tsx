@@ -12,16 +12,22 @@ const WaveformContainer: React.FC = () => {
 	const { calcSecondsFromPosition, calcPositionFromSeconds } = usePositionCalculations();
 	const [isDragging, setIsDragging] = useState<boolean>(false);
 	const [mouseDownTime, setMouseDownTime] = useState<number>(Date.now());
-
 	const containerRef: RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
+		const seekHandleContainer: HTMLElement | null = document.getElementById(
+			'seek-handle-container'
+		);
+
+		const handleScroll = () => {
+			handleScrollDebounce();
+			handleScrollImmediately();
+		};
+
 		const handleScrollImmediately = () => {
-			if (containerRef.current) {
-				dispatch({
-					type: actions.SET_WAVEFORM_SCROLL_POSITION,
-					payload: containerRef.current.scrollLeft,
-				});
+			// console.log('seek handle container ref', state.seekHandleContainerRef);
+			if (containerRef.current && seekHandleContainer) {
+				seekHandleContainer.scrollLeft = containerRef.current.scrollLeft;
 			}
 		};
 
@@ -35,21 +41,21 @@ const WaveformContainer: React.FC = () => {
 		}, 300);
 
 		if (containerRef.current) {
-			containerRef.current.addEventListener('scroll', handleScrollImmediately);
+			containerRef.current.addEventListener('scroll', handleScroll);
 		}
 
 		const localContainerRefCurrent = containerRef.current;
 
 		return () => {
-			localContainerRefCurrent?.removeEventListener('scroll', handleScrollImmediately);
+			localContainerRefCurrent?.removeEventListener('scroll', handleScroll);
 		};
 	}, []);
 
 	useEffect(() => {
-		// don't do this when scrollbar is dragging
-		// if (containerRef.current) {
-		// 	containerRef.current.scrollLeft = state.waveformScrollPosition;
-		// }
+		// auto scroll while playing
+		if (containerRef.current) {
+			containerRef.current.scrollLeft = state.waveformScrollPosition;
+		}
 	}, [state.waveformScrollPosition]);
 
 	useEffect(() => {
