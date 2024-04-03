@@ -5,10 +5,10 @@ const { state, dispatch } = useAppState();
 	https://www.npmjs.com/package/ytdl-core
 	https://medium.com/@pritubera/how-i-made-a-youtube-audio-downloader-using-node-js-and-react-js-c51bb757bbbf
 
-- on initial screen positioning or objects and hide seek handle
 
-- waveform should vertically scale according to VH
+
 - chord analysis on bottom 
+	- find the startTime of each note. Group together all notes into categories based on startTime. Analyze the chord, plot the points.
 - midi nodes are held when pausing, something even after stopping
 
 

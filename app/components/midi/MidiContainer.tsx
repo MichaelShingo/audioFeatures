@@ -33,6 +33,18 @@ const pitchList: string[] = [
 	'B',
 ];
 
+const chords: Record<number, Set<string>> = {};
+
+const addToChords = (startTime: number, pitch: string): void => {
+	if (chords[startTime]) {
+		chords[startTime].add(pitch);
+	} else {
+		const pitchSet: Set<string> = new Set();
+		pitchSet.add(pitch);
+		chords[startTime] = pitchSet;
+	}
+};
+
 const MidiContainer = () => {
 	const theme = useTheme();
 	const { state } = useAppState();
@@ -51,6 +63,9 @@ const MidiContainer = () => {
 				const note = track.notes[i];
 				const pitchClassName: string = note.name.slice(0, -1);
 				const pitchClass: number = midiPitchToInt[pitchClassName];
+
+				const startTime: number = parseFloat(note.time.toFixed(2));
+				addToChords(startTime, note.name.slice(0, -1));
 
 				res[pitchClass].push(
 					<Tooltip key={i} title={pitchClassName} sx={{ pointerEvents: 'all' }}>
@@ -75,6 +90,8 @@ const MidiContainer = () => {
 					</Tooltip>
 				);
 			}
+
+			console.log(chords);
 		}
 		return res;
 	};

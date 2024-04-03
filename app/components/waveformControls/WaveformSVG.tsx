@@ -1,8 +1,5 @@
-import DraggableSelection from './DraggableSelection';
 import { useAppState } from '../../context/AppStateContext';
 import { useEffect, useState } from 'react';
-import HoverMarker from './HoverMarker';
-import SeekHandle from './SeekHandle';
 
 const WaveformSVG = () => {
 	const { state } = useAppState();
