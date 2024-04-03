@@ -44,11 +44,11 @@ const SeekHandleContainer = () => {
 				overflowX: 'scroll',
 				overflowY: 'scroll',
 				paddingInline: '0px',
-				display: 'flex',
 				flexDirection: 'column',
 				gap: '0px',
 				marginBottom: '7px',
 				pointerEvents: 'none',
+				display: state.isUploaded ? 'flex' : 'none',
 			}}
 		>
 			<SeekHandle />

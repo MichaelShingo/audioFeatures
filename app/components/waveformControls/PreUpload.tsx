@@ -14,11 +14,12 @@ const PreUpload: React.FC = () => {
 				direction="column"
 				sx={{
 					width: '100%',
+					height: '100%',
 					backgroundColor: '',
 					display:
 						(state.isUploading && !state.isUploaded) || state.isUploaded
 							? 'none'
-							: 'block',
+							: 'flex',
 				}}
 			>
 				<Typography
@@ -29,12 +30,15 @@ const PreUpload: React.FC = () => {
 					}}
 					variant="h4"
 				>
-					Upload audio or activate microphone.
+					Upload audio.
 				</Typography>
 			</Stack>
 			<Box
 				sx={{
 					width: '50%',
+					height: '100%',
+					backgroundColor: '',
+					transform: 'translateY(50%)',
 					marginInline: 'auto',
 					display: state.isUploading ? 'block' : 'none',
 				}}
