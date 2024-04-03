@@ -52,14 +52,6 @@ const WaveformSVG = () => {
 		return `L${x} ${Math.round(yValue * scale)}, `;
 	};
 
-	const calcVerticalScalePercentage = (): number | undefined => {
-		if (state.isDragging) {
-			return state.mousePosition.y / 10;
-		} else {
-			return 67.9;
-		}
-	};
-
 	const calcStrokeWidth = (): number => {
 		if (state.zoomFactor < 0.5) {
 			return 0.6;
@@ -67,13 +59,20 @@ const WaveformSVG = () => {
 		return 1 / state.zoomFactor + 0.1;
 	};
 
+	const calcWaveformTransform = (): string => {
+		if (state.windowHeight > 779) {
+			return 'scaleY(100%) translateY(-35%)';
+		} else if (state.windowHeight > 600) {
+			return 'scaleY(69%) translateY(-50%)';
+		}
+		return 'scaleY(50%) translateY(-80%)';
+	};
+
 	return (
 		<div
 			style={{
 				backgroundColor: '',
-				transform: `scaleY(${state.windowHeight / 7}%) translateY(-${
-					40 + state.windowHeight / 120
-				}%)`,
+				transform: calcWaveformTransform(),
 				pointerEvents: 'all',
 				position: 'relative',
 			}}
