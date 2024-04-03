@@ -1,7 +1,5 @@
-import DraggableSelection from './DraggableSelection';
 import { useAppState } from '../../context/AppStateContext';
 import { useEffect, useState } from 'react';
-import HoverMarker from './HoverMarker';
 
 const WaveformSVG = () => {
 	const { state } = useAppState();
@@ -51,12 +49,6 @@ const WaveformSVG = () => {
 		return `L${x} ${Math.round(yValue * scale)}, `;
 	};
 
-	const calcVerticalScalePercentage = (): number | undefined => {
-		if (state.isDragging) {
-			return state.mousePosition.y / 5;
-		}
-	};
-
 	const calcStrokeWidth = (): number => {
 		if (state.zoomFactor < 0.5) {
 			return 0.6;
@@ -64,23 +56,29 @@ const WaveformSVG = () => {
 		return 1 / state.zoomFactor + 0.1;
 	};
 
+	const calcWaveformTransform = (): string => {
+		if (state.windowHeight > 779) {
+			return 'scaleY(100%) translateY(-35%)';
+		} else if (state.windowHeight > 600) {
+			return 'scaleY(69%) translateY(-50%)';
+		}
+		return 'scaleY(50%) translateY(-80%)';
+	};
+
 	return (
 		<div
 			style={{
 				backgroundColor: '',
-				transform: `scaleY(${calcVerticalScalePercentage()}%) translateY(-30px)`,
-				pointerEvents: 'none',
+				transform: calcWaveformTransform(),
+				pointerEvents: 'all',
 				position: 'relative',
 			}}
 		>
-			<DraggableSelection />
-			<HoverMarker />
-
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
-				height="1000px"
+				height="400px"
 				width={`${state.loudnessData.length * state.zoomFactor}px`}
-				viewBox={`0 0 ${state.loudnessData.length} 1000`}
+				viewBox={`0 0 ${state.loudnessData.length} 700`}
 				preserveAspectRatio="none"
 			>
 				<g fill="#3498db" stroke="#3498db" strokeWidth={calcStrokeWidth()}>

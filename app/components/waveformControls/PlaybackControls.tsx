@@ -3,10 +3,8 @@ import { Stack, Typography, useTheme } from '@mui/material';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import PauseIcon from '@mui/icons-material/Pause';
 import StopIcon from '@mui/icons-material/Stop';
-import KeyboardVoiceIcon from '@mui/icons-material/KeyboardVoice';
 import Timecode from './Timecode';
 import FilledIconButton from './FilledIconButton';
-import ResizeInterface from './ResizeInterface';
 import React, { useEffect, useState } from 'react';
 import AudioUpload from '../audio/AudioUpload';
 import * as Tone from 'tone';
@@ -94,8 +92,6 @@ const PlaybackControls: React.FC = () => {
 		return `${calcMinutes(seconds)}:${calcSeconds(seconds)}:${calcMilliseconds(seconds)}`;
 	};
 
-	const listenAudio = () => {};
-
 	return (
 		<Stack
 			direction="row"
@@ -120,12 +116,11 @@ const PlaybackControls: React.FC = () => {
 				onClickHandler={pauseAudio}
 				icon={<PauseIcon />}
 			/>
-			<FilledIconButton
+			{/* <FilledIconButton
 				isActive={!state.isPlaying}
 				onClickHandler={listenAudio}
 				icon={<KeyboardVoiceIcon />}
-			/>
-			<ResizeInterface />
+			/> */}
 			<ZoomSlider />
 			<Box
 				sx={{

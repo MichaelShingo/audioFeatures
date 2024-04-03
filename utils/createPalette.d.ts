@@ -10,5 +10,6 @@ declare module '@mui/material/styles/createPalette' {
 		mediumGrey: string;
 		lightBlue: string;
 		lightBlueTrans: string;
+		lightBlueTransSolid: string;
 	}
 }

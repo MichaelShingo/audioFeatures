@@ -36,6 +36,8 @@ const AppContainer: React.FC<AppContainerProps> = ({ children }) => {
 				color: 'white',
 				height: isSmallScreen ? '95vh' : '100vh',
 				width: '100vw',
+				overflowX: 'hidden',
+				overflowY: 'hidden',
 				mt: '0px',
 				mb: '0px',
 				pt: '0%',

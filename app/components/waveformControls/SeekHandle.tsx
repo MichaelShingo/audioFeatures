@@ -5,21 +5,6 @@ import { Box } from '@mui/system';
 import * as Tone from 'tone';
 import usePositionCalculations from '../../customHooks/usePositionCalculations';
 
-const redLineStyles = {
-	height: `100%`,
-	width: '2px',
-	position: 'relative',
-	top: '0px',
-	zIndex: '5',
-	pointerEvents: 'all',
-	'&:hover': {
-		cursor: 'grab',
-	},
-	'&: active': {
-		cursor: 'grabbing',
-	},
-};
-
 const SeekHandle: React.FC = () => {
 	const { state, dispatch } = useAppState();
 	const { calcPositionFromSeconds, calcSecondsFromPosition } = usePositionCalculations();
@@ -35,7 +20,11 @@ const SeekHandle: React.FC = () => {
 	}, [state.seconds]);
 
 	useEffect(() => {
+		// const position = calcPositionFromSeconds(state.seconds);
 		scrollPositionRef.current = state.waveformScrollPosition;
+		// if (seekHandleRef.current) {
+		// 	seekHandleRef.current.style.left = `${position - state.waveformScrollPosition}px`;
+		// }
 	}, [state.waveformScrollPosition]);
 
 	useEffect(() => {
@@ -114,10 +103,25 @@ const SeekHandle: React.FC = () => {
 
 	return (
 		<Box
+			id="seek-handle"
 			ref={seekHandleRef}
 			onMouseDown={handleOnMouseDown}
 			onMouseUp={handleOnMouseUp}
-			sx={{ ...redLineStyles, backgroundColor: theme.palette.common.brightRed }}
+			sx={{
+				height: `200%`,
+				width: '2px',
+				position: 'relative',
+				top: '0px',
+				zIndex: '50',
+				pointerEvents: 'all',
+				'&:hover': {
+					cursor: 'grab',
+				},
+				'&: active': {
+					cursor: 'grabbing',
+				},
+				backgroundColor: theme.palette.common.brightRed,
+			}}
 		>
 			<svg
 				xmlns="http://www.w3.org/2000/svg"

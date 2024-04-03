@@ -1,28 +1,43 @@
 import React, { RefObject, useEffect, useRef, useState } from 'react';
 import { actions, useAppState } from '../../context/AppStateContext';
-import SeekHandle from '../waveformControls/SeekHandle';
 import usePositionCalculations from '../../customHooks/usePositionCalculations';
-import HoverMarker from '../waveformControls/HoverMarker';
 import WaveformSVG from '../waveformControls/WaveformSVG';
 import PreUpload from '../waveformControls/PreUpload';
+import MidiContainer from '../midi/MidiContainer';
+import { debounce } from 'lodash';
+import { Box } from '@mui/system';
 
 const WaveformContainer: React.FC = () => {
 	const { state, dispatch } = useAppState();
 	const { calcSecondsFromPosition, calcPositionFromSeconds } = usePositionCalculations();
 	const [isDragging, setIsDragging] = useState<boolean>(false);
 	const [mouseDownTime, setMouseDownTime] = useState<number>(Date.now());
-
 	const containerRef: RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
+		const seekHandleContainer: HTMLElement | null = document.getElementById(
+			'seek-handle-container'
+		);
+
 		const handleScroll = () => {
+			handleScrollDebounce();
+			handleScrollImmediately();
+		};
+
+		const handleScrollImmediately = () => {
+			if (containerRef.current && seekHandleContainer) {
+				seekHandleContainer.scrollLeft = containerRef.current.scrollLeft;
+			}
+		};
+
+		const handleScrollDebounce = debounce(() => {
 			if (containerRef.current) {
 				dispatch({
 					type: actions.SET_WAVEFORM_SCROLL_POSITION,
 					payload: containerRef.current.scrollLeft,
 				});
 			}
-		};
+		}, 300);
 
 		if (containerRef.current) {
 			containerRef.current.addEventListener('scroll', handleScroll);
@@ -36,6 +51,7 @@ const WaveformContainer: React.FC = () => {
 	}, []);
 
 	useEffect(() => {
+		// auto scroll while playing
 		if (containerRef.current) {
 			containerRef.current.scrollLeft = state.waveformScrollPosition;
 		}
@@ -96,12 +112,8 @@ const WaveformContainer: React.FC = () => {
 		dispatch({ type: actions.SET_IS_HOVERED_WAVEFORM, payload: false });
 	};
 
-	const handleOnClick = (event: React.MouseEvent<HTMLDivElement>) => {
-		if (Date.now() - mouseDownTime > 150) {
-			return;
-		}
-		const target = event.target as HTMLDivElement;
-		if (target.tagName.toLowerCase() !== 'div') {
+	const handleOnClick = () => {
+		if (Date.now() - mouseDownTime > 400) {
 			return;
 		}
 		const position: number = state.mousePosition.x + state.waveformScrollPosition;
@@ -113,7 +125,7 @@ const WaveformContainer: React.FC = () => {
 		if (containerRef.current) {
 			return state.mousePosition.y > containerRef.current.clientHeight;
 		}
-		return false;
+		return true;
 	};
 
 	const handleDragSelection = (e: React.MouseEvent) => {
@@ -165,11 +177,7 @@ const WaveformContainer: React.FC = () => {
 			onMouseLeave={handleOnMouseLeave}
 			onMouseDown={handleDragSelection}
 			onMouseUp={handleEndDragSelection}
-			onClick={
-				state.isUploaded
-					? (e: React.MouseEvent<HTMLDivElement>) => handleOnClick(e)
-					: () => {}
-			}
+			onClick={state.isUploaded ? () => handleOnClick() : () => {}}
 			style={{
 				width: '100vw',
 				backgroundColor: '',
@@ -178,10 +186,7 @@ const WaveformContainer: React.FC = () => {
 				overflowY: 'hidden',
 				paddingInline: '0px',
 				display: 'flex',
-				alignItems: 'center',
-				justifyContent: 'flex-start',
-				flexDirection: 'row',
-				flexWrap: 'nowrap',
+				flexDirection: 'column',
 				gap: '0px',
 				marginBottom: '7px',
 				pointerEvents: state.isUploaded ? 'all' : 'none',
@@ -190,8 +195,12 @@ const WaveformContainer: React.FC = () => {
 			<PreUpload />
 			{state.isUploaded && !state.isUploading ? (
 				<>
-					<SeekHandle />
-					<WaveformSVG />
+					<Box sx={{ height: '40%', backgroundColor: '' }}>
+						<WaveformSVG />
+					</Box>
+					<Box sx={{ height: '60%', backgroundColor: '' }}>
+						<MidiContainer />
+					</Box>
 				</>
 			) : (
 				<></>
