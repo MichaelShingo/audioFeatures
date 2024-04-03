@@ -3,7 +3,6 @@ import { Stack, Typography, useTheme } from '@mui/material';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import PauseIcon from '@mui/icons-material/Pause';
 import StopIcon from '@mui/icons-material/Stop';
-import KeyboardVoiceIcon from '@mui/icons-material/KeyboardVoice';
 import Timecode from './Timecode';
 import FilledIconButton from './FilledIconButton';
 import React, { useEffect, useState } from 'react';
@@ -92,8 +91,6 @@ const PlaybackControls: React.FC = () => {
 	const calcTimecodeText = (seconds: number): string => {
 		return `${calcMinutes(seconds)}:${calcSeconds(seconds)}:${calcMilliseconds(seconds)}`;
 	};
-
-	const listenAudio = async () => {};
 
 	return (
 		<Stack

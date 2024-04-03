@@ -177,11 +177,7 @@ const WaveformContainer: React.FC = () => {
 			onMouseLeave={handleOnMouseLeave}
 			onMouseDown={handleDragSelection}
 			onMouseUp={handleEndDragSelection}
-			onClick={
-				state.isUploaded
-					? (e: React.MouseEvent<HTMLDivElement>) => handleOnClick(e)
-					: () => {}
-			}
+			onClick={state.isUploaded ? () => handleOnClick() : () => {}}
 			style={{
 				width: '100vw',
 				backgroundColor: '',
