@@ -34,7 +34,7 @@ const ZoomSlider: React.FC = () => {
 	};
 
 	return (
-		<Box sx={{ width: 300 }}>
+		<Box sx={{ width: state.windowWidth < 710 ? 'fit-content' : 300 }}>
 			<Stack spacing={1} direction="row" alignItems="center">
 				<IconButton
 					disabled={isDisabled()}
@@ -53,6 +53,7 @@ const ZoomSlider: React.FC = () => {
 					onChange={handleChange}
 					valueLabelFormat={(value: number) => `${value}%`}
 					sx={{
+						display: state.windowWidth < 710 ? 'none' : 'block',
 						'& .MuiSlider-thumb': {
 							borderRadius: '3px',
 						},

@@ -182,7 +182,7 @@ const appReducer = (state: GlobalState, action: AppAction): GlobalState => {
 			return { ...state, spectralFlatnessData: action.payload as SpectralFlatness[] };
 		case actions.SET_SECONDS: {
 			let seconds: number = action.payload as number;
-			seconds = seconds < 0 ? 0 : seconds;
+			seconds = seconds < 0 || Number.isNaN(seconds) ? 0 : seconds;
 			seconds = seconds > state.audioDuration ? state.audioDuration : seconds;
 			return { ...state, seconds: roundSeconds(seconds) };
 		}

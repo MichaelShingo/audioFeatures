@@ -70,6 +70,7 @@ const DraggableSelection = () => {
 			onMouseOver={() => setHandleVisibility(true)}
 			onMouseOut={() => setHandleVisibility(false)}
 			sx={{
+				display: state.windowWidth < 875 ? 'none' : 'block',
 				backgroundColor: theme.palette.common.lightBlueTrans,
 				visibility: isVisible ? 'visible' : 'hidden',
 				border: `2px solid ${theme.palette.common.lightBlue}`,

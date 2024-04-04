@@ -31,20 +31,14 @@ const AppContainer: React.FC<AppContainerProps> = ({ children }) => {
 			data-label="app-container"
 			component="div"
 			sx={{
+				display: 'none',
 				backgroundColor: theme.palette.background.paper,
-				color: 'white',
 				height: '100vh',
-				width: '100vw',
-				overflowX: 'hidden',
-				overflowY: 'auto',
-				mt: '0px',
-				mb: '0px',
-				pt: '0%',
-				pb: '0%',
-				ml: '50%',
-				mr: '50%',
-				transform: 'translateX(-50%)',
-				display: 'flex',
+				minWidth: '100vw',
+				overflowX: 'scroll',
+				overflowY: 'scroll',
+
+				transform: 'translateX(1%)',
 				flexDirection: 'column',
 				alignItems: 'center',
 				justifyContent: 'center',

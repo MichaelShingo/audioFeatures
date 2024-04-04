@@ -90,8 +90,6 @@ const MidiContainer = () => {
 					</Tooltip>
 				);
 			}
-
-			console.log(chords);
 		}
 		return res;
 	};

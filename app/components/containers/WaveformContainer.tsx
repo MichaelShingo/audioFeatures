@@ -113,7 +113,6 @@ const WaveformContainer: React.FC = () => {
 	};
 
 	const handleClick = () => {
-		console.log('waveformon click');
 		if (Date.now() - mouseDownTime > 400 || !state.isUploaded) {
 			return;
 		}

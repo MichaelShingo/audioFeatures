@@ -33,14 +33,15 @@ const SeekHandleContainer = () => {
 			id="seek-handle-container"
 			ref={ref}
 			style={{
+				backgroundColor: '',
 				position: 'absolute',
 				top: '0px',
 				right: '0px',
 				minWidth: '100vw',
-				width: `${state.waveformContainerWidth}px`, // deleting this makes seek handle disappear
-				backgroundColor: '',
-				zIndex: 50,
+				// width: `${state.waveformContainerWidth}px`, // deleting this makes seek handle disappear
+				width: '100vw',
 				height: '90%',
+				zIndex: 50,
 				overflowX: 'scroll',
 				overflowY: 'scroll',
 				paddingInline: '0px',

@@ -13,12 +13,13 @@ export default function Home() {
 	return (
 		<ThemeProvider theme={theme}>
 			<AppStateProvider>
+				<MidiParser />
+				<MousePosition />
+				<MouseUpHandler />
+				<AudioComponent />
+				<UpperContainer />
 				<AppContainer>
-					<MidiParser />
-					<MousePosition />
-					<MouseUpHandler />
-					<AudioComponent />
-					<UpperContainer />
+					<></>
 				</AppContainer>
 			</AppStateProvider>
 		</ThemeProvider>

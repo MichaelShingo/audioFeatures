@@ -1,6 +1,16 @@
 import { actions, useAppState } from '../../context/AppStateContext';
 const { state, dispatch } = useAppState();
 
+import { useMediaQuery, Theme, useTheme } from '@mui/material';
+
+	const isSmallScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
+
+- Note text should scale down
+- restrict mouse events on seek handle container somehow - so you can't scroll the whole container on mobile.  
+- hide the note row??
+- is mobile interactivity weird with selection, dragging stuff? 
+
+
 - Can you get audio data from youtube or another source? https://github.com/liwa-dev/YTAudioConverterAPI
 	https://www.npmjs.com/package/ytdl-core
 	https://medium.com/@pritubera/how-i-made-a-youtube-audio-downloader-using-node-js-and-react-js-c51bb757bbbf

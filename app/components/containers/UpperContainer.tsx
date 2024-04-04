@@ -13,7 +13,10 @@ const UpperContainer: React.FC<UpperContainerProps> = () => {
 			sx={{
 				height: '100%',
 				width: '100vw',
+				overflowX: 'hidden',
+				overflowY: 'hidden',
 				backgroundColor: '',
+				color: 'white',
 			}}
 		>
 			<WaveformContainer />
