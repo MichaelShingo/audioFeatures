@@ -119,7 +119,7 @@ const Timecode = () => {
 	};
 
 	return (
-		<Stack direction="row" sx={{ marginRight: '5px' }}>
+		<Stack direction="row" sx={{}}>
 			<TimecodeInput
 				refObj={refMinutes}
 				handleBlur={handleBlurMinutes}

@@ -93,34 +93,36 @@ const PlaybackControls: React.FC = () => {
 	};
 
 	return (
-		<Stack
-			direction="row"
+		<Box
+			// direction={state.windowWidth < 855 ? 'column' : 'row'}
 			justifyContent="center"
 			alignItems="center"
-			sx={{ backgroundColor: theme.palette.background.default }}
+			sx={{
+				backgroundColor: theme.palette.background.default,
+				display: 'flex',
+				flexWrap: 'wrap',
+				gap: '10px',
+			}}
 		>
 			<Timecode />
-			<AudioUpload />
-			<FilledIconButton
-				isActive={state.isPlaying || state.seconds > 0}
-				onClickHandler={stopAudio}
-				icon={<StopIcon />}
-			/>
-			<FilledIconButton
-				isActive={!state.isPlaying && state.isUploaded}
-				onClickHandler={playAudio}
-				icon={<PlayArrowIcon style={{}} />}
-			/>
-			<FilledIconButton
-				isActive={state.isPlaying}
-				onClickHandler={pauseAudio}
-				icon={<PauseIcon />}
-			/>
-			{/* <FilledIconButton
-				isActive={!state.isPlaying}
-				onClickHandler={listenAudio}
-				icon={<KeyboardVoiceIcon />}
-			/> */}
+			<Stack direction="row">
+				<AudioUpload />
+				<FilledIconButton
+					isActive={state.isPlaying || state.seconds > 0}
+					onClickHandler={stopAudio}
+					icon={<StopIcon />}
+				/>
+				<FilledIconButton
+					isActive={!state.isPlaying && state.isUploaded}
+					onClickHandler={playAudio}
+					icon={<PlayArrowIcon />}
+				/>
+				<FilledIconButton
+					isActive={state.isPlaying}
+					onClickHandler={pauseAudio}
+					icon={<PauseIcon />}
+				/>
+			</Stack>
 			<ZoomSlider />
 			<Box
 				sx={{
@@ -132,13 +134,14 @@ const PlaybackControls: React.FC = () => {
 				}}
 			>
 				<Typography>
-					{state.selectionStartSeconds >= state.selectionEndSeconds
+					{state.selectionStartSeconds >= state.selectionEndSeconds ||
+					Number.isNaN(state.selectionStartSeconds)
 						? 'Selected Range'
 						: `${calcTimecodeText(state.selectionStartSeconds)} —
 					${calcTimecodeText(state.selectionEndSeconds)}`}
 				</Typography>
 			</Box>
-		</Stack>
+		</Box>
 	);
 };
 

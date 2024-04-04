@@ -6,11 +6,15 @@ const { state, dispatch } = useAppState();
 	https://medium.com/@pritubera/how-i-made-a-youtube-audio-downloader-using-node-js-and-react-js-c51bb757bbbf
 
 
+- Get chroma analysis from Spotify? https://developer.spotify.com/documentation/web-api/reference/get-audio-analysis
+- musicpy - https://musicpy.readthedocs.io/en/latest/Introduction/#introduction
 
-- chord analysis on bottom 
-	- find the startTime of each note. Group together all notes into categories based on startTime. Analyze the chord, plot the points.
+
+- add keyboard shortcuts (spacebar, esc, arrow keys) 
+- what sound should the midi be?
+- mobile responsiveness 
+- safari compatibility
 - midi nodes are held when pausing, something even after stopping
-
 
 - position playhead 
 	- what if you have 2 of them? one in waveform, one in midi? 
@@ -59,6 +63,12 @@ Advanced Features
 Issues
 - Optimizing visualization of waveform?
 - 
+
+- chord analysis on bottom 
+	- Find root of the chord: 
+- triads: major, minor, dim, aug, sus4, sus2
+- sevenths: Major, minor, halfDim, fullDim, dominant
+7th, 9th, 11th, 13th 
 
 
 brightred f52c40

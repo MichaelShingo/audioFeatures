@@ -12,6 +12,7 @@ const UpperContainer: React.FC<UpperContainerProps> = () => {
 		<Box
 			sx={{
 				height: '100%',
+				width: '100vw',
 				backgroundColor: '',
 			}}
 		>

@@ -112,8 +112,9 @@ const WaveformContainer: React.FC = () => {
 		dispatch({ type: actions.SET_IS_HOVERED_WAVEFORM, payload: false });
 	};
 
-	const handleOnClick = () => {
-		if (Date.now() - mouseDownTime > 400) {
+	const handleClick = () => {
+		console.log('waveformon click');
+		if (Date.now() - mouseDownTime > 400 || !state.isUploaded) {
 			return;
 		}
 		const position: number = state.mousePosition.x + state.waveformScrollPosition;
@@ -177,7 +178,7 @@ const WaveformContainer: React.FC = () => {
 			onMouseLeave={handleOnMouseLeave}
 			onMouseDown={handleDragSelection}
 			onMouseUp={handleEndDragSelection}
-			onClick={state.isUploaded ? () => handleOnClick() : () => {}}
+			onClick={state.isUploaded ? () => handleClick() : () => {}}
 			style={{
 				width: '100vw',
 				backgroundColor: '',

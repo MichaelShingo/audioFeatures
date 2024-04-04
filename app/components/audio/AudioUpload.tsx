@@ -32,7 +32,8 @@ const AudioUpload: React.FC = () => {
 		}
 	};
 
-	const startSilentOsc = async () => {
+	const startSilentOsc = async (e: React.MouseEvent) => {
+		e.stopPropagation();
 		await Tone.start();
 		try {
 			if (silentOsc) {
@@ -46,7 +47,7 @@ const AudioUpload: React.FC = () => {
 	};
 
 	return (
-		<IconButton component="label" onClick={startSilentOsc}>
+		<IconButton component="label" onClick={(e) => startSilentOsc(e)}>
 			<FileUpload />
 			<VisuallyHiddenInput type="file" accept="audio/*" onChange={handleFileChange} />
 		</IconButton>

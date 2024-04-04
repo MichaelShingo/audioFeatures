@@ -1,6 +1,6 @@
 import { Box } from '@mui/system';
 import { ReactNode, useEffect } from 'react';
-import { useMediaQuery, Theme, useTheme } from '@mui/material';
+import { useTheme } from '@mui/material';
 import { actions, useAppState } from '../../context/AppStateContext';
 
 interface AppContainerProps {
@@ -9,7 +9,6 @@ interface AppContainerProps {
 
 const AppContainer: React.FC<AppContainerProps> = ({ children }) => {
 	const { dispatch } = useAppState();
-	const isSmallScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
 	const theme = useTheme();
 
 	useEffect(() => {
@@ -34,10 +33,10 @@ const AppContainer: React.FC<AppContainerProps> = ({ children }) => {
 			sx={{
 				backgroundColor: theme.palette.background.paper,
 				color: 'white',
-				height: isSmallScreen ? '95vh' : '100vh',
+				height: '100vh',
 				width: '100vw',
 				overflowX: 'hidden',
-				overflowY: 'hidden',
+				overflowY: 'auto',
 				mt: '0px',
 				mb: '0px',
 				pt: '0%',
