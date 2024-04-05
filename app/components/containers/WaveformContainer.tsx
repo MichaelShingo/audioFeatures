@@ -37,7 +37,7 @@ const WaveformContainer: React.FC = () => {
 					payload: containerRef.current.scrollLeft,
 				});
 			}
-		}, 300);
+		}, 75);
 
 		if (containerRef.current) {
 			containerRef.current.addEventListener('scroll', handleScroll);

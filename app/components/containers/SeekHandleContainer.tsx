@@ -11,7 +11,7 @@ const SeekHandleContainer = () => {
 	const ref = useRef<HTMLDivElement | null>(null);
 
 	useEffect(() => {
-		const preventScroll: EventListener = (e: MouseEvent) => {
+		const preventScroll: EventListener = (e) => {
 			e.preventDefault();
 		};
 		if (ref.current) {

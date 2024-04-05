@@ -16,6 +16,8 @@ const VisuallyHiddenInput = styled('input')({
 	width: 1,
 });
 
+new Tone.Limiter(-6).toDestination();
+
 const AudioUpload: React.FC = () => {
 	const { dispatch } = useAppState();
 	const [silentOsc, setSilentOsc] = useState<Tone.Oscillator | null>(null);

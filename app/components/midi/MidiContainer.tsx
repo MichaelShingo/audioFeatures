@@ -1,4 +1,4 @@
-import { Tooltip, Typography, useTheme } from '@mui/material';
+import { Typography, useTheme } from '@mui/material';
 import { Box } from '@mui/system';
 import React, { ReactNode } from 'react';
 import { useAppState } from '../../context/AppStateContext';

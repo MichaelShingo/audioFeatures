@@ -8,11 +8,7 @@ import { useMediaQuery, Theme, useTheme } from '@mui/material';
 	
 	
 - iPad midi sound problem? Is it just clipping??? need limiter?
-
-- mobile you can move the seek handle vertically???? - make it not draggable at all ?
-- restrict mouse events on seek handle container somehow - so you can't scroll the whole container on mobile. 
-	- can you make the container unfocusable, but keep the handle interactable? 
-	- or prevent scroll event entirely, unless it's programatically set
+- check safari compatibility
 
 
 - Can you get audio data from youtube or another source? https://github.com/liwa-dev/YTAudioConverterAPI
