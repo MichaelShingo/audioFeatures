@@ -17,7 +17,7 @@ const MidiParser = () => {
 
 	useEffect(() => {
 		scheduleNotes();
-	}, []);
+	}, [state.isUploading]);
 
 	const scheduleNotes = async () => {
 		await Tone.start();
