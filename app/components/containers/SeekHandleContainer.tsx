@@ -11,17 +11,16 @@ const SeekHandleContainer = () => {
 	const ref = useRef<HTMLDivElement | null>(null);
 
 	useEffect(() => {
-		const preventScroll = (e: MouseEvent) => {
+		const preventScroll: EventListener = (e: MouseEvent) => {
 			e.preventDefault();
 		};
 		if (ref.current) {
 			ref.current.addEventListener('wheel', preventScroll);
-			// ref.current.style.scrollbarWidth = 'none'; // Hide scrollbar for Firefox
-			// ref.current.style['&::-webkit-scrollbar'] = {
-			// 	display: 'none', // Hide the scrollbar for Chrome/Safari
-			// };
+			ref.current.addEventListener('touchmove', preventScroll);
+			ref.current.addEventListener('scroll', preventScroll);
 		}
 	}, []);
+
 	useEffect(() => {
 		if (ref.current) {
 			ref.current.scrollLeft = state.waveformScrollPosition;
@@ -38,7 +37,6 @@ const SeekHandleContainer = () => {
 				top: '0px',
 				right: '0px',
 				minWidth: '100vw',
-				// width: `${state.waveformContainerWidth}px`, // deleting this makes seek handle disappear
 				width: '100vw',
 				height: '90%',
 				zIndex: 50,
