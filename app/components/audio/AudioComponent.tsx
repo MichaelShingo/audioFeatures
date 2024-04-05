@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import Meyda, { MeydaFeaturesObject } from 'meyda';
 import {
 	BUFFER_SIZE,
@@ -12,12 +12,8 @@ import * as Tone from 'tone';
 
 const AudioComponent: React.FC = () => {
 	const { state, dispatch } = useAppState();
-	const nativeAudioRef = useRef<HTMLAudioElement | null>(null);
 
 	useEffect(() => {
-		if (nativeAudioRef.current) {
-			nativeAudioRef.current.play();
-		}
 		dispatch({ type: actions.SET_SECONDS, payload: 0 });
 		Tone.Transport.seconds = 0;
 		const setPitchData = async () => {
@@ -111,11 +107,7 @@ const AudioComponent: React.FC = () => {
 		return [[0]];
 	};
 
-	return (
-		<audio ref={nativeAudioRef}>
-			<source src="/silent.mp3" type="audio/mp3"></source>
-		</audio>
-	);
+	return <></>;
 };
 
 export default AudioComponent;

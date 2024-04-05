@@ -6,9 +6,10 @@ import { useMediaQuery, Theme, useTheme } from '@mui/material';
 	const isSmallScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
 	
 	
-	
-- iPad midi sound problem? Is it just clipping??? need limiter?
-- check safari compatibility
+- check safari and iPad compatibility
+- keyboard shortucst
+- zoom slider percentage color is off and shows up behind scroll bar 
+- volume control settings for midi and audio.
 
 
 - Can you get audio data from youtube or another source? https://github.com/liwa-dev/YTAudioConverterAPI
@@ -22,9 +23,7 @@ import { useMediaQuery, Theme, useTheme } from '@mui/material';
 
 - add keyboard shortcuts (spacebar, esc, arrow keys) 
 - what sound should the midi be?
-- mobile responsiveness 
 - safari compatibility
-- midi nodes are held when pausing, something even after stopping
 
 - position playhead 
 	- what if you have 2 of them? one in waveform, one in midi? 
@@ -34,9 +33,6 @@ import { useMediaQuery, Theme, useTheme } from '@mui/material';
 - hitting pause doesn't stop midi current notes
 
 - WaveformSVG.tsx:39 - scroll of waveform container is being set every time waveformScrollPosition, changes. 
-
-
-- extract chord symbols 
 
 
 Finetuning playback

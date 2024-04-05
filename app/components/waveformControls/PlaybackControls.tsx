@@ -19,6 +19,7 @@ import {
 	calcSeconds,
 } from '@/app/utils/timecodeCalculations';
 import { Box } from '@mui/system';
+import CustomModal from '../containers/CustomModal';
 
 let scheduleRepeaterId: number = -1;
 
@@ -111,52 +112,9 @@ const PlaybackControls: React.FC = () => {
 				paddingBottom: '10px',
 			}}
 		>
-			<Modal
-				open={isTimecodeModalOpen}
-				sx={{
-					display: 'flex',
-					justifyContent: 'center',
-					alignItems: 'center',
-					transform: 'translateX(-50%) translateY(0%)',
-					mt: '20%',
-					borderRadius: '1%',
-					ml: '50%',
-					mr: '50%',
-					p: '15px',
-					height: '100px',
-					width: '80vw',
-					backgroundColor: theme.palette.common.darkGrey,
-					border: `2px solid ${theme.palette.common.lightBlueTrans}`,
-				}}
-			>
-				<Stack sx={{ height: '100%', width: '100%' }} direction="column">
-					<Box
-						sx={{
-							display: 'flex',
-							justifyContent: 'right',
-							alignItems: 'center',
-							height: '20%',
-							width: '100%',
-							backgroundColor: '',
-						}}
-					>
-						<IconButton onClick={() => setIsTimecodeModalOpen(false)}>
-							<CloseIcon />
-						</IconButton>
-					</Box>
-					<Box
-						sx={{
-							display: 'flex',
-							justifyContent: 'center',
-							alignItems: 'center',
-							height: '80%',
-							backgroundColor: '',
-						}}
-					>
-						<Timecode />
-					</Box>
-				</Stack>
-			</Modal>
+			<CustomModal isOpen={isTimecodeModalOpen} setIsOpen={setIsTimecodeModalOpen}>
+				<Timecode />
+			</CustomModal>
 			<Box>
 				{state.windowWidth < 505 ? (
 					<IconButton onClick={() => setIsTimecodeModalOpen(true)}>
