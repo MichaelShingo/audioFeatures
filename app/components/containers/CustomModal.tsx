@@ -1,11 +1,11 @@
 import { IconButton, Modal, useTheme } from '@mui/material';
 import { Box, Stack } from '@mui/system';
 import CloseIcon from '@mui/icons-material/Close';
-import React, { ReactNode } from 'react';
+import React, { ReactNode, SetStateAction } from 'react';
 
 interface CustomModalProps {
 	isOpen: boolean;
-	setIsOpen: (value: boolean) => void;
+	setIsOpen: React.Dispatch<SetStateAction<boolean>>;
 	children: ReactNode;
 }
 const CustomModal: React.FC<CustomModalProps> = ({ isOpen, setIsOpen, children }) => {
@@ -24,10 +24,12 @@ const CustomModal: React.FC<CustomModalProps> = ({ isOpen, setIsOpen, children }
 				ml: '50%',
 				mr: '50%',
 				p: '15px',
-				height: '100px',
+				height: 'fit-content',
 				width: '80vw',
+				maxWidth: '500px',
 				backgroundColor: theme.palette.common.darkGrey,
 				border: `2px solid ${theme.palette.common.lightBlueTrans}`,
+				color: 'white',
 			}}
 		>
 			<Stack sx={{ height: '100%', width: '100%' }} direction="column">
@@ -41,7 +43,12 @@ const CustomModal: React.FC<CustomModalProps> = ({ isOpen, setIsOpen, children }
 						backgroundColor: '',
 					}}
 				>
-					<IconButton onClick={() => setIsOpen(false)}>
+					<IconButton
+						onClick={() => {
+							setIsOpen((prevIsOpen) => !prevIsOpen);
+							console.log('setting to false');
+						}}
+					>
 						<CloseIcon />
 					</IconButton>
 				</Box>

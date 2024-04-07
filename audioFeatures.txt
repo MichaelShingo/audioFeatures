@@ -6,10 +6,14 @@ import { useMediaQuery, Theme, useTheme } from '@mui/material';
 	const isSmallScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
 	
 	
+
+- volume control settings for midi and audio.
+- close button on modal doens't work.
 - check safari and iPad compatibility
 - keyboard shortucst
 - zoom slider percentage color is off and shows up behind scroll bar 
-- volume control settings for midi and audio.
+- waveform doesn't show on firefox 
+
 
 
 - Can you get audio data from youtube or another source? https://github.com/liwa-dev/YTAudioConverterAPI

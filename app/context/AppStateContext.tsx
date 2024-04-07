@@ -51,6 +51,8 @@ interface GlobalState {
 	midiData: Midi | null;
 	waveformContainerWidth: number;
 	seekHandleContainerRef: MutableRefObject<HTMLDivElement | null> | null;
+	audioVolume: number;
+	chordVolume: number;
 }
 
 const initialState: GlobalState = {
@@ -87,6 +89,8 @@ const initialState: GlobalState = {
 	midiData: null,
 	waveformContainerWidth: 0,
 	seekHandleContainerRef: null,
+	audioVolume: 100,
+	chordVolume: 100,
 };
 
 export type AppAction = {
@@ -146,6 +150,8 @@ export const actions: Record<string, string> = {
 	SET_MIDI_DATA: 'SET_MIDI_DATA',
 	SET_WAVEFORM_CONTAINER_WIDTH: 'SET_WAVEFORM_CONTAINER_WIDTH',
 	SET_SEEK_HANDLE_CONTAINER_REF: 'SET_SEEK_HANDLE_CONTAINER_REF',
+	SET_AUDIO_VOLUME: 'SET_AUDIO_VOLUME',
+	SET_CHORD_VOLUME: 'SET_CHORD_VOLUME',
 };
 
 const appReducer = (state: GlobalState, action: AppAction): GlobalState => {
@@ -238,6 +244,10 @@ const appReducer = (state: GlobalState, action: AppAction): GlobalState => {
 			return { ...state, midiData: action.payload as Midi };
 		case actions.SET_WAVEFORM_CONTAINER_WIDTH:
 			return { ...state, waveformContainerWidth: action.payload as number };
+		case actions.SET_AUDIO_VOLUME:
+			return { ...state, audioVolume: action.payload as number };
+		case actions.SET_CHORD_VOLUME:
+			return { ...state, chordVolume: action.payload as number };
 		case actions.SET_SEEK_HANDLE_CONTAINER_REF:
 			return {
 				...state,

@@ -14,11 +14,11 @@ export default function Home() {
 	return (
 		<ThemeProvider theme={theme}>
 			<AppStateProvider>
+				<SettingsContainer />
 				<MidiParser />
 				<MousePosition />
 				<MouseUpHandler />
 				<AudioComponent />
-				<SettingsContainer />
 				<UpperContainer />
 				<WindowSizeTracker />
 			</AppStateProvider>

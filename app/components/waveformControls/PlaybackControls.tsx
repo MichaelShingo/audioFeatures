@@ -1,10 +1,9 @@
 import { actions, useAppState } from '../../context/AppStateContext';
-import { IconButton, Modal, Stack, Typography, useTheme } from '@mui/material';
+import { IconButton, Stack, Typography, useTheme } from '@mui/material';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import PauseIcon from '@mui/icons-material/Pause';
 import StopIcon from '@mui/icons-material/Stop';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
-import CloseIcon from '@mui/icons-material/Close';
 import Timecode from './Timecode';
 import FilledIconButton from './FilledIconButton';
 import React, { useEffect, useState } from 'react';
