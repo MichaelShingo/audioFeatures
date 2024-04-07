@@ -10,6 +10,7 @@ const MidiParser = () => {
 
 	useEffect(() => {
 		if (!state.isPlaying) {
+			console.log('releasing synths');
 			synths.forEach((synth) => {
 				synth.releaseAll();
 			});
@@ -23,7 +24,7 @@ const MidiParser = () => {
 	useEffect(() => {
 		console.log(synths);
 		synths.forEach((synth) => {
-			synth.volume.value = mapRange(state.chordVolume, 0, 100, -50, 0);
+			synth.volume.value = mapRange(state.chordVolume, 0, 100, -80, 0);
 		});
 	}, [state.chordVolume]);
 

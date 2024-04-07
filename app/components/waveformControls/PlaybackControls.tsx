@@ -31,7 +31,7 @@ const PlaybackControls: React.FC = () => {
 
 	useEffect(() => {
 		if (player) {
-			player.volume.value = mapRange(state.audioVolume, 0, 100, 50, 0);
+			player.volume.value = mapRange(state.audioVolume, 0, 100, -80, 0);
 		}
 	}, [state.audioVolume]);
 
