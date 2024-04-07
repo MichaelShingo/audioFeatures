@@ -11,7 +11,7 @@ import AudioUpload from '../audio/AudioUpload';
 import * as Tone from 'tone';
 import ZoomSlider from './ZoomSlider';
 import useIsMobile from '@/app/customHooks/useIsMobile';
-
+import { mapRange } from '@/app/utils/mapRange';
 import {
 	calcMilliseconds,
 	calcMinutes,
@@ -28,6 +28,12 @@ const PlaybackControls: React.FC = () => {
 	const [player, setPlayer] = useState<Tone.Player | null>(null);
 	const [isTimecodeModalOpen, setIsTimecodeModalOpen] = useState<boolean>(false);
 	const isMobile = useIsMobile();
+
+	useEffect(() => {
+		if (player) {
+			player.volume.value = mapRange(state.audioVolume, 0, 100, 50, 0);
+		}
+	}, [state.audioVolume]);
 
 	useEffect(() => {
 		if (player) {

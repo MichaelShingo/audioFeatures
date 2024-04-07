@@ -2,6 +2,7 @@ import { Midi } from '@tonejs/midi';
 import { useEffect } from 'react';
 import * as Tone from 'tone';
 import { actions, useAppState } from '../../context/AppStateContext';
+import { mapRange } from '@/app/utils/mapRange';
 const synths: Tone.PolySynth[] = [];
 
 const MidiParser = () => {
@@ -19,7 +20,15 @@ const MidiParser = () => {
 		scheduleNotes();
 	}, [state.isUploading]);
 
+	useEffect(() => {
+		console.log(synths);
+		synths.forEach((synth) => {
+			synth.volume.value = mapRange(state.chordVolume, 0, 100, -50, 0);
+		});
+	}, [state.chordVolume]);
+
 	const scheduleNotes = async () => {
+		synths.length = 0;
 		await Tone.start();
 		const midi: Midi = await Midi.fromUrl('/jazzTest.mid');
 
