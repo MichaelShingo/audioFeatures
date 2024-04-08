@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
+import React, { ChangeEvent, useEffect, useRef } from 'react';
 import { actions, useAppState } from '../../context/AppStateContext';
 import { IconButton, styled } from '@mui/material';
 import FileUpload from '@mui/icons-material/FileUpload';
@@ -18,13 +18,10 @@ const VisuallyHiddenInput = styled('input')({
 
 const AudioUpload: React.FC = () => {
 	const { dispatch } = useAppState();
-	const [silentOsc, setSilentOsc] = useState<Tone.Oscillator | null>(null);
 	const nativeAudioRef = useRef<HTMLAudioElement | null>(null);
 
 	useEffect(() => {
 		new Tone.Limiter(-6).toDestination();
-		const newOsc = new Tone.Oscillator(0, 'sine').toDestination();
-		setSilentOsc(newOsc);
 	}, []);
 
 	const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -37,18 +34,9 @@ const AudioUpload: React.FC = () => {
 
 	const startSilentOsc = async (e: React.MouseEvent) => {
 		e.stopPropagation();
+		await Tone.start();
 		if (nativeAudioRef.current) {
 			nativeAudioRef.current.play();
-		}
-		await Tone.start();
-		try {
-			if (silentOsc) {
-				silentOsc.mute = true;
-				silentOsc.start('+0.5');
-				Tone.Transport.cancel();
-			}
-		} catch (e) {
-			return;
 		}
 	};
 

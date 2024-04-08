@@ -4,7 +4,7 @@ import React, { ReactNode } from 'react';
 import { useAppState } from '../../context/AppStateContext';
 import usePositionCalculations from '@/app/customHooks/usePositionCalculations';
 
-const midiPitchToInt: Record<string, number> = {
+export const midiPitchToInt: Record<string, number> = {
 	C: 0,
 	'C#': 1,
 	D: 2,

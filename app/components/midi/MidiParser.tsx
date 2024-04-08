@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import * as Tone from 'tone';
 import { actions, useAppState } from '../../context/AppStateContext';
 import { mapRange } from '@/app/utils/mapRange';
-const synths: Tone.PolySynth[] = [];
+let synths: Tone.PolySynth[] = [];
 
 const MidiParser = () => {
 	const { state, dispatch } = useAppState();
@@ -21,14 +21,18 @@ const MidiParser = () => {
 	}, [state.isUploading]);
 
 	useEffect(() => {
-		console.log(synths);
 		synths.forEach((synth) => {
-			synth.volume.value = mapRange(state.chordVolume, 0, 100, -50, 0);
+			synth.volume.value = mapRange(state.chordVolume, 0, 100, -80, 0);
 		});
 	}, [state.chordVolume]);
 
 	const scheduleNotes = async () => {
-		synths.length = 0;
+		synths.forEach((synth) => {
+			synth.unsync();
+			synth.dispose();
+			synth.disconnect();
+		});
+		synths = [];
 		await Tone.start();
 		const midi: Midi = await Midi.fromUrl('/jazzTest.mid');
 
