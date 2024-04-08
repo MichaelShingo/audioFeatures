@@ -14,12 +14,14 @@ const CustomModal: React.FC<CustomModalProps> = ({ isOpen, setIsOpen, children }
 	return (
 		<Modal
 			open={isOpen}
+			hideBackdrop={false}
+			onMouseEnter={(e) => e.stopPropagation}
 			sx={{
 				display: 'flex',
 				justifyContent: 'center',
 				alignItems: 'center',
 				transform: 'translateX(-50%) translateY(0%)',
-				mt: '20%',
+				mt: '8%',
 				borderRadius: '1%',
 				ml: '50%',
 				mr: '50%',
