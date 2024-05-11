@@ -24,10 +24,18 @@ const AudioUpload: React.FC = () => {
 		new Tone.Limiter(-6).toDestination();
 	}, []);
 
-	const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+	const handleFileChange = async (event: ChangeEvent<HTMLInputElement>) => {
 		dispatch({ type: actions.SET_IS_UPLOADING, payload: true });
 		const file = event.target.files?.[0];
 		if (file) {
+			const formData: FormData = new FormData();
+			const blob = new Blob([file], { type: file.type });
+			formData.append('user-file', blob, `user-file.${file.type}`);
+			await fetch('https://url.org/post'),
+				{
+					method: 'POST',
+					body: formData,
+				};
 			dispatch({ type: actions.SET_AUDIO_FILE, payload: file });
 		}
 	};
