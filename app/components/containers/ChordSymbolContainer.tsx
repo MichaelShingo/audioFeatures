@@ -13,7 +13,7 @@ const ChordSymbolContainer = () => {
 	const { calcPositionFromSeconds } = usePositionCalculations();
 
 	useEffect(() => {
-		// API Call Here //
+		// await data from API //
 		const audioSliceData: Record<string, AudioSlice> = JSON.parse(audioSliceJSON);
 		const chords: Chord[] = parseAudioSlice(audioSliceData);
 		setChords(chords);
@@ -42,7 +42,9 @@ const ChordSymbolContainer = () => {
 						color: 'white',
 					}}
 				>
-					<Typography>{chords[i].symbol}</Typography>
+					<Typography sx={{ pointerEvents: 'all', zIndex: 60 }}>
+						{chords[i].symbol}
+					</Typography>
 				</Box>
 			);
 		}
@@ -54,7 +56,7 @@ const ChordSymbolContainer = () => {
 		<Box
 			sx={{
 				position: 'relative',
-				zIndex: -1,
+				zIndex: 50,
 				pointerEvents: 'all',
 				backgroundColor: '',
 				height: '100%',

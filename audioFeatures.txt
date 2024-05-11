@@ -1,5 +1,6 @@
 import { actions, useAppState } from '../../context/AppStateContext';
 
+- timing of midi changes slightly off? 
 - MIDI endpoint 
 - Chord data endpoint
 - Chord analysis relative to a key? 

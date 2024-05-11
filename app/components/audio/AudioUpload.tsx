@@ -31,11 +31,11 @@ const AudioUpload: React.FC = () => {
 			const formData: FormData = new FormData();
 			const blob = new Blob([file], { type: file.type });
 			formData.append('user-file', blob, `user-file.${file.type}`);
-			await fetch('https://url.org/post'),
-				{
-					method: 'POST',
-					body: formData,
-				};
+			// await fetch('https://url.org/post'),
+			// 	{
+			// 		method: 'POST',
+			// 		body: formData,
+			// 	};
 			dispatch({ type: actions.SET_AUDIO_FILE, payload: file });
 		}
 	};
