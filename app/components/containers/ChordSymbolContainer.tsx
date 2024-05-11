@@ -24,6 +24,7 @@ const ChordSymbolContainer = () => {
 			return [];
 		}
 		const res: ReactNode[] = [];
+
 		for (let i = 0; i < chords.length; i++) {
 			res.push(
 				<Box
@@ -42,7 +43,13 @@ const ChordSymbolContainer = () => {
 						color: 'white',
 					}}
 				>
-					<Typography sx={{ pointerEvents: 'all', zIndex: 60 }}>
+					<Typography
+						sx={{
+							pointerEvents: 'all',
+							zIndex: 60,
+							fontSize: state.zoomFactor < 0.4 ? '10px' : '20px',
+						}}
+					>
 						{chords[i].symbol}
 					</Typography>
 				</Box>

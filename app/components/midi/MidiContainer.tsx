@@ -63,7 +63,6 @@ const MidiContainer = () => {
 				const note = track.notes[i];
 				const pitchClassName: string = note.name.slice(0, -1);
 				const pitchClass: number = midiPitchToInt[pitchClassName];
-
 				const startTime: number = parseFloat(note.time.toFixed(2));
 				addToChords(startTime, note.name.slice(0, -1));
 

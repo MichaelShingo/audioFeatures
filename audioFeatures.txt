@@ -10,7 +10,10 @@ import { useMediaQuery, Theme, useTheme } from '@mui/material';
 - timing of midi changes slightly off? 
 - Chord analysis relative to a key?
 - check safari and iPad compatibility
-- waveform doesn't show on firefox 
+
+- waveform doesn't show on firefox - maybe use a library for HTML canvas https://stackoverflow.com/questions/4340040/html5-canvas-vector-graphics
+
+
 - why does timecod ebecome -1 sometimes? Can you log seconds until it happens? 
 
 - keyboard shortucst
