@@ -5,14 +5,10 @@ import { useMediaQuery, Theme, useTheme } from '@mui/material';
 const isSmallScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
 
 
-
-
 Yihong questions
 - timing of midi changes slightly off? 
 - Chord analysis relative to a key?
 - check safari and iPad compatibility
-
-- waveform doesn't show on firefox - maybe use a library for HTML canvas https://stackoverflow.com/questions/4340040/html5-canvas-vector-graphics
 
 
 - why does timecod ebecome -1 sometimes? Can you log seconds until it happens? - seconds is supposedly 0, -1 only appears on minutes and seconds, not milliseconds 
@@ -20,6 +16,7 @@ Yihong questions
 - keyboard shortucst
 
 
+- if any other issues with waveform, maybe use HTML canvas vector library https://stackoverflow.com/questions/4340040/html5-canvas-vector-graphics
 
 
 can you access the individual synths and trigger them? 
@@ -36,15 +33,6 @@ can you access the individual synths and trigger them?
 - add keyboard shortcuts (spacebar, esc, arrow keys) 
 - what sound should the midi be?
 - safari compatibility
-
-- position playhead 
-	- what if you have 2 of them? one in waveform, one in midi? 
-	- or overlay container?
-	- you can't link it to scrolling position because it's terrible without debouncing. 
-	- what if you have a separate scrollable container whose scroll is linked to the main container, so you draw on top of it? 
-- hitting pause doesn't stop midi current notes
-
-- WaveformSVG.tsx:39 - scroll of waveform container is being set every time waveformScrollPosition, changes. 
 
 
 Finetuning playback
