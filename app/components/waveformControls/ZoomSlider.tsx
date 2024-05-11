@@ -48,6 +48,7 @@ const ZoomSlider: React.FC = () => {
 					value={Math.round(state.zoomFactor * 100)}
 					handleChange={handleChange}
 					display={state.windowWidth < 710 ? 'none' : 'block'}
+					labelDisplay="off"
 				/>
 				<IconButton
 					disabled={isDisabled()}

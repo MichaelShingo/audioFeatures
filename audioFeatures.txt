@@ -1,21 +1,25 @@
 import { actions, useAppState } from '../../context/AppStateContext';
+
+- MIDI endpoint 
+- Chord data endpoint
+- Chord analysis relative to a key? 
+- CHECK SAFARI COMPATIBILITY 
+
+
 const { state, dispatch } = useAppState();
 
 import { useMediaQuery, Theme, useTheme } from '@mui/material';
 
 	const isSmallScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
 	
-- keyboard shortucst
-- zoom slider percentage color is off and shows up behind scroll bar 
 - check safari and iPad compatibility
 - waveform doesn't show on firefox 
 
+- why does timecod ebecome -1 sometimes? Can you log seconds until it happens? 
+
+- keyboard shortucst
 
 
-Audio volumes - is fine
-settings container  - is fine 
-modals - is fine 
-silentosc - is fine 
 
 
 can you access the individual synths and trigger them? 

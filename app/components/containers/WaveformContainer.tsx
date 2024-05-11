@@ -6,6 +6,7 @@ import PreUpload from '../waveformControls/PreUpload';
 import MidiContainer from '../midi/MidiContainer';
 import { debounce } from 'lodash';
 import { Box } from '@mui/system';
+import ChordSymbolContainer from './ChordSymbolContainer';
 
 const WaveformContainer: React.FC = () => {
 	const { state, dispatch } = useAppState();
@@ -198,8 +199,11 @@ const WaveformContainer: React.FC = () => {
 					<Box sx={{ height: '40%', backgroundColor: '' }}>
 						<WaveformSVG />
 					</Box>
-					<Box sx={{ height: '60%', backgroundColor: '' }}>
+					<Box sx={{ height: '53%', backgroundColor: '' }}>
 						<MidiContainer />
+					</Box>
+					<Box sx={{ height: '7%', backgroundColor: '' }}>
+						<ChordSymbolContainer />
 					</Box>
 				</>
 			) : (

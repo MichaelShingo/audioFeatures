@@ -39,7 +39,7 @@ const SeekHandleContainer = () => {
 				minWidth: '100vw',
 				width: '100vw',
 				height: '90%',
-				zIndex: 50,
+				zIndex: 40,
 				overflowX: 'scroll',
 				overflowY: 'scroll',
 				paddingInline: '0px',

@@ -48,7 +48,6 @@ const CustomModal: React.FC<CustomModalProps> = ({ isOpen, setIsOpen, children }
 					<IconButton
 						onClick={() => {
 							setIsOpen((prevIsOpen) => !prevIsOpen);
-							console.log('setting to false');
 						}}
 					>
 						<CloseIcon />

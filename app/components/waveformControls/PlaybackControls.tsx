@@ -119,6 +119,7 @@ const PlaybackControls: React.FC = () => {
 		>
 			<CustomModal isOpen={isTimecodeModalOpen} setIsOpen={setIsTimecodeModalOpen}>
 				<Timecode />
+				<Box sx={{ height: '70px' }}></Box>
 			</CustomModal>
 			<Box>
 				{state.windowWidth < 505 ? (

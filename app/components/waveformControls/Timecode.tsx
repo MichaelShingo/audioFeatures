@@ -39,6 +39,7 @@ const Timecode = () => {
 	};
 
 	useEffect(() => {
+		console.log(state.seconds);
 		const fps: number = 1 / 24;
 		const startTime: number = 0;
 		if (Tone.Transport.state === 'started') {

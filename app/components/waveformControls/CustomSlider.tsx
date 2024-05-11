@@ -1,4 +1,4 @@
-import { Slider, useTheme } from '@mui/material';
+import { Slider, SliderOwnProps, useTheme } from '@mui/material';
 
 interface CustomSliderProps {
 	isDisabled?: boolean;
@@ -7,6 +7,7 @@ interface CustomSliderProps {
 	value: number;
 	handleChange: (event: Event, newValue: number | number[]) => void;
 	display?: string;
+	labelDisplay?: SliderOwnProps['valueLabelDisplay'];
 }
 const CustomSlider: React.FC<CustomSliderProps> = ({
 	isDisabled = false,
@@ -15,6 +16,7 @@ const CustomSlider: React.FC<CustomSliderProps> = ({
 	value,
 	handleChange,
 	display = 'block',
+	labelDisplay = 'auto',
 }) => {
 	const theme = useTheme();
 	return (
@@ -23,7 +25,7 @@ const CustomSlider: React.FC<CustomSliderProps> = ({
 			min={min}
 			max={max}
 			size="small"
-			valueLabelDisplay="auto"
+			valueLabelDisplay={labelDisplay}
 			aria-label="zoom"
 			value={value}
 			onChange={handleChange}
@@ -41,6 +43,9 @@ const CustomSlider: React.FC<CustomSliderProps> = ({
 				},
 				'& .MuiSlider-track': {
 					color: isDisabled ? theme.palette.common.maroon : theme.palette.primary.light,
+				},
+				'.MuiSlider-valueLabel': {
+					backgroundColor: theme.palette.common.darkRed,
 				},
 				'&:disabled': {
 					backgroundColor: theme.palette.common.maroon,
