@@ -196,7 +196,7 @@ const WaveformContainer: React.FC = () => {
 			<PreUpload />
 			{state.isUploaded && !state.isUploading ? (
 				<>
-					<Box sx={{ height: '40%', backgroundColor: '' }}>
+					<Box sx={{ height: '40%', width: 'fit-content', backgroundColor: '' }}>
 						<WaveformSVG />
 					</Box>
 					<Box sx={{ height: '53%', backgroundColor: '' }}>

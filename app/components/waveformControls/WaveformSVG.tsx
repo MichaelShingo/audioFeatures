@@ -46,7 +46,7 @@ const WaveformSVG = () => {
 		const scale: number = 5;
 		yValue = y ? y + offset : offset + 4.65;
 		yValue = Math.abs(yValue);
-		return `L${x} ${Math.round(yValue * scale)}, `;
+		return `L${x} ${Math.round(yValue * scale)} `;
 	};
 
 	const calcStrokeWidth = (): number => {
@@ -78,17 +78,11 @@ const WaveformSVG = () => {
 				xmlns="http://www.w3.org/2000/svg"
 				height="400px"
 				width={`${state.loudnessData.length * state.zoomFactor}px`}
-				viewBox={`0 0 5000 700`}
+				viewBox={`0 0 ${state.loudnessData.length} 700`}
 				preserveAspectRatio="none"
 			>
-				<g
-					width="100%"
-					height="100%"
-					fill="#3498db"
-					stroke="#3498db"
-					strokeWidth={`${calcStrokeWidth()}px`}
-				>
-					<path d={svgPathData} fillOpacity="0.3" />
+				<g fill="#3498db" stroke="#3498db" height="500px" strokeWidth={calcStrokeWidth()}>
+					<path d={svgPathData} fillOpacity="0.3" height="500px" />
 				</g>
 			</svg>
 		</div>

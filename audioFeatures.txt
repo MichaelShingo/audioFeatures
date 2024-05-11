@@ -1,12 +1,13 @@
 import { actions, useAppState } from '../../context/AppStateContext';
 const { state, dispatch } = useAppState();
-
 import { useMediaQuery, Theme, useTheme } from '@mui/material';
 
-	const isSmallScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
+const isSmallScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
 
 
-- if zoom level <  x%, smaller chord text 
+
+
+Yihong questions
 - timing of midi changes slightly off? 
 - Chord analysis relative to a key?
 - check safari and iPad compatibility
@@ -14,7 +15,7 @@ import { useMediaQuery, Theme, useTheme } from '@mui/material';
 - waveform doesn't show on firefox - maybe use a library for HTML canvas https://stackoverflow.com/questions/4340040/html5-canvas-vector-graphics
 
 
-- why does timecod ebecome -1 sometimes? Can you log seconds until it happens? 
+- why does timecod ebecome -1 sometimes? Can you log seconds until it happens? - seconds is supposedly 0, -1 only appears on minutes and seconds, not milliseconds 
 
 - keyboard shortucst
 

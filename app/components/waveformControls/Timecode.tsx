@@ -7,10 +7,17 @@ import TimecodeInput from './TimecodeInput';
 import usePositionCalculations from '../../customHooks/usePositionCalculations';
 
 const calcMinutes = (seconds: number): string => {
+	if (seconds <= 0) {
+		return '0';
+	}
+	console.log(seconds / 60);
 	return Math.floor(seconds / 60).toString();
 };
 
 const calcSeconds = (seconds: number): string => {
+	if (seconds <= 0) {
+		return '0';
+	}
 	return Math.floor(seconds % 60).toString();
 };
 
@@ -32,20 +39,36 @@ const Timecode = () => {
 
 	const setTimecode = (seconds: number): void => {
 		if (refMilliseconds.current && refSeconds.current && refMinutes.current) {
-			refMilliseconds.current.value = calcMilliseconds(seconds);
-			refSeconds.current.value = calcSeconds(seconds);
-			refMinutes.current.value = calcMinutes(seconds);
+			const milliseconds = calcMilliseconds(seconds);
+			const secondsCalc = calcSeconds(seconds);
+			const minutes = calcMinutes(seconds);
+			console.log(milliseconds, secondsCalc, minutes);
+			console.log(typeof milliseconds, typeof secondsCalc, typeof minutes);
+
+			refMilliseconds.current.value = milliseconds;
+			refSeconds.current.value = secondsCalc;
+			refMinutes.current.value = minutes;
+			// refMilliseconds.current.value = calcMilliseconds(seconds);
+			// refSeconds.current.value = calcSeconds(seconds);
+			// refMinutes.current.value = calcMinutes(seconds);
 		}
 	};
 
 	useEffect(() => {
-		console.log(state.seconds);
+		console.log(state.seconds); // seconds is supposedly 0 when it's -1 displayed
 		const fps: number = 1 / 24;
 		const startTime: number = 0;
 		if (Tone.Transport.state === 'started') {
 			Tone.Transport.scheduleRepeat(
 				(time) => {
-					Tone.Draw.schedule(() => setTimecode(Tone.Transport.seconds), time);
+					const transportSeconds = Tone.Transport.seconds;
+					let verifiedSeconds =
+						transportSeconds < 0 || Number.isNaN(transportSeconds) ? 0 : transportSeconds;
+					verifiedSeconds =
+						transportSeconds > state.audioDuration
+							? state.audioDuration
+							: transportSeconds;
+					Tone.Draw.schedule(() => setTimecode(verifiedSeconds), time);
 				},
 				fps,
 				startTime
