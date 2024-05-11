@@ -1,73 +1,51 @@
 'use client';
 import { Box } from '@mui/system';
-import { actions, useAppState } from '../../context/AppStateContext';
-import { ReactNode, useEffect } from 'react';
+import { useAppState } from '../../context/AppStateContext';
+import { ReactNode, useEffect, useState } from 'react';
 import { audioSliceJSON } from '@/app/data/sampleBackendData';
-
-type Chord = {
-	symbol: string;
-	start: number;
-	end: number;
-};
-
-type AudioSlice = {
-	C: number;
-	'C#': number;
-	D: number;
-	'D#': number;
-	E: number;
-	F: number;
-	'F#': number;
-	G: number;
-	'G#': number;
-	A: number;
-	'A#': number;
-	B: number;
-	start: number;
-	end: number;
-	series_id: number;
-	chord_cluster: number;
-	predicted_cluster: string;
-	song: string;
-};
+import usePositionCalculations from '@/app/customHooks/usePositionCalculations';
+import { Typography } from '@mui/material';
+import { AudioSlice, Chord, parseAudioSlice } from '@/app/utils/parseAudioSlice';
 
 const ChordSymbolContainer = () => {
 	const { state } = useAppState();
-
-	// API Call Here within useEffect //
+	const [chords, setChords] = useState<Chord[] | null>(null);
+	const { calcPositionFromSeconds } = usePositionCalculations();
 
 	useEffect(() => {
-		const parseAudioSlice = () => {
-			const audioSliceData: Record<string, AudioSlice> = JSON.parse(audioSliceJSON);
-			const audioSliceKeys: string[] = Object.keys(audioSliceData);
-
-			const chords: Chord[] = [];
-			let currentChord: Chord = {
-				symbol: audioSliceData[0].predicted_cluster,
-				start: audioSliceData[0].start,
-				end: -1,
-			};
-
-			for (let i = 1; i < audioSliceKeys.length; i++) {
-				const nextSlice: AudioSlice = audioSliceData[audioSliceKeys[i]];
-				if (nextSlice.predicted_cluster !== currentChord.symbol) {
-					currentChord.end = nextSlice.start;
-					chords.push({ ...currentChord });
-					currentChord = {
-						symbol: nextSlice.predicted_cluster,
-						start: nextSlice.start,
-						end: -1,
-					};
-				}
-			}
-			console.log(chords);
-		};
-
-		parseAudioSlice();
+		// API Call Here //
+		const audioSliceData: Record<string, AudioSlice> = JSON.parse(audioSliceJSON);
+		const chords: Chord[] = parseAudioSlice(audioSliceData);
+		setChords(chords);
 	}, []);
 
 	const generateChordSymbols = (): ReactNode[] => {
+		if (!chords) {
+			return [];
+		}
 		const res: ReactNode[] = [];
+		for (let i = 0; i < chords.length; i++) {
+			res.push(
+				<Box
+					key={i}
+					sx={{
+						fontSize: state.windowHeight < 720 ? '12px' : '18px',
+						backgroundColor: '',
+						position: 'absolute',
+						height: '100%',
+						left: `${calcPositionFromSeconds(chords[i].start)}px`,
+						width: `${calcPositionFromSeconds(chords[i].end - chords[i].start)}px`,
+						pointerEvents: 'all',
+						display: 'flex',
+						alignItems: 'center',
+						justifyContent: 'center',
+						color: 'white',
+					}}
+				>
+					<Typography>{chords[i].symbol}</Typography>
+				</Box>
+			);
+		}
 
 		return res;
 	};
@@ -75,14 +53,16 @@ const ChordSymbolContainer = () => {
 	return (
 		<Box
 			sx={{
-				pointerEvents: 'none',
-				backgroundColor: 'red',
+				position: 'relative',
+				zIndex: -1,
+				pointerEvents: 'all',
+				backgroundColor: '',
 				height: '100%',
 				minWidth: '100%',
 				width: `${state.waveformContainerWidth}px`,
 			}}
 		>
-			{generateChordSymbols()}
+			{chords && generateChordSymbols()}
 		</Box>
 	);
 };
