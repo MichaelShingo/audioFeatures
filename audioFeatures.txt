@@ -1,28 +1,38 @@
 import { actions, useAppState } from '../../context/AppStateContext';
 const { state, dispatch } = useAppState();
+import { useMediaQuery, Theme, useTheme } from '@mui/material';
+
+const isSmallScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
+
+
+Yihong questions
+- timing of midi changes slightly off? 
+- Chord analysis relative to a key?
+- check safari and iPad compatibility
+
+
+- why does timecod ebecome -1 sometimes? Can you log seconds until it happens? - seconds is supposedly 0, -1 only appears on minutes and seconds, not milliseconds 
+
+- keyboard shortucst
+
+
+- if any other issues with waveform, maybe use HTML canvas vector library https://stackoverflow.com/questions/4340040/html5-canvas-vector-graphics
+
+
+can you access the individual synths and trigger them? 
 
 - Can you get audio data from youtube or another source? https://github.com/liwa-dev/YTAudioConverterAPI
 	https://www.npmjs.com/package/ytdl-core
 	https://medium.com/@pritubera/how-i-made-a-youtube-audio-downloader-using-node-js-and-react-js-c51bb757bbbf
 
 
-
-- chord analysis on bottom 
-	- find the startTime of each note. Group together all notes into categories based on startTime. Analyze the chord, plot the points.
-- midi nodes are held when pausing, something even after stopping
+- Get chroma analysis from Spotify? https://developer.spotify.com/documentation/web-api/reference/get-audio-analysis
+- musicpy - https://musicpy.readthedocs.io/en/latest/Introduction/#introduction
 
 
-- position playhead 
-	- what if you have 2 of them? one in waveform, one in midi? 
-	- or overlay container?
-	- you can't link it to scrolling position because it's terrible without debouncing. 
-	- what if you have a separate scrollable container whose scroll is linked to the main container, so you draw on top of it? 
-- hitting pause doesn't stop midi current notes
-
-- WaveformSVG.tsx:39 - scroll of waveform container is being set every time waveformScrollPosition, changes. 
-
-
-- extract chord symbols 
+- add keyboard shortcuts (spacebar, esc, arrow keys) 
+- what sound should the midi be?
+- safari compatibility
 
 
 Finetuning playback
@@ -59,6 +69,12 @@ Advanced Features
 Issues
 - Optimizing visualization of waveform?
 - 
+
+- chord analysis on bottom 
+	- Find root of the chord: 
+- triads: major, minor, dim, aug, sus4, sus2
+- sevenths: Major, minor, halfDim, fullDim, dominant
+7th, 9th, 11th, 13th 
 
 
 brightred f52c40

@@ -6,6 +6,7 @@ import PreUpload from '../waveformControls/PreUpload';
 import MidiContainer from '../midi/MidiContainer';
 import { debounce } from 'lodash';
 import { Box } from '@mui/system';
+import ChordSymbolContainer from './ChordSymbolContainer';
 
 const WaveformContainer: React.FC = () => {
 	const { state, dispatch } = useAppState();
@@ -37,7 +38,7 @@ const WaveformContainer: React.FC = () => {
 					payload: containerRef.current.scrollLeft,
 				});
 			}
-		}, 300);
+		}, 75);
 
 		if (containerRef.current) {
 			containerRef.current.addEventListener('scroll', handleScroll);
@@ -112,8 +113,8 @@ const WaveformContainer: React.FC = () => {
 		dispatch({ type: actions.SET_IS_HOVERED_WAVEFORM, payload: false });
 	};
 
-	const handleOnClick = () => {
-		if (Date.now() - mouseDownTime > 400) {
+	const handleClick = () => {
+		if (Date.now() - mouseDownTime > 400 || !state.isUploaded) {
 			return;
 		}
 		const position: number = state.mousePosition.x + state.waveformScrollPosition;
@@ -177,7 +178,7 @@ const WaveformContainer: React.FC = () => {
 			onMouseLeave={handleOnMouseLeave}
 			onMouseDown={handleDragSelection}
 			onMouseUp={handleEndDragSelection}
-			onClick={state.isUploaded ? () => handleOnClick() : () => {}}
+			onClick={state.isUploaded ? () => handleClick() : () => {}}
 			style={{
 				width: '100vw',
 				backgroundColor: '',
@@ -195,11 +196,14 @@ const WaveformContainer: React.FC = () => {
 			<PreUpload />
 			{state.isUploaded && !state.isUploading ? (
 				<>
-					<Box sx={{ height: '40%', backgroundColor: '' }}>
+					<Box sx={{ height: '40%', width: 'fit-content', backgroundColor: '' }}>
 						<WaveformSVG />
 					</Box>
-					<Box sx={{ height: '60%', backgroundColor: '' }}>
+					<Box sx={{ height: '53%', backgroundColor: '' }}>
 						<MidiContainer />
+					</Box>
+					<Box sx={{ height: '7%', backgroundColor: '' }}>
+						<ChordSymbolContainer />
 					</Box>
 				</>
 			) : (

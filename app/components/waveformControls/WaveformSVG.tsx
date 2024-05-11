@@ -12,7 +12,7 @@ const WaveformSVG = () => {
 			}
 
 			const loudnessDataLength: number = state.loudnessData.length;
-			let newSVGData = 'M0 530,';
+			let newSVGData = 'M0 530';
 
 			for (let i = 0; i < loudnessDataLength; i++) {
 				const loudnessTotal = getLoudnessTotal(i);
@@ -46,7 +46,7 @@ const WaveformSVG = () => {
 		const scale: number = 5;
 		yValue = y ? y + offset : offset + 4.65;
 		yValue = Math.abs(yValue);
-		return `L${x} ${Math.round(yValue * scale)}, `;
+		return `L${x} ${Math.round(yValue * scale)} `;
 	};
 
 	const calcStrokeWidth = (): number => {
@@ -81,8 +81,8 @@ const WaveformSVG = () => {
 				viewBox={`0 0 ${state.loudnessData.length} 700`}
 				preserveAspectRatio="none"
 			>
-				<g fill="#3498db" stroke="#3498db" strokeWidth={calcStrokeWidth()}>
-					<path d={svgPathData} fillOpacity="0.3" />
+				<g fill="#3498db" stroke="#3498db" height="500px" strokeWidth={calcStrokeWidth()}>
+					<path d={svgPathData} fillOpacity="0.3" height="500px" />
 				</g>
 			</svg>
 		</div>

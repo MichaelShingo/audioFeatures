@@ -12,7 +12,11 @@ const UpperContainer: React.FC<UpperContainerProps> = () => {
 		<Box
 			sx={{
 				height: '100%',
+				width: '100vw',
+				overflowX: 'hidden',
+				overflowY: 'hidden',
 				backgroundColor: '',
+				color: 'white',
 			}}
 		>
 			<WaveformContainer />
@@ -23,7 +27,7 @@ const UpperContainer: React.FC<UpperContainerProps> = () => {
 					height: '10%',
 					backgroundColor: theme.palette.background.default,
 					padding: '3px',
-					zIndex: '-1',
+					zIndex: 50,
 				}}
 			>
 				<PlaybackControls />

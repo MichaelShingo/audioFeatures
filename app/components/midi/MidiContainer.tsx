@@ -1,10 +1,10 @@
-import { Tooltip, Typography, useTheme } from '@mui/material';
+import { Typography, useTheme } from '@mui/material';
 import { Box } from '@mui/system';
 import React, { ReactNode } from 'react';
 import { useAppState } from '../../context/AppStateContext';
 import usePositionCalculations from '@/app/customHooks/usePositionCalculations';
 
-const midiPitchToInt: Record<string, number> = {
+export const midiPitchToInt: Record<string, number> = {
 	C: 0,
 	'C#': 1,
 	D: 2,
@@ -63,35 +63,32 @@ const MidiContainer = () => {
 				const note = track.notes[i];
 				const pitchClassName: string = note.name.slice(0, -1);
 				const pitchClass: number = midiPitchToInt[pitchClassName];
-
 				const startTime: number = parseFloat(note.time.toFixed(2));
 				addToChords(startTime, note.name.slice(0, -1));
 
 				res[pitchClass].push(
-					<Tooltip key={i} title={pitchClassName} sx={{ pointerEvents: 'all' }}>
-						<Box
-							sx={{
-								position: 'absolute',
-								height: `${100 / 12}%`,
-								backgroundColor: theme.palette.common.lightBlueTransSolid,
-								left: `${calcPositionFromSeconds(note.time)}px`,
-								width: `${calcPositionFromSeconds(note.duration)}px`,
-								boxShadow: `inset 0 0 0 1px ${theme.palette.common.lightBlue}`,
-								borderRadius: '6px',
-								pointerEvents: 'all',
-								display: 'flex',
-								alignItems: 'center',
-								justifyContent: 'center',
-								color: theme.palette.common.lightBlue,
-							}}
-						>
-							{pitchClassName}
-						</Box>
-					</Tooltip>
+					<Box
+						key={i}
+						sx={{
+							fontSize: state.windowHeight < 720 ? '12px' : '18px',
+							position: 'absolute',
+							height: `${100 / 12}%`,
+							backgroundColor: theme.palette.common.lightBlueTransSolid,
+							left: `${calcPositionFromSeconds(note.time)}px`,
+							width: `${calcPositionFromSeconds(note.duration)}px`,
+							boxShadow: `inset 0 0 0 1px ${theme.palette.common.lightBlue}`,
+							borderRadius: '6px',
+							pointerEvents: 'all',
+							display: 'flex',
+							alignItems: 'center',
+							justifyContent: 'center',
+							color: theme.palette.common.lightBlue,
+						}}
+					>
+						{pitchClassName}
+					</Box>
 				);
 			}
-
-			console.log(chords);
 		}
 		return res;
 	};
@@ -121,6 +118,7 @@ const MidiContainer = () => {
 					>
 						<Typography
 							sx={{
+								display: 'none',
 								position: 'absolute',
 								transform: 'translateY(25%)',
 								left: '0',

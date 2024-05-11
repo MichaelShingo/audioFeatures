@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import React, { ChangeEvent, useEffect, useRef } from 'react';
 import { actions, useAppState } from '../../context/AppStateContext';
 import { IconButton, styled } from '@mui/material';
 import FileUpload from '@mui/icons-material/FileUpload';
@@ -18,35 +18,43 @@ const VisuallyHiddenInput = styled('input')({
 
 const AudioUpload: React.FC = () => {
 	const { dispatch } = useAppState();
-	const [silentOsc, setSilentOsc] = useState<Tone.Oscillator | null>(null);
+	const nativeAudioRef = useRef<HTMLAudioElement | null>(null);
+
 	useEffect(() => {
-		const newOsc = new Tone.Oscillator(0, 'sine').toDestination();
-		setSilentOsc(newOsc);
+		new Tone.Limiter(-6).toDestination();
 	}, []);
 
-	const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+	const handleFileChange = async (event: ChangeEvent<HTMLInputElement>) => {
 		dispatch({ type: actions.SET_IS_UPLOADING, payload: true });
 		const file = event.target.files?.[0];
 		if (file) {
+			const formData: FormData = new FormData();
+			const blob = new Blob([file], { type: file.type });
+			formData.append('user-file', blob, `user-file.${file.type}`);
+			// console.log('fetch');
+			// const result = await fetch('https://161.35.92.198/upload/', {
+			// 	method: 'POST',
+			// 	body: formData,
+			// });
+			// console.log(result);
+
 			dispatch({ type: actions.SET_AUDIO_FILE, payload: file });
 		}
 	};
 
-	const startSilentOsc = async () => {
+	const startSilentOsc = async (e: React.MouseEvent) => {
+		e.stopPropagation();
 		await Tone.start();
-		try {
-			if (silentOsc) {
-				silentOsc.mute = true;
-				silentOsc.start('+0.5');
-				Tone.Transport.cancel();
-			}
-		} catch (e) {
-			return;
+		if (nativeAudioRef.current) {
+			nativeAudioRef.current.play();
 		}
 	};
 
 	return (
-		<IconButton component="label" onClick={startSilentOsc}>
+		<IconButton component="label" onClick={(e) => startSilentOsc(e)}>
+			<audio ref={nativeAudioRef}>
+				<source src="/silent.mp3" type="audio/mp3"></source>
+			</audio>
 			<FileUpload />
 			<VisuallyHiddenInput type="file" accept="audio/*" onChange={handleFileChange} />
 		</IconButton>

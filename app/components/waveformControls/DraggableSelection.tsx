@@ -3,12 +3,14 @@ import { actions, useAppState } from '../../context/AppStateContext';
 import { Box } from '@mui/system';
 import usePositionCalculations from '../../customHooks/usePositionCalculations';
 import { useEffect, useState } from 'react';
+import useIsMobile from '@/app/customHooks/useIsMobile';
 
 const DraggableSelection = () => {
 	const { state, dispatch } = useAppState();
 	const { calcPositionFromSeconds, calcSecondsFromPosition } = usePositionCalculations();
 	const theme = useTheme();
 	const [handleVisibility, setHandleVisibility] = useState<boolean>(false);
+	const isMobile = useIsMobile();
 
 	const selectionWidth: number = calcPositionFromSeconds(
 		state.selectionEndSeconds - state.selectionStartSeconds
@@ -70,6 +72,7 @@ const DraggableSelection = () => {
 			onMouseOver={() => setHandleVisibility(true)}
 			onMouseOut={() => setHandleVisibility(false)}
 			sx={{
+				display: state.windowWidth < 875 || isMobile ? 'none' : 'block',
 				backgroundColor: theme.palette.common.lightBlueTrans,
 				visibility: isVisible ? 'visible' : 'hidden',
 				border: `2px solid ${theme.palette.common.lightBlue}`,

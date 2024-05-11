@@ -2,6 +2,7 @@ import { Box, Stack } from '@mui/system';
 import React from 'react';
 import { useAppState } from '../../context/AppStateContext';
 import { LinearProgress, Typography } from '@mui/material';
+import AudioUpload from '../audio/AudioUpload';
 
 const PreUpload: React.FC = () => {
 	const { state } = useAppState();
@@ -28,10 +29,13 @@ const PreUpload: React.FC = () => {
 						marginBottom: '25px',
 						width: '100%',
 					}}
-					variant="h4"
+					variant="h3"
 				>
-					Upload audio.
+					Upload audio
 				</Typography>
+				<Box sx={{ transform: 'scale(250%)', zIndex: 50, pointerEvents: 'all' }}>
+					<AudioUpload />
+				</Box>
 			</Stack>
 			<Box
 				sx={{
