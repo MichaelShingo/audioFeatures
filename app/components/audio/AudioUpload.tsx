@@ -31,10 +31,14 @@ const AudioUpload: React.FC = () => {
 			const formData: FormData = new FormData();
 			const blob = new Blob([file], { type: file.type });
 			formData.append('user-file', blob, `user-file.${file.type}`);
-			const result = await fetch('https://api.bellowswang.com/upload/', {
-				method: 'POST',
-				body: formData,
-			});
+			console.log('fletch');
+			const result = await fetch(
+				'https://corsproxy.io/?https://api.bellowswang.com/upload/',
+				{
+					method: 'POST',
+					body: formData,
+				}
+			);
 			console.log(result);
 
 			dispatch({ type: actions.SET_AUDIO_FILE, payload: file });
