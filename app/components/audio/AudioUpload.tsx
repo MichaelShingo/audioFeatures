@@ -31,12 +31,13 @@ const AudioUpload: React.FC = () => {
 			const formData: FormData = new FormData();
 			const blob = new Blob([file], { type: file.type });
 			formData.append('user-file', blob, `user-file.${file.type}`);
-			// console.log('fetch');
-			// const result = await fetch('https://161.35.92.198/upload/', {
-			// 	method: 'POST',
-			// 	body: formData,
-			// });
-			// console.log(result);
+			console.log('fetch');
+			const result = await fetch('https://api.bellowswang.com/upload/', {
+				method: 'POST',
+				body: formData,
+				mode: 'no-cors',
+			});
+			console.log(result);
 
 			dispatch({ type: actions.SET_AUDIO_FILE, payload: file });
 		}
