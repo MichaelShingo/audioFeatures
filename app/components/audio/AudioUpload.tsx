@@ -31,7 +31,7 @@ const AudioUpload: React.FC = () => {
 			const formData: FormData = new FormData();
 			const blob = new Blob([file], { type: file.type });
 			formData.append('user-file', blob, `user-file.${file.type}`);
-			console.log('fletch');
+			console.log('fetch');
 			const result = await fetch('https://api.bellowswang.com/upload/', {
 				method: 'POST',
 				body: formData,
