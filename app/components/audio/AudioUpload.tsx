@@ -30,7 +30,7 @@ const AudioUpload: React.FC = () => {
 		if (file) {
 			const formData: FormData = new FormData();
 			formData.append('user_file', file, `user_file.${file.type}`);
-			console.log('fetch');
+			console.log('fetch no blob');
 			const result = await fetch('https://api.bellowswang.com/upload/', {
 				method: 'POST',
 				body: formData,
