@@ -24,20 +24,22 @@ const PreUpload: React.FC = () => {
 							: 'flex',
 				}}
 			>
-				<Typography
-					variant="h6"
-					sx={{
-						textAlign: 'center',
-						mb: '5px',
-						color: theme.palette.common.brightRed,
-						backgroundColor: theme.palette.common.darkRed,
-						paddingBlock: '5px',
-						paddingInline: '13px',
-						borderRadius: '20px',
-					}}
-				>
-					{state.errorState}
-				</Typography>
+				{state.errorState !== '' && (
+					<Typography
+						variant="h6"
+						sx={{
+							textAlign: 'center',
+							mb: '9px',
+							color: theme.palette.common.brightRed,
+							backgroundColor: theme.palette.common.darkRed,
+							paddingBlock: '5px',
+							paddingInline: '13px',
+							borderRadius: '20px',
+						}}
+					>
+						{state.errorState}
+					</Typography>
+				)}
 				<Typography
 					sx={{
 						textAlign: 'center',

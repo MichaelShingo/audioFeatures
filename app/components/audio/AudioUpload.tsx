@@ -83,10 +83,10 @@ const AudioUpload: React.FC = () => {
 				}
 
 				dispatch({ type: actions.SET_MIDI_FILE, payload: midiFileResponse.body });
-
 				dispatch({ type: actions.SET_LOADING_STATE, payload: 'Fetching chord data' });
+
 				const chordJSONResponse = await fetch(
-					`${apiURL}/${fileUploadJSON.json_file_url.slice(1)}`,
+					`${apiURL}${fileUploadJSON.json_file_url}`,
 					{
 						method: 'GET',
 					}
