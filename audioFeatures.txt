@@ -5,8 +5,8 @@ import { useMediaQuery, Theme, useTheme } from '@mui/material';
 const isSmallScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
 
 
-- Make loading indications for each step of fetching....
-- api error handling 
+- midi keeps playing on pause..................
+
 
 Yihong questions
 - timing of midi changes slightly off? 
