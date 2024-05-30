@@ -56,6 +56,8 @@ interface GlobalState {
 	chordVolume: number;
 	chords: Chord[];
 	midiFile: ReadableStream<Uint8Array> | null;
+	loadingState: string;
+	errorState: string;
 }
 
 const initialState: GlobalState = {
@@ -96,6 +98,8 @@ const initialState: GlobalState = {
 	chordVolume: 100,
 	chords: [],
 	midiFile: null,
+	loadingState: '',
+	errorState: '',
 };
 
 export type AppAction = {
@@ -162,6 +166,8 @@ export const actions: Record<string, string> = {
 	SET_CHORD_VOLUME: 'SET_CHORD_VOLUME',
 	SET_CHORDS: 'SET_CHORDS',
 	SET_MIDI_FILE: 'SET_MIDI_FILE',
+	SET_LOADING_STATE: 'SET_LOADING_STATE',
+	SET_ERROR_STATE: 'SET_ERROR_STATE',
 };
 
 const appReducer = (state: GlobalState, action: AppAction): GlobalState => {
@@ -267,6 +273,10 @@ const appReducer = (state: GlobalState, action: AppAction): GlobalState => {
 			return { ...state, chords: action.payload as Chord[] };
 		case actions.SET_MIDI_FILE:
 			return { ...state, midiFile: action.payload as ReadableStream<Uint8Array> };
+		case actions.SET_LOADING_STATE:
+			return { ...state, loadingState: action.payload as string };
+		case actions.SET_ERROR_STATE:
+			return { ...state, errorState: action.payload as string };
 		default:
 			return state;
 	}

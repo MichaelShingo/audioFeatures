@@ -3,10 +3,11 @@ import React from 'react';
 import { useAppState } from '../../context/AppStateContext';
 import { LinearProgress, Typography } from '@mui/material';
 import AudioUpload from '../audio/AudioUpload';
+import { useTheme } from '@mui/material';
 
 const PreUpload: React.FC = () => {
 	const { state } = useAppState();
-
+	const theme = useTheme();
 	return (
 		<>
 			<Stack
@@ -23,6 +24,20 @@ const PreUpload: React.FC = () => {
 							: 'flex',
 				}}
 			>
+				<Typography
+					variant="h6"
+					sx={{
+						textAlign: 'center',
+						mb: '5px',
+						color: theme.palette.common.brightRed,
+						backgroundColor: theme.palette.common.darkRed,
+						paddingBlock: '5px',
+						paddingInline: '13px',
+						borderRadius: '20px',
+					}}
+				>
+					{state.errorState}
+				</Typography>
 				<Typography
 					sx={{
 						textAlign: 'center',
@@ -48,6 +63,9 @@ const PreUpload: React.FC = () => {
 				}}
 			>
 				<LinearProgress />
+				<Typography variant="h4" sx={{ mt: '10px', textAlign: 'center', width: '100%' }}>
+					{state.loadingState}
+				</Typography>
 			</Box>
 		</>
 	);

@@ -10,7 +10,6 @@ const calcMinutes = (seconds: number): string => {
 	if (seconds <= 0) {
 		return '0';
 	}
-	console.log(seconds / 60);
 	return Math.floor(seconds / 60).toString();
 };
 
@@ -42,8 +41,6 @@ const Timecode = () => {
 			const milliseconds = calcMilliseconds(seconds);
 			const secondsCalc = calcSeconds(seconds);
 			const minutes = calcMinutes(seconds);
-			console.log(milliseconds, secondsCalc, minutes);
-			console.log(typeof milliseconds, typeof secondsCalc, typeof minutes);
 
 			refMilliseconds.current.value = milliseconds;
 			refSeconds.current.value = secondsCalc;
