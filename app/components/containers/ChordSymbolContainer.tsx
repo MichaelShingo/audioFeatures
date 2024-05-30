@@ -1,31 +1,21 @@
 'use client';
 import { Box } from '@mui/system';
 import { useAppState } from '../../context/AppStateContext';
-import { ReactNode, useEffect, useState } from 'react';
-import { audioSliceJSON } from '@/app/data/sampleBackendData';
+import { ReactNode } from 'react';
 import usePositionCalculations from '@/app/customHooks/usePositionCalculations';
 import { Typography } from '@mui/material';
-import { AudioSlice, Chord, parseAudioSlice } from '@/app/utils/parseAudioSlice';
 
 const ChordSymbolContainer = () => {
 	const { state } = useAppState();
-	const [chords, setChords] = useState<Chord[] | null>(null);
 	const { calcPositionFromSeconds } = usePositionCalculations();
 
-	useEffect(() => {
-		// await data from API //
-		const audioSliceData: Record<string, AudioSlice> = JSON.parse(audioSliceJSON);
-		const chords: Chord[] = parseAudioSlice(audioSliceData);
-		setChords(chords);
-	}, []);
-
 	const generateChordSymbols = (): ReactNode[] => {
-		if (!chords) {
+		if (!state.chords) {
 			return [];
 		}
 		const res: ReactNode[] = [];
 
-		for (let i = 0; i < chords.length; i++) {
+		for (let i = 0; i < state.chords.length; i++) {
 			res.push(
 				<Box
 					key={i}
@@ -34,8 +24,10 @@ const ChordSymbolContainer = () => {
 						backgroundColor: '',
 						position: 'absolute',
 						height: '100%',
-						left: `${calcPositionFromSeconds(chords[i].start)}px`,
-						width: `${calcPositionFromSeconds(chords[i].end - chords[i].start)}px`,
+						left: `${calcPositionFromSeconds(state.chords[i].start)}px`,
+						width: `${calcPositionFromSeconds(
+							state.chords[i].end - state.chords[i].start
+						)}px`,
 						pointerEvents: 'all',
 						display: 'flex',
 						alignItems: 'center',
@@ -50,7 +42,7 @@ const ChordSymbolContainer = () => {
 							fontSize: state.zoomFactor < 0.4 ? '10px' : '20px',
 						}}
 					>
-						{chords[i].symbol}
+						{state.chords[i].symbol}
 					</Typography>
 				</Box>
 			);
@@ -71,7 +63,7 @@ const ChordSymbolContainer = () => {
 				width: `${state.waveformContainerWidth}px`,
 			}}
 		>
-			{chords && generateChordSymbols()}
+			{state.chords && generateChordSymbols()}
 		</Box>
 	);
 };

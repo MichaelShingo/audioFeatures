@@ -3,6 +3,7 @@ import { actions, useAppState } from '../../context/AppStateContext';
 import { IconButton, styled } from '@mui/material';
 import FileUpload from '@mui/icons-material/FileUpload';
 import * as Tone from 'tone';
+import { AudioSlice, Chord, parseAudioSlice } from '@/app/utils/parseAudioSlice';
 
 const VisuallyHiddenInput = styled('input')({
 	clip: 'rect(0 0 0 0)',
@@ -16,6 +17,15 @@ const VisuallyHiddenInput = styled('input')({
 	width: 1,
 });
 
+type FileUploadResponse = {
+	json_file_url: string;
+	message: string;
+	midi_file_url: string;
+	original_filename: string;
+};
+
+const apiURL = 'https://api.bellowswang.com';
+
 const AudioUpload: React.FC = () => {
 	const { dispatch } = useAppState();
 	const nativeAudioRef = useRef<HTMLAudioElement | null>(null);
@@ -28,15 +38,37 @@ const AudioUpload: React.FC = () => {
 		dispatch({ type: actions.SET_IS_UPLOADING, payload: true });
 		const file = event.target.files?.[0];
 		if (file) {
+			dispatch({ type: actions.SET_AUDIO_FILE, payload: file });
+
 			const formData: FormData = new FormData();
 			formData.append('user_file', file, file.name);
-			const result = await fetch('https://api.bellowswang.com/upload/', {
+			const response = await fetch(`${apiURL}/upload/`, {
 				method: 'POST',
 				body: formData,
 			});
-			console.log(result);
 
-			dispatch({ type: actions.SET_AUDIO_FILE, payload: file });
+			const fileUploadJSON: FileUploadResponse = await response.json();
+
+			console.log(fileUploadJSON);
+
+			const midiFileResponse = await fetch(`${apiURL}${fileUploadJSON.midi_file_url}`, {
+				method: 'GET',
+			});
+
+			console.log(midiFileResponse.body);
+			dispatch({ type: actions.SET_MIDI_FILE, payload: midiFileResponse.body });
+
+			const chordJSONResponse = await fetch(
+				`${apiURL}/${fileUploadJSON.json_file_url.slice(1)}`,
+				{
+					method: 'GET',
+				}
+			);
+
+			const audioSliceJSON: Record<string, AudioSlice> = await chordJSONResponse.json();
+
+			const chords: Chord[] = parseAudioSlice(audioSliceJSON);
+			dispatch({ type: actions.SET_CHORDS, payload: chords });
 		}
 	};
 
