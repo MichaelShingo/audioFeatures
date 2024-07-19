@@ -5,8 +5,13 @@ import { useMediaQuery, Theme, useTheme } from '@mui/material';
 const isSmallScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
 
 
+- midi keeps playing on pause..................
+
+
 Yihong questions
 - timing of midi changes slightly off? 
+- it only produces 4 note chords? Doesn't work with triadic harmony.
+- 
 - Chord analysis relative to a key?
 - check safari and iPad compatibility
 

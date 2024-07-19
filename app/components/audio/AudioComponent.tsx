@@ -19,8 +19,7 @@ const AudioComponent: React.FC = () => {
 		const setPitchData = async () => {
 			if (state.audioFile) {
 				const pitchResults: PitchData = await analyzePitch(state.audioFile);
-				dispatch({ type: actions.SET_IS_UPLOADING, payload: false });
-				dispatch({ type: actions.SET_IS_UPLOADED, payload: true });
+
 				dispatch({
 					type: actions.SET_PITCH_DATA,
 					payload: pitchResults as PitchData,

@@ -8,6 +8,7 @@ import React, {
 import { Loudness, PitchData, SpectralFlatness } from '../data/constants';
 import { Timecode, roundSeconds } from '../utils/timecodeCalculations';
 import { Midi } from '@tonejs/midi';
+import { Chord } from '../utils/parseAudioSlice';
 
 export const H_BREAKPOINT = 440;
 export const SETTINGS_ROW_SPACING: string = '10px';
@@ -53,6 +54,10 @@ interface GlobalState {
 	seekHandleContainerRef: MutableRefObject<HTMLDivElement | null> | null;
 	audioVolume: number;
 	chordVolume: number;
+	chords: Chord[];
+	midiFile: ReadableStream<Uint8Array> | null;
+	loadingState: string;
+	errorState: string;
 }
 
 const initialState: GlobalState = {
@@ -91,6 +96,10 @@ const initialState: GlobalState = {
 	seekHandleContainerRef: null,
 	audioVolume: 100,
 	chordVolume: 100,
+	chords: [],
+	midiFile: null,
+	loadingState: '',
+	errorState: '',
 };
 
 export type AppAction = {
@@ -108,7 +117,10 @@ export type AppAction = {
 		| AudioBuffer
 		| SpectralFlatness[]
 		| MutableRefObject<HTMLDivElement | null>
-		| Midi;
+		| Chord[]
+		| Midi
+		| ReadableStream<Uint8Array>
+		| null;
 };
 
 interface AppStateContextType {
@@ -152,6 +164,10 @@ export const actions: Record<string, string> = {
 	SET_SEEK_HANDLE_CONTAINER_REF: 'SET_SEEK_HANDLE_CONTAINER_REF',
 	SET_AUDIO_VOLUME: 'SET_AUDIO_VOLUME',
 	SET_CHORD_VOLUME: 'SET_CHORD_VOLUME',
+	SET_CHORDS: 'SET_CHORDS',
+	SET_MIDI_FILE: 'SET_MIDI_FILE',
+	SET_LOADING_STATE: 'SET_LOADING_STATE',
+	SET_ERROR_STATE: 'SET_ERROR_STATE',
 };
 
 const appReducer = (state: GlobalState, action: AppAction): GlobalState => {
@@ -253,6 +269,14 @@ const appReducer = (state: GlobalState, action: AppAction): GlobalState => {
 				...state,
 				seekHandleContainerRef: action.payload as MutableRefObject<HTMLDivElement | null>,
 			};
+		case actions.SET_CHORDS:
+			return { ...state, chords: action.payload as Chord[] };
+		case actions.SET_MIDI_FILE:
+			return { ...state, midiFile: action.payload as ReadableStream<Uint8Array> };
+		case actions.SET_LOADING_STATE:
+			return { ...state, loadingState: action.payload as string };
+		case actions.SET_ERROR_STATE:
+			return { ...state, errorState: action.payload as string };
 		default:
 			return state;
 	}
